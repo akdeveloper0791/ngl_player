@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:keepScreenOn="true"
+    android:background="@color/app_default_layout__background_colour"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/display_media_view_layout"
+            >
+        <VideoView
+            android:id="@+id/display_media_video_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+         />
+
+        <ImageView
+            android:id="@+id/display_media_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            />
+            </FrameLayout>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/loading_result_layout">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/download_loading_pd">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/display_ad_progress_dialog_layout"
+                        android:layout_centerInParent="true"
+                    >
+
+                    <com.liulishuo.magicprogresswidget.MagicProgressCircle
+                            android:id="@+id/display_ads_pg_dialog_magic_circles"
+                            android:layout_width="@dimen/display_ad_percentage_progress_dialog_width"
+                            android:layout_height="@dimen/display_ad_percentage_progress_dialog_height"
+                            app:mpc_percent="@string/display_ads_layout_progress_dialog_default_percent"
+                            app:mpc_start_color="@color/colorPrimary"
+                            app:mpc_end_color="@color/colorPrimaryDark"
+                            app:mpc_stroke_width="@dimen/display_ad_percentage_progress_dialog_stroke_width"
+                            android:visibility="gone"
+                            app:mpc_default_color="@color/display_ad_progress_dialog_stroke_colour"
+                            android:layout_gravity="center"
+                    />
+
+                    <com.wang.avi.AVLoadingIndicatorView
+                            android:id="@+id/display_ads_pg_dialog_avl"
+                            android:layout_width="@dimen/display_ad_percentage_progress_dialog_width"
+                            android:layout_height="@dimen/display_ad_percentage_progress_dialog_height"
+                            android:visibility="visible"
+                            app:indicator="BallSpinFadeLoader"
+                            app:indicator_color="@color/colorPrimaryDark"
+                            android:layout_gravity="center"
+                        />
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/display_ad_progress_dialog_percentage_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:gravity="center"
+                        android:text="0%"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/display_ad_percentage_progress_dialog_percentage_tv_size" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/display_ad_loading_tv"
+                        android:text="@string/loading_text"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:layout_marginTop="@dimen/app_default_vertical_space"
+                        android:layout_below="@+id/display_ad_progress_dialog_layout"
+                        android:gravity="center"/>
+
+                </RelativeLayout>
+
+                <ImageView
+                android:id="@+id/refresh"
+                android:src="@drawable/refresh"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:visibility="gone"
+                android:layout_gravity="center"
+                />
+
+            </FrameLayout>
+
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/display_ad_scrolling_tv"
+                    android:text=""
+                    android:textColor="@color/display_ad_scrolling_text_color"
+                    android:singleLine="true"
+                    android:visibility="gone"
+                    android:ellipsize="marquee"
+                    android:gravity="center"
+                    android:background="@color/display_ad_scrolling_text_bg_color"
+                    android:marqueeRepeatLimit ="marquee_forever"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:scrollHorizontally="true"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="@dimen/app_default_vertical_space"
+                    android:textSize="@dimen/display_ad_scrolling_tv_size"
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:id="@+id/display_ad_error_info_layout"
+                android:visibility="gone"
+                android:background="@color/colorPrimary">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/display_ad_error_info_tv"
+                android:text="@string/app_default_error_msg_text"
+                android:layout_gravity="bottom"
+                android:textColor="@color/display_ad_error_text_color"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit ="marquee_forever"
+                android:focusable="true"
+                android:gravity="center"
+                android:focusableInTouchMode="true"
+                android:scrollHorizontally="true"
+                android:textStyle="bold"
+                android:padding="@dimen/app_default_edit_text_horizontal_padding"
+                android:paddingLeft="@dimen/app_default_edit_text_horizontal_padding"
+                android:layout_marginBottom="@dimen/app_default_vertical_space"
+                android:textSize="@dimen/display_ad_scrolling_tv_size"
+                android:layout_alignParentLeft="true"
+            />
+
+            <ImageView
+                    android:id="@+id/display_ad_remove_error_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/ic_cancel"
+             />
+            </RelativeLayout>
+        </FrameLayout>
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|top"
+            android:src="@drawable/ic_overflownew"
+            android:id="@+id/display_media_overflow_icon"
+            android:layout_marginRight="30dp"
+            android:visibility="gone"
+            />
+
+
+        </FrameLayout>
+
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/add_local_schedules_layout"
+    android:orientation="horizontal"
+    android:layout_gravity="bottom"
+    android:visibility="gone"
+    android:background="@android:drawable/screen_background_dark_transparent"
+  >
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_white_settings"
+        android:id="@+id/settings"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_alignParentLeft="true"
+        android:onClick="onClick"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/settings"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/app_default_button_text_color"
+        android:text="@string/app_default_action_settings"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_white_create"
+        android:id="@+id/add_local_schedules_button"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@+id/settings"
+        android:layout_toLeftOf="@+id/close_add_local_schedules"
+        android:onClick="onClick"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/add_local_schedules_button"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:id="@+id/add_schedule_tv"
+        android:layout_toRightOf="@+id/settings"
+        android:gravity="center"
+        android:layout_toLeftOf="@+id/close_add_local_schedules"
+        android:textColor="@color/app_default_button_text_color"
+        android:text="Add Schedules"/>
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_white_cancel"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="20dp"
+        android:id="@+id/close_add_local_schedules"
+        android:onClick="onClick"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/close_add_local_schedules"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/app_default_button_text_color"
+        android:text="Cancel"/>
+
+</RelativeLayout>
+
+
+</FrameLayout>
+
+</LinearLayout>

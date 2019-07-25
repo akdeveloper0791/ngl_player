@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:text="@string/publish_immediate"
+            android:layout_margin="5dp"
+            android:textStyle="bold" />
+
+        <ToggleButton
+        android:id="@+id/announce_on_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:layout_marginLeft="5dp"
+        android:layout_centerHorizontal="true"
+         />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/text_to_announce_layout"
+        android:visibility="gone" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+        android:text="@string/text_to_announce"
+        android:layout_margin="5dp"
+    />
+
+    <EditText
+        android:id="@+id/announcement_text"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/app_default_edit_text_height"
+        android:layout_margin="@dimen/app_default_edit_text_margin"
+        android:layout_marginBottom="@dimen/app_default_vertical_space"
+        android:layout_marginTop="1dp"
+        android:textAlignment="center"
+        android:background="@drawable/edit_text_focused"
+        android:hint="@string/text_to_announce_hint"
+        android:textColorHint="@color/app_default_edit_text_hint_color"
+        android:textColor="@color/app_default_text_color"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+    />
+
+     <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+         <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:text="@string/announce"
+                android:layout_margin="5dp"
+                 android:id="@+id/text_announce"
+              android:layout_alignBaseline="@+id/announcement_times"
+         />
+
+         <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:text="@string/times"
+                android:layout_margin="5dp"
+                android:id="@+id/text_times"
+             android:layout_alignBaseline="@+id/announcement_times"
+                />
+
+
+            <EditText
+                android:id="@+id/announcement_times"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/app_default_edit_text_height"
+                android:layout_margin="@dimen/app_default_edit_text_margin"
+                android:layout_marginTop="@dimen/app_default_vertical_space"
+                android:layout_marginBottom="@dimen/app_default_vertical_space"
+                android:background="@drawable/edit_text_focused"
+                android:text="3"
+                android:textAlignment="center"
+                android:inputType="number"
+                android:textColorHint="@color/app_default_edit_text_hint_color"
+                android:textColor="@color/app_default_text_color"
+                android:layout_toLeftOf="@+id/text_times"
+                android:layout_toRightOf="@+id/text_announce"
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:text="@string/with"
+
+                android:layout_marginLeft="15dp"
+                android:id="@+id/text_announce_gap"
+                android:layout_alignBaseline="@+id/announcement_gap"
+                />
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:text="@string/seconds_gap"
+                android:layout_margin="5dp"
+                android:id="@+id/seconds_gap"
+                android:layout_alignBaseline="@+id/announcement_gap"
+                />
+
+
+            <EditText
+                android:id="@+id/announcement_gap"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/app_default_edit_text_height"
+                android:layout_margin="@dimen/app_default_edit_text_margin"
+                android:layout_marginTop="@dimen/app_default_vertical_space"
+                android:layout_marginBottom="@dimen/app_default_vertical_space"
+                android:background="@drawable/edit_text_focused"
+                android:text="3"
+                android:textAlignment="center"
+                android:inputType="number"
+                android:textColorHint="@color/app_default_edit_text_hint_color"
+                android:textColor="@color/app_default_text_color"
+                android:layout_toLeftOf="@+id/seconds_gap"
+                android:layout_toRightOf="@+id/text_announce_gap"
+                />
+
+        </RelativeLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="  Update  "
+        android:id="@+id/save_settings"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:textColor="@color/app_default_button_text_color"
+        android:background="@drawable/button_background"
+        android:onClick="onClick"/>
+
+    </LinearLayout>
+
+</LinearLayout>
+
+</ScrollView>

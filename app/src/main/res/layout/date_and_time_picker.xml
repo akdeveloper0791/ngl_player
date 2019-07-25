@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
+  >
+
+   <TextView
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_alignParentTop="true"
+       android:id="@+id/date_time_picker_header"
+       android:text="@string/app_default_date_time_layout_header"
+       android:gravity="center"
+       android:textColor="@color/date_time_picker_header_text_colour"
+       android:textSize="@dimen/app_default_text_view_text_size"
+       android:background="@color/colorPrimary"
+       android:paddingLeft="@dimen/app_default_text__view_horizontal_padding"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/app_default_edit_text_height"
+        android:id="@+id/date_edit_text"
+        android:layout_below="@+id/date_time_picker_header"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginRight="@dimen/app_default_horizontal_space"
+        android:layout_marginTop="@dimen/date_time_layout_header_layout_gap"
+        android:layout_marginLeft="@dimen/app_default_horizontal_space"
+        android:background="@drawable/edit_text_focused"
+        android:hint="@string/app_default_date_time_layout_date_hint"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/app_default_edit_text_height"
+        android:id="@+id/time_edit_text"
+        android:layout_below="@+id/date_edit_text"
+        android:background="@drawable/edit_text_focused"
+        android:layout_marginTop="@dimen/activity_default_margin"
+        android:layout_marginBottom="@dimen/activity_default_margin"
+        android:layout_alignLeft="@+id/date_edit_text"
+        android:layout_marginRight="@dimen/app_default_horizontal_space"
+        android:hint="@string/app_default_date_time_layout_time_et_hint"
+        android:layout_alignStart="@+id/date_edit_text" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_default_alert_negative_button_done_text"
+        android:id="@+id/done_button"
+        android:background="@drawable/button_background"
+        android:layout_below="@+id/time_edit_text"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/activity_default_margin"
+       />
+
+</RelativeLayout>

@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.ibetter.www.adskitedigi.adskitedigi">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+
+    <uses-feature
+        android:name="android.hardware.usb.host"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.BLUETOOTH" /> <!-- Allows applications to set the system time -->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
+    <uses-feature
+        android:name="android.hardware.bluetooth"
+        android:required="false" />
+
+    <uses-feature
+        android:name="android.p"
+        android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.faketouch"
+        android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location.gps"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.microphone"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.sensor"
+        android:required="false" />
+    <uses-feature
+        android:name="android.software.leanback"
+        android:required="false" />
+
+    <uses-feature android:name="android.hardware.camera2.full"
+        android:required="false"/>
+    <uses-feature android:name="android.hardware.camera.autofocus"  android:required="false" />
+
+    <application
+        android:name=".SignageServe"
+        android:allowBackup="true"
+        android:banner="@drawable/ic_tv_banner"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <activity android:name=".AppEntryClass">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity> <!-- login activity -->
+
+        <activity android:name=".RestartApp" />
+        <activity android:name=".StopApp" /> <!-- login activity -->
+        <activity android:name=".login.LoginActivity" /> <!-- register display activity -->
+        <activity android:name=".register.RegisterActivity" />
+
+        <service android:name=".register.RegisterDisplayService" /> <!-- required_schedule_files -->
+
+        <!-- get file  service -->
+        <!-- display ads -->
+        <!-- add schedules locally -->
+        <!-- -display schedule details -->
+
+        <!-- send mail  service -->
+
+        <service android:name=".send_mail.SendMailToDigiContact" /> <!-- main settings -->
+
+        <activity
+            android:name=".settings.MainSettingsActivity"
+            android:theme="@style/DisplaySchedulesActionBarTheme" />
+
+        <activity
+            android:name=".settings.user_channel_guide.UserGuideActivity"
+            android:theme="@style/DisplaySchedulesActionBarTheme" />
+
+        <activity
+            android:name=".settings.text_settings.ScrollingTextSettings"
+            android:theme="@style/DisplaySchedulesActionBarTheme" />
+        <activity
+            android:name=".settings.playing_mode_settings.PlayingModeSettingsActivity"
+            android:theme="@style/DisplaySchedulesActionBarTheme" />
+        <activity
+            android:name=".settings.default_image_settings.DefaultImageSettings"
+            android:theme="@style/DisplaySchedulesActionBarTheme" />
+        <activity
+            android:name=".settings.display_image_duration_settings.DisplayImageDurationSettings"
+            android:theme="@style/DisplaySchedulesActionBarTheme" />
+        <activity
+            android:name=".settings.display_report_image_duration.DisplayReportImageDurationSettings"
+            android:theme="@style/DisplaySchedulesActionBarTheme" />
+        <activity
+            android:name=".settings.overlay_image_settings.OverlayImageSettings"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/DisplaySchedulesActionBarTheme" />
+        <activity
+            android:name=".display_local_media_folder.DisplayLocalFolderAds"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+
+        <service android:name=".display_local_media_folder.DeleteExpiredCampaigns" />
+
+        <activity
+            android:name=".settings.announcement_settings.AnnouncementSettings"
+            android:theme="@style/DisplaySchedulesActionBarTheme" />
+        <activity
+            android:name=".settings.signage_manager_settings.SignageManagerAccessSettingsMain"
+            android:theme="@style/SMAccessSettingsTheme" />
+
+        <service android:name=".settings.signage_manager_settings.ToggleSMServices" />
+
+        <activity
+            android:name=".settings.audio_settings.AudioSettings"
+            android:theme="@style/DisplaySchedulesActionBarTheme" />
+        <activity
+            android:name=".settings.url_settings.URLSettingsAct"
+            android:theme="@style/Theme.AppCompat.Light" />
+        <activity android:name=".settings.metrics_settings.MetricsSettingsActivity"
+            android:theme="@style/Theme.AppCompat.Light"  />
+        <activity android:name=".settings.auto_campaign_sync_settings.AutoCampaignDownloadSettings"
+            android:theme="@style/Theme.AppCompat.Light"  />
+        <activity android:name=".settings.player_statistics_settings.PlayerStatisticsSettings"
+            android:theme="@style/Theme.AppCompat.Light"  />
+
+        <activity android:name=".settings.device_profile_settings.DeviceProfileActivity"
+            android:theme="@style/DisplaySchedulesActionBarTheme"  />
+
+        <activity
+            android:name=".settings.show_mac_settings.ShowSSMACSettings"
+            android:theme="@style/DisplaySchedulesActionBarTheme" /> <!-- display ads -->
+        <activity
+            android:name=".test.TestActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+        <activity
+            android:name=".display_local_media_folder.PlayAnnouncementActivity"
+            android:theme="@android:style/Theme.Dialog" />
+
+        <activity android:name=".settings.signage_manager_settings.enter_prise_mode.interative.UserURLActivityForm"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+
+
+        <activity android:name=".settings.signage_manager_settings.enter_prise_mode.interative.CustomInteractiveForm"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+
+        <activity android:name=".settings.signage_manager_settings.enter_prise_mode.interative.InteractiveSettings"
+            android:theme="@style/DisplaySchedulesActionBarTheme" />
+
+        <service android:name=".settings.signage_manager_settings.enter_prise_mode.interative.MonitorAppInvokeService"/>
+
+        <service android:name=".nearby.ConnectingNearBySMService" />
+        <service android:name=".nearby.service.GetModifyFilesService" />
+        <service android:name=".nearby.service.HandleMediaSettingsService" /> <!-- get file  service -->
+        <service android:name=".nearby.CheckAndRestartSMService" />
+        <service android:name=".nearby.CheckAndRestartSMServiceOreo" />
+
+        <service android:name=".settings.signage_manager_settings.enter_prise_mode.services.GetFilesService" />
+
+        <activity
+            android:name=".settings.advance_settings.AdvanceSettings"
+            android:theme="@style/DisplaySchedulesActionBarTheme" />
+        <activity
+            android:name=".settings.advance_settings.DisplayAppsActivity"
+            android:theme="@style/DisplaySchedulesActionBarTheme" />
+
+        <service android:name=".settings.time_sync_settings.SetBootTimeForMediaService" /> <!-- enter prise mode settings service -->
+        <service android:name=".settings.signage_manager_settings.enter_prise_mode.EnterPriseSettingsService" />
+
+        <activity android:name=".settings.signage_manager_settings.enter_prise_mode.AskEnterpriseModePermissions" />
+
+        <service android:name=".settings.signage_manager_settings.enter_prise_mode.services.DeleteCampaigns" /> <!-- enterprise announcement -->
+
+        <activity
+            android:name=".settings.signage_manager_settings.enter_prise_mode.announcement.PlayAnnouncement"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert" />
+
+        <service android:name=".display_local_media_folder.TriggerAlarmService" />
+        <service android:name=".accessibility.OtherAppLaunchService" />
+
+        <service
+            android:name=".accessibility.HandleKeyCommands"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+            android:process=":HandleKeyCommands">
+
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/global_action_bar_service" />
+        </service>
+
+        <service
+            android:name=".settings.signage_manager_settings.enter_prise_mode.RestartEnterpriseSettingsMode"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" /> <!-- Firebase Notifications -->
+
+        <service android:name=".fcm.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <service android:name=".fcm.MyFirebaseInstanceIDService" />
+        <service android:name=".fcm.UploadFCMIdToServer" />
+
+        <service android:name=".metrics.internal.MetricsService"/>
+        <service android:name=".metrics.UploadMetricsFileService"/>
+        <service android:name=".metrics.ProcessRule" />
+        <service android:name=".metrics.HandleDelayRuleService" />
+        <service android:name=".metrics.HandleDelayRuleBootService" />
+
+
+        <receiver
+            android:name=".display_local_media_folder.AlarmReceiver"
+            android:enabled="true" />
+
+        <receiver android:name=".receiver.BootCompletedIntentReceiver">
+            <intent-filter android:priority="2147483646">
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver> <!-- receivers for monitoring internet changes -->
+        <receiver android:name=".receiver.MonitorInternetChanges">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.MemCardReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_MOUNTED" />
+                <action android:name="android.intent.action.MEDIA_UNMOUNTED" />
+
+                <data android:scheme="file" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".fcm.SoftIotFCMReceiver" >
+            <intent-filter>
+                <action android:name="com.ibetter.www.adskitedigi.adskitedigi.fcm.SoftIotFCMReceiver" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".fcm.SoftIOTFCMService" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" /> <!-- display ads -->
+        <activity android:name=".login.MacAddressQrCode" />
+        <activity
+            android:name=".settings.signage_manager_settings.DisplayDialogForLicenceApprovalActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity android:name=".login.GcDeviceRegister" />
+        <activity android:name=".login.GCMacAddressQRCode" /> <!-- Green Content activities -->
+        <service
+            android:name=".login.GCRegisterDeviceService"
+            android:exported="false"></service>
+
+
+        <activity
+            android:name=".green_content.GreenContentMngmtActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/DisplaySchedulesActionBarTheme" />
+        <activity
+            android:name=".green_content.GCLoginActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/WebView_AppTheme" />
+        <activity
+            android:name=".green_content.GCProfileActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/DisplaySchedulesActionBarTheme" />
+        <activity
+            android:name=".green_content.GCContentWebView"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="fullSensor"
+            android:theme="@style/WebView_AppTheme" />
+
+        <service android:name=".green_content.gc_services.GCLoginIntentService" />
+        <service android:name=".green_content.gc_services.TestRestApi" />
+
+        <activity
+            android:name=".green_content.downloadCampaign.DownloadCampaigns"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/DisplaySchedulesActionBarTheme" />
+
+        <service android:name=".green_content.downloadCampaign.download_services.FetchBasicCampInfoService" />
+        <service android:name=".green_content.downloadCampaign.SkipAllCampaignsService" />
+        <service android:name=".green_content.downloadCampaign.auto_download_campaign.AutoDownloadCampaignTriggerService" />
+        <service android:name=".green_content.downloadCampaign.auto_download_campaign.AutoCampDownloadListService" />
+        <service android:name=".green_content.downloadCampaign.DeleteUnknownCampaigns" />
+
+        <activity
+            android:name=".green_content.campaign_preview.PreviewIndvCampaign"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+
+        <service android:name=".player_statistics.PlayerStatisticsCollectionService" />
+        <service android:name=".player_statistics.UploadPlayerStatisticsCollectionService" />
+
+        <service android:name=".green_content.downloadCampaign.download_services.DownloadCampaignsService"/>
+
+        <service android:name=".iot_devices.RegisterIOTDevice"/>
+
+        <service android:name=".green_content.contextual_ads.SyncRulesService" />
+
+        <receiver android:name=".metrics.HandleDelayRuleReceiver">
+            <intent-filter>
+                <action android:name="com.ibetter.www.adskitedigi.adskitedigi.metrics.HandleDelayRuleReceiver" />
+            </intent-filter>
+        </receiver>
+
+
+    </application>
+
+</manifest>

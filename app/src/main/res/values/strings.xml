@@ -1,0 +1,881 @@
+<resources>
+
+    <!--[++] global names -->
+    <string name="loading_text">Loading...</string>
+
+    <!-- App version code in SP -->
+    <string name="app_version_code">app_version_code</string>
+    <string name="app_default_mobile_number_length">10</string>
+    <string name="app_default_android_text">Android</string>
+    <string name="app_default_alert_positive_button_confirm_text">Confirm</string>
+    <string name="app_default_alert_refresh_button_text">Refresh</string>
+    <string name="app_default_alert_positive_button_yes_text">Yes</string>
+    <string name="app_default_alert_negative_button_cancel_text">Cancel</string>
+    <string name="app_default_alert_negative_button_exit_text">Exit</string>
+    <string name="app_default_alert_negative_button_ok_text">Ok</string>
+    <string name="app_default_alert_negative_button_skip_text">Skip</string>
+    <string name="app_default_alert_negative_button_done_text">Done</string>
+    <string name="app_default_alert_negative_button_no_text">No</string>
+    <string name="app_default_alert_title_info">Info</string>
+    <string name="app_default_alert_title_choose_action">Choose Action</string>
+    <string name="app_local_edit_alert">Edit Scroll Text</string>
+    <string name="app_local_update_alert">Update</string>
+    <string name="app_default_intent_action_text">intentAction</string>
+    <string name="app_default_error_code_text">errorCode</string>
+    <string name="app_default_error_msg_text">errorMsg</string>
+    <string name="app_default_success_msg_text">success_msg</string>
+    <string name="app_default_success_code_text">success_code</string>
+    <string name="app_default_proceed_text">Proceed</string>
+    <string name="app_default_flag_text">flag</string>
+    <string name="app_default_result_text">result</string>
+    <string name="date_format_hours">yyyy-MM-dd HH</string>
+    <string name="schedule_layout_expiry_date_format">yyyy-MM-dd HH:mm:ss</string>
+    <string name="get_required_files_immediately">get_required_files_immediately</string>
+    <string name="app_default_video_name">Video</string>
+    <string name="app_default_image_name">Image</string>
+    <string name="app_default_txt_name">Text</string>
+    <string name="app_default_url_name">url</string>
+    <string name="app_default_multi_region">multi_region</string>
+    <string name="app_default_file_name">File</string>
+    <string name="app_default_rss_name">rss</string>
+    <string name="app_default_get_video_text">video/*</string>
+    <string name="app_default_date_time_layout_time_et_hint">Select time</string>
+    <string name="app_default_date_time_layout_date_hint">Select date</string>
+    <string name="app_default_date_time_layout_header">Date And Time Picker</string>
+    <string name="app_default_media_file_text">media</string>
+    <string name="app_default_layout_file_text">layout</string>
+    <string name="app_default_local_text">Local</string>
+    <string name="app_default_action_settings">Settings</string>
+    <string name="app_default_update_action_button_tv">Update</string>
+    <string name="unable_to_save_settings"> Unable to save settings</string>
+    <string name="success">Success</string>
+    <string name="save_settings_success">Settings have been saved successfully</string>
+    <string name="app_default_contact_info"> Please Contact 9900819475/contact@adskite.com</string>
+    <string name="no_internet">No Internet Found, Please Check.</string>
+    <string name="app_default_update_success_mssg">Updated Successfully</string>
+
+    <!-- [-] global names -->
+
+    <!-- [+] app_details -->
+    <string name="app_name"> Digital Signage Player</string>
+    <string name="adskite_digi_directory">SignageServ</string>
+    <!-- [-] app_details -->
+
+    <!-- [+] shared preference strings-->
+    <string name="user_details_sp">user_details_sp</string>
+    <string name="playing_media_mode">playing_media_mode</string>
+    <string name="default_image_duration">default_image_duration</string>
+    <string name="default_report_image_duration">default_report_image_duration</string>
+    <string name="playing_folder_path">playing_folder_path</string>
+    <string name="playing_local_content_mode">playing_local_content_mode</string>
+    <string name="playing_default_image_path">playing_default_image_path</string>
+    <string name="sp_hard_ware_key">hard_ware_key</string>
+    <string name="sp_device_name">device_name</string>
+    <string name="sp_display_details">display_details</string>
+    <string name="sp_display_time_stamp">sp_display_time_stamp</string>
+    <string name="sp_register_status">register_status</string>
+    <string name="sp_local_scroll_text">sp_local_scroll_text</string>
+    <string name="sp_signage_mgr_access">sp_signage_mgr_access</string>
+    <string name="last_played_schedule_Media_id">last_played_schedule_Media_id</string>
+    <string name="last_played_schedule_Media_stop_position">last_played_schedule_Media_stop_position</string>
+    <string name="user_mobile_number">user_mobile_number</string>
+    <string name="user_display_name">user_display_name</string>
+    <string name="user_display_location_desc">user_display_location_desc</string>
+    <string name="local_scroll_text">local_scroll_text</string>
+    <string name="local_scroll_text_italic">local_scroll_text_italic</string>
+    <string name="local_scroll_text_bold">local_scroll_text_bold</string>
+    <string name="scroll_text_text_size">scroll_text_text_size</string>
+    <string name="scroll_text_text_color">scroll_text_text_color</string>
+    <string name="scroll_text_bg_color">scroll_text_bg_color</string>
+    <string name="scroll_text_updated_at">scroll_text_updated_at</string>
+    <string name="local_media_scroll_text">local_media_scroll_text</string>
+    <string name="local_scroll_text_mode">local_scroll_text_mode</string>
+    <string name="is_scrolling_text_on">is_scrolling_text_on</string>
+    <string name="is_signage_mgr_access_on">is_signage_mgr_access_on</string>
+    <string name="is_enterprise_signage_mgr_access_on">is_enterprise_signage_mgr_access_on</string>
+    <string name="signage_mgr_access_service_id">signage_mgr_access_service_id</string>
+    <string name="sync_time_sp">sync_time_sp</string>
+    <string name="screen_orientation_sp">screen_orientation_sp</string>
+    <string name="auto_restart_on_reboot">auto_restart_on_reboot</string>
+    <string name="play_campaign_on_reboot_once_sp">play_campaign_on_reboot_once_sp</string>
+    <string name="overlaying_image_setting_info">overlaying_image_setting_info</string>
+    <string name="is_overlaying_image_on">is_overlaying_image_on</string>
+    <string name="user_display_created_time">user_display_created_time</string>
+    <string name="user_display_status">user_display_status</string>
+    <string name="image_capture_duration">image_capture_duration</string>
+    <string name="is_metrics_on">is_metrics_on</string>
+    <string name="metrics_camera_type">metrics_camera_type</string>
+    <string name="is_auto_download_campaign">is_auto_download_campaign</string>
+    <string name="auto_campaign_download_duration">auto_campaign_download_duration</string>
+
+    <string name="player_statistics_collection">player_statistics_collection</string>
+    <string name="player_statistics_collection_duration">player_statistics_collection_duration</string>
+
+    <!-- [-] shared preference strings-->
+
+    <!--[++] iot device sp -->
+    <string name="iot_device_details_sp">iot_device_details_sp</string>
+    <string name="iot">iot</string>
+    <string name="iot_key">iot_key</string>
+    <!--[-] iot device sp -->
+
+    <!-- [+] error codes -->
+    <string name="display_ready">0</string>
+    <string name="display_waiting">2</string>
+    <string name="display_added">1</string>
+    <string name="no_internet_error_code">00</string>
+    <string name="internal_server_error_code">01</string>
+    <string name="not_licensed_device_error_code">02</string>
+    <string name="not_licensed_approved_error_code">03</string>
+    <string name="display_ads_media_info_not_found_error_code">04</string>
+    <string name="display_ads_media_no_more_schedule_layout_error_code">05</string>
+    <string name="display_ads_media_expired_schedule_layout_error_code">06</string>
+    <string name="display_ads_media_same_schedule_layout_error_code">07</string>
+    <string name="display_ads_media_skip_schedule_layout_error_code">08</string>
+    <string name="display_out_off_memory_error_code">09</string>
+    <!-- [-] error codes -->
+
+    <!-- [+] error messages -->
+    <string name="no_internet_connection_error_msg">No internet connection</string>
+    <string name="internal_server_error_msg">Internal server error</string>
+    <string name="display_ads_media_info_not_found_error_msg">Media info not found</string>
+    <string name="display_ads_media_no_more_schedule_layout_error_msg">No schedule layouts found</string>
+    <string name="display_ads_media_skip_schedule_layout_error_msg">Skip schedule layout</string>
+    <string name="display_ads_media_expired_schedule_layout_error_msg">Invalid/Expired schedule</string>
+    <string name="display_ads_media_same_schedule_layout_error_msg">Same schedule</string>
+    <string name="wrong_error_message">Something went wrong, try again after some time</string>
+    <string name="no_internet_connection_info_msg">No internet connection,Unable to connect with server,would you like to play local schedules</string>
+    <string name="internal_server_error_info_msg">Internal server error,Unable to connect with server,would you like to play local schedules</string>
+    <!-- [-] error messages -->
+
+    <!-- [+] login layout strings -->
+    <string name="register_layout_header_text">Register to SignageServ</string>
+    <string name="register_layout_mobile_number_edit_text_hint">Enter Mobile Number</string>
+    <string name="register_layout_register_button_text">Register</string>
+    <string name="register_layout_path_edit_text_hint">Select Folder Path</string>
+    <string name="register_layout_display_name_edit_text_hint">Enter Display Name</string>
+    <string name="register_layout_location_display_info_edit_text_hint">Enter Location Description</string>
+    <string name="register_layout_user_email_edit_text_hint">Enter Registered GC User Email</string>
+    <string name="register_layout_pwd_edit_text_hint">Enter Password</string>
+    <string name="register_layout_is_adskite_text_hint">AdsKite Admin</string>
+    <string name="register_layout_ak_admin_pwd_edit_text_hint">Enter AdsKite Admin Password</string>
+    <string name="register_layout_sequential_play_txt">Sequential Play </string>
+    <string name="register_layout_scheduled_play_txt">Scheduled Play </string>
+
+    <!-- [-] login layout strings -->
+
+
+    <!-- [+] progress dialog  action strings -->
+    <string name="register_action_progress_dialog_text">Register.....</string>
+    <!-- [-] register action strings -->
+
+    <!-- [+] get file  strings -->
+    <string name="get_files_chunk_offset_text">chunk_offset</string>
+    <string name="get_files_file_path">file_path</string>
+    <string name="get_files_file_type">file_type</string>
+    <string name="get_files_file_id">file_id</string>
+    <string name="get_files_chuck_size">chuck_size</string>
+    <string name="get_files_chunk_offset">chunk_offset</string>
+    <string name="get_response_file_path">response_file_path</string>
+    <string name="get_files_previous_chunk_size">previous_chunk_size</string>
+    <string name="get_files_modified_chunk_size">modified_chunk_size</string>
+    <string name="get_files_no_of_cycles">no_of_cycles</string>
+    <!-- [-] get file  strings -->
+
+    <!-- [+]status msgs strings -->
+    <string name="waiting_message">Display is awaiting licensing approval from an Administrator.</string>
+    <string name="stored_message">Display is added and awaiting for licensing approval from an Administrator.</string>
+    <!-- [-] register action strings -->
+
+    <!-- [=] layout_media strings -->
+    <string name="layout_media_dependencies_seperator">,</string>
+    <string name="layout_media_extension_seperator">\\.</string>
+    <!-- [-] layout_media strings -->
+
+    <!-- [+] login action strings -->
+    <string name="login_action_mobile_number_et_error_msg">Please enter valid 10 digit mobile number</string>
+    <string name="login_action_folder_path_et_error_msg">Please enter valid folder path </string>
+    <string name="login_action_display_name_et_error_msg">Please enter valid Display Name </string>
+    <string name="login_action_playing_mode_selection_spinner_error_msg">Please Select Playing Media Mode</string>
+    <string name="login_action_login_successful_text">Login successfully</string>
+    <string name="login_action_login_failure_text">Unable to login right now,Please try again</string>
+    <string name="login_action_mobile_confirmation_alert_msg">Please Confirm your mobile number </string>
+    <string name="login_action_unable_to_get_path_msg">Unable to get path </string>
+    <string name="login_action_user_email_et_error_msg">Please enter valid Email</string>
+    <string name="login_action_user_pwd_et_error_msg">Invalid password</string>
+
+    <!-- [-] login action strings -->
+    <!-- [+] xibo api call request paramesters strings -->
+    <!-- <string name="xibo_pref_serverurl_default">https://www.signageserv.com/signages/xmds.php?v=4</string>-->
+   <!-- <string name="xibo_pref_serverurl_default">http://159.89.166.5/xmds.php?v=4</string>
+    -->
+    <string name="xibo_pref_serverurl_default">https://www.signageserv.com/xmds.php?v=4</string>
+
+    <string name="xibo_server_key">serverKey</string>
+      <string name="xibo_version">version</string>
+      <string name="xibo_displayName">displayName</string>
+      <string name="xibo_hard_ware_key">hardwareKey</string>
+      <string name="xibo_file_path">filePath</string>
+      <string name="xibo_file_type">fileType</string>
+      <string name="xibo_file_id">fileId</string>
+      <string name="xibo_chuck_size">chuckSize</string>
+      <string name="xibo_chunk_offset">chunkOffset</string>
+      <string name="xibo_device_hard_ware_key_prefix">Adskite_Digi-</string>
+      <string name="xibo_register_api_response_message_parameter">message</string>
+      <string name="xibo_register_api_response_code_parameter">code</string>
+      <string name="xibo_register_api_response_status_parameter">status</string>
+      <string name="xibo_required_files_api_response_type_parameter">type</string>
+      <string name="xibo_required_files_api_response_id_parameter">id</string>
+      <string name="xibo_required_files_api_response_md5_parameter">md5</string>
+      <string name="xibo_required_files_api_response_download_parameter">download</string>
+      <string name="xibo_required_files_api_response_path_parameter">path</string>
+      <string name="xibo_required_files_api_response_size_parameter">size</string>
+      <string name="xibo_schedule_api_response_file_parameter">file</string>
+      <string name="xibo_schedule_api_response_from_date_parameter">fromdt</string>
+      <string name="xibo_schedule_api_response_to_date_parameter">todt</string>
+      <string name="xibo_schedule_api_response_schedule_id_parameter">scheduleid</string>
+      <string name="xibo_schedule_api_response_priority_parameter">priority</string>
+      <string name="xibo_schedule_api_response_dependents_parameter">dependents</string>
+      <!-- [-] xibo api call request paramesters strings -->
+
+    <!-- [+] xibo api call name spaces strings -->
+    <string name="xibo_register_api_name_space">RegisterDisplay</string>
+    <string name="xibo_required_files_api_name_space">RequiredFiles</string>
+    <string name="xibo_schedule_api_name_space">Schedule</string>
+    <string name="xibo_get_file_api_name_space">GetFile</string>
+    <!-- [-] xibo api call name spaces strings -->
+
+    <!-- [+] device shared preferences values -->
+    <string name="device_downloadable_sp">device_downloadable_sp</string>
+    <!-- [-] device shared preferences values -->
+
+    <!-- [+] display  media layout strings -->
+    <string name="display_media_default_text">Welcome to Adskite Digi \n please wait.........</string>
+    <string name="display_ads_layout_progress_dialog_default_percent">0.0</string>
+    <string name="display_ads_layout_scrolling_text"> Thank you for choosing SIGNAGESERV Digital Signage Solution. For Support  Please Contact  Ph: 9900819475 /E-mail contact@adskite.com/Visit www.signageserv.com </string>
+    <string name="display_ads_no_internet_connection_info_msg">No internet connection,Unable to connect with server,would you like to skip this schedule</string>
+    <string name="display_ads_internal_server_error_info_msg">Internal server error,Unable to connect with server,would you like to skip this schedule</string>
+    <string name="display_ads_restarting_player_dialog_info_msg">Do you want continue to  play from resume </string>
+    <string name="display_ads_restarting_player_restarting_player_dialog_positive_button_Continue_text">Continue</string>
+    <string name="display_ads_restarting_player_restarting_player_dialog_negative_button_Continue_text">Play From Starting</string>
+    <string name="display_image_scroll_default">3</string>
+    <!-- [-] display  media layout strings -->
+
+    <!-- [+]   media video extentions -->
+    <string name="media_video_wmv">wmv</string>
+    <string name="media_video_avi">avi</string>
+    <string name="media_video_mpeg">mpeg</string>
+    <string name="media_video_mpg">mpg</string>
+    <string name="media_video_3gp">3gp</string>
+    <string name="media_video_webm">webm</string>
+    <string name="media_video_mp4">mp4</string>
+    <string name="media_video_mkv">mkv</string>
+    <!-- [-]   media video extentions -->
+
+    <!-- [++]   media audio extentions -->
+    <string name="media_audio_mp3">mp3</string>
+    <string name="media_audio_m4a">m4a</string>
+    <string name="media_audio_ts">ts</string>
+    <string name="media_audio_flac">flac</string>
+    <string name="media_audio_wav">wav</string>
+    <string name="media_audio_ogg">ogg</string>
+    <string name="media_audio_xmf">xmf</string>
+    <string name="media_audio_ota">ota</string>
+    <!-- [-]   media audio extentions -->
+
+    <!-- [+]   media image extentions -->
+    <string name="media_image_jpg">jpg</string>
+    <string name="media_image_jpeg">jpeg</string>
+    <string name="media_image_png">png</string>
+    <string name="media_image_bmp">bmp</string>
+    <string name="media_image_gif">gif</string>
+    <string name="media_txt">txt</string>
+    <!-- [-]   media image extentions -->
+
+    <!-- [+]   media File extentions -->
+    <string name="media_file_doc">doc</string>
+    <string name="media_file_docx">docx</string>
+    <string name="media_file_pdf">pdf</string>
+    <string name="media_file_ppt">ppt</string>
+    <string name="media_file_pptx">pptx</string>
+    <string name="media_file_xls">xls</string>
+    <string name="media_file_xlsx">xlsx</string>
+    <!-- [-]   media File extentions -->
+
+    <string name="media_thumbnail_extention">.jpg</string>
+
+
+    <string name="media_json_txt">json</string>
+
+    <!-- [+]  add local schedule -->
+    <string name="add_local_schedule_from_date_tv_text">Schedule Starting Time </string>
+    <string name="add_local_schedule_is_to_date_enabled_tv_text">Set End Time </string>
+    <string name="add_local_schedule_schedule_date_et_hint">YYYY-MM-DD</string>
+    <string name="add_local_schedule_schedule_time_et_hint">HH:MM:SS</string>
+    <string name="add_local_schedule_schedule_media_name_et_hint">Enter schedule name</string>
+    <string name="add_local_schedule_schedule_media_name_tv_text">Schedule Name </string>
+    <string name="add_local_schedule_to_date_tv_text">Schedule Ending Time</string>
+    <string name="add_local_schedule_from_date_et_hint">Select schedule starting time</string>
+    <string name="add_local_schedule_to_date_et_hint">Select schedule ending time</string>
+    <string name="add_local_schedule_select_media_tv_text">Select Media</string>
+    <string name="add_local_schedule_save_button_text">Add Schedule</string>
+    <string name="add_local_schedule_update_button_text">Update Schedule</string>
+    <string name="add_local_schedule_added_successful_text">Schedule added successfully</string>
+    <string name="add_local_schedule_add_failure_text">Unable to  add schedule</string>
+    <string name="add_local_schedule_updated_successful_text">Schedule updated successfully</string>
+    <string name="add_local_schedule_update_failure_text">Unable to  update schedule</string>
+    <string name="local_schedule_failure_delete_text">Unable to  delete schedule</string>
+    <string name="add_local_schedule_delete_successful_text">Schedule deleted successfully</string>
+    <string name="add_local_schedule_media_existing_info">This Schedule media is already exist</string>
+    <string name="add_local_schedule_schedule_prefix_text">SCHEDULE_</string>
+    <string name="add_local_schedule_file_prefix_text">FILE_</string>
+    <string name="add_local_schedule_layout_prefix_text">LAYOUT_</string>
+    <string name="add_local_schedule_action">add_local_schedule_action</string>
+    <string name="local_schedule_id">local_schedule_id</string>
+    <string name="local_schedule_from_date">local_schedule_from_date</string>
+    <string name="local_schedule_to_date">local_schedule_to_date</string>
+    <string name="local_schedule_path">local_schedule_path</string>
+    <string name="local_schedule_schedule_name">local_schedule_name</string>
+    <string name="local_schedule_set_end_time">local_set_end_time</string>
+    <string name="add_local_schedule_schedule_media_et_error_text">Please enter schedule media name</string>
+    <string name="add_local_schedule_from_date_et_error_text">Please enter schedule starting Date</string>
+    <string name="add_local_schedule_to_date_et_error_text">Please enter schedule end Date</string>
+    <string name="add_local_schedule_from_time_et_error_text">Please enter schedule starting time</string>
+    <string name="add_local_schedule_to_time_et_error_text">Please enter schedule end time</string>
+    <string name="add_local_schedule_date_format_error_text">Make sure start date is less than end date </string>
+    <string name="add_local_schedule_media_error_text">Please Select media </string>
+    <string name="local_scroll_text_err_msg">Please Enter Scrolled Text</string>
+    <string name="local_scroll_text_save_button_text">Update</string>
+    <string name="custom_scroll_text_hint">Enter Scroll Text</string>
+    <string name="media_scroll_text_hint">Enter Position To Scroll</string>
+    <string name="add_local_schedule_memory_intensive_text">Memory for storing this media is not available, Would you like to save schedule with out copying?
+            \nNote: If you delete the media from the device or disconnect the source your schedule may not work. </string>
+
+    <string name="invalid_scroll_media">Invalid scroll media position</string>
+    <!-- [-]  add local schedule -->
+
+    <!-- [+]  select media dialog-->
+    <string name="select_media_photo_tv_text">Photos</string>
+    <string name="select_media_video_tv_text">Videos</string>
+    <!-- [-]  select media dialog-->
+
+
+    <!-- [+]  date time modal -->
+    <string name="date_time_modal_date_error_text">Please select date </string>
+    <string name="date_time_modal_time_error_text">Please select time</string>
+    <!-- [-]  date time modal -->
+
+    <string name="mail_info_1">Dear,\n We got new device( </string>
+    <string name="mail_info_2"> ) Request for approval</string>
+
+   <!-- <string-array name="playing_modes">
+        <item>Choose Playing Media Mode</item>
+        <item>Local Media Mode</item>
+        <item>Server Media Mode</item>
+        <item>Local &amp; Server Media Mode</item>
+        <item>Local Folder Media Mode</item>
+    </string-array>-->
+
+  <string-array name="playing_modes">
+        <item>Choose Playing Media Mode</item>
+        <item>Multi Layout Cloud Mode</item>
+        <item>Cloud Content Mode</item>
+        <item>Local Content Mode</item>
+    </string-array>
+
+    <!-- home page navigation drawer items for admin-->
+    <string-array name="settings">
+        <item>Device Profile Settings</item>
+        <item>CMS Settings</item>
+        <item>Show SS Player QR Code</item>
+        <item>Set Default Banner</item>
+        <item>Set Overlay Logo</item>
+        <item>Content Auto Sync Settings</item>
+        <item>Campaign Statistics Settings</item>
+        <item>IOT Device Settings</item>
+        <item>Advanced Settings</item>
+        <item>Text Settings</item>
+        <item>Audio Settings</item>
+        <item>Display Image Duration Settings</item>
+        <item>Display Report Image Duration Settings</item>
+        <item>New Content Arrival Action Settings</item>
+        <item>Interactive Action Settings</item>
+        <item>URL Settings</item>
+        <item>Signage Manager Access Settings</item>
+
+    </string-array>
+
+    <array name="settings_icons">
+        <item>@drawable/ic_image</item>
+        <item>@drawable/ic_mode_icon</item>
+        <item>@drawable/ic_signage_mgr_settings</item>
+        <item>@drawable/ic_image</item>
+        <item>@drawable/ic_image</item>
+        <item>@drawable/ic_signage_mgr_settings</item>
+        <item>@drawable/ic_signage_mgr_settings</item>
+        <item>@drawable/ic_signage_mgr_settings</item>
+        <item>@drawable/ic_signage_mgr_settings</item>
+        <item>@drawable/ic_gray_text</item>
+        <item>@drawable/ic_anounce</item>
+        <item>@drawable/ic_image</item>
+        <item>@drawable/ic_image</item>
+        <item>@drawable/ic_anounce</item>
+        <item>@drawable/ic_signage_mgr_settings</item>
+        <item>@drawable/ic_signage_mgr_settings</item>
+        <item>@drawable/ic_signage_mgr_settings</item>
+    </array>
+
+
+    <string name="hide_scroll_text_settings">Show Scrolling Ticker</string>
+    <string name="display_images_settings_layout_edit_text_hint">Enter Image Duration  </string>
+    <string name="scrolling_media_name">Scrolling Media Name</string>
+    <string name="scrolling_customized_text">Scrolling Customized Text</string>
+
+    <!-- announce settings xml -->
+    <string name="text_to_announce">  Announce Text</string>
+    <string name="text_to_announce_hint">Enter Text To Announce</string>
+    <string name="publish_immediate">Publish Immediate</string>
+    <string name="announce">Announce</string>
+    <string name="times">Times</string>
+    <string name="announcement_text_error">Announcement text should contain minimum 10 characters</string>
+    <string name="with">with</string>
+    <string name="seconds_gap">Seconds gap</string>
+    <string name="set_overlaying_settings">Set Overlaying Settings</string>
+
+    <!-- announcement settings sp-->
+    <string name="announcement_settings_sp">announcement_settings_sp</string>
+    <string name="announcement_settings_announcement_text">announcement_settings_announcement_text</string>
+    <string name="announcement_settings_announcement_times">announcement_settings_announcement_times</string>
+    <string name="announcement_settings_announcement_status">announcement_settings_announcement_status</string>
+    <string name="default_announcement_settings_announcement_text"> </string>
+    <string name="announcement_settings_action_bar">Publish Immediate Format</string>
+    <string name="announcement_settings_announcement_gap">announcement_settings_announcement_gap</string>
+    <string name="file_name_seperator">_</string>
+    <string name="install_tts_alert">Dear user, some of your settings are outdated, Please update them to enjoy the full features</string>
+    <string name="tts_error_alert">Dear user, your device does not have TTS feature, Announcement functionality won\'t work</string>
+    <string name="reports_prefix">report</string>
+
+    <!-- fcm settings sp -->
+    <string name="fcm_sp">fcm_sp</string>
+    <string name="fcm_token">fcm_token</string>
+    <string name="is_fcm_updated">is_fcm_updated</string>
+
+
+    <string name="hide_file_name">hide_file_name</string>
+    <string name="signage_mgr_service_id_validations_err">Please Enter Service Id</string>
+
+    <string name="signage_mgr_access_back_press_dialog_info_msg">You Should Enter Signage Manger Service ID, Shall You Turn OFF The Access?   </string>
+    <string name="signage_mgr_access_settings_text">Signage Manager Access Settings</string>
+    <string name="signage_mgr_access_settings_service_id_hint">Enter Account Service Id</string>
+    <string name="signage_mgr_access_service_id_text">Service Id :</string>
+    <string name="signage_mgr_access__update_alert">Update Service ID</string>
+    <string name="error_missing_permissions">Cannot start without required permissions</string>
+    <string name="signage_mgr_access_toast_connected">Connected to %s</string>
+    <string name="signage_mgr_access_toast_disconnected">Disconnected from %s</string>
+    <string name="signage_mgr_access_name_prefix">SS-</string>
+    <string name="signage_mgr_access_settings_enterprise_text">Signage Manager Access Settings \n (Enterprise)</string>
+    <!-- [+] shared preference strings for  customer actions-->
+    <string name="action_template_id">action_template_id</string>
+    <string name="interactive_action_form_url">interactive_action_form_url</string>
+    <string name="interactive_action_app_invoke">interactive_action_app_invoke</string>
+    <string name="interactive_inactivity_timer_flag">interactive_inactivity_timer_flag</string>
+    <string name="interactive_inactivity_timer">interactive_inactivity_timer</string>
+
+
+    <string name="display_customer_interactive_action">display_customer_interactive_action</string>
+    <string name="display_customer_interactive_action_text">display_customer_interactive_action_text</string>
+    <string name="auto_campaign_rule_setting">auto_campaign_rule_setting</string>
+    <string name="update_is_re_launch">update_is_re_launch</string>
+
+    <string name="media_image_type">Image</string>
+    <string name="media_video_type">Video</string>
+    <string name="media_url_type">Url</string>
+    <string name="media">media</string>
+    <string name="url_txt">URL</string>
+
+
+    <string name="do_not_display_media">dndm</string>
+    <string name="media_thumbnail">THUMB</string>
+
+    <string name="add_action_prefix">Add:</string>
+
+    <string name="delete_request">Delete_Request:</string>
+    <string name="delete_response">Delete_Response:</string>
+    <string name="delete_actio_request">delete_action_request:</string>
+    <string name="campaign_image_add_request">campaign_image:</string>
+    <string name="delete_offer_audio_action_request">delete_offer_audio_action_request:</string>
+
+    <string name="signage_mgr_access_settings_note">Note: Please make sure when SM on , Sequential Play got selected.</string>
+    <string name="control_panel_restart_request">control_panel_restart_request</string>
+    <string name="control_panel_stop_request">control_panel_stop_request</string>
+
+    <string name="device_volume_change_request">device_volume_change_request</string>
+
+    <string name="get_text_settings_request">get_text_settings_request</string>
+    <string name="get_text_settings_response">get_text_settings_response</string>
+
+    <string name="play_offer_audio_request">play_offer_audio_request</string>
+    <string name="play_offer_audio_response">play_offer_audio_response</string>
+    <string name="play_offer_text_action">play_offer_text_action</string>
+
+    <!--modify action String data -->
+    <string name="modify_request">Modify_Request:</string>
+    <string name="modify_response">Modify_Response:</string>
+    <string name="modify_action_request">modify_action_request:</string>
+    <string name="modify_action_response">modify_action_response:</string>
+
+    <string name="media_settings_request">media_settings_request:</string>
+    <string name="skip_setting">skip_setting</string>
+
+    <string name="ss_mode_settings">ss_mode_settings:</string>
+    <string name="ss_mode_settings_request">mode_request</string>
+    <string name="ss_mode_change_request">mode_change</string>
+    <string name="ss_mode_settings_response">ss_mode_settings_response</string>
+
+    <string name="scroll_text">scroll_text</string>
+    <string name="is_scroll_text_on">is_scroll_text_on</string>
+    <string name="scroll_text_mode">scroll_text_mode</string>
+    <string name="scroll_media_name_position">scroll_media_name_position</string>
+
+    <string name="offer_txt_json_key">offer_text</string>
+    <string name="media_resource_json_key">resource</string>
+    <string name="is_display_scroll_txt_json_key">display_scroll_txt</string>
+    <string name="media_duration_json_key">duration</string>
+    <string name="bg_audio_json_key">bg_audio</string>
+    <string name="can_play_bg_audio_json_key">play_bg_audio</string>
+    <string name="is_skip_json_key">is_skip</string>
+    <string name="media_name_json_key">media_name</string>
+    <string name="media_path_json_key">media_path</string>
+    <string name="hide_ticker_txt">hide_ticker_txt</string>
+    <string name="media_info_json_key">media_info</string>
+
+
+    <string name="server_mode_multi_layout">Multi Layout Cloud Mode</string>
+    <string name="server_mode_single_layout">Cloud Content Mode</string>
+    <string name="local_mode">Local Content Mode</string>
+
+    <string name="white_label_app_package">com.signage.rpndebcdbq</string>
+
+    <string name="double_tap_redirect_to_settings">Double tap on screen to redirect to settings</string>
+    <string name="error_msg_un_support_playing_mode">Dear User we are unable to play the selected mode, please contact our customer care for complete info, or change the settings</string>
+
+    <string name="add_text_ticker_prefix">Text_Ticker:</string>
+
+    <string name="start_streaming">start_streaming</string>
+    <string name="action">action</string>
+    <string name="action_extra_info">extra_info</string>
+    <string name="update_scroll_text_action">update_scroll_text_action</string>
+
+    <string name="bg_audio_file">bg_audio_file</string>
+
+    <string name="bg_audio_settings_dir">/AdskiteDigi/Settings/Media/Audio/BgAudio</string>
+    <string name="default_file_name_seperator">/</string>
+
+    <string name="play_offer_audio_no_media_info">*Audio file not found</string>
+
+    <!-- settings  sp -->
+    <string name="settings_sp">settings_sp</string>
+    <string name="play_audio_sp">play_audio_sp</string>
+    <string name="auto_scroll_web_view_sp">auto_scroll_web_view_sp</string>
+    <string name="auto_scroll_web_view_duration_sp">auto_scroll_web_view_duration_sp</string>
+    <string name="sm_access_settings_mode_sp">sm_access_settings_mode_sp</string>
+
+    <!-- handle delay rule sp -->
+    <string name="handle_delay_rule_sp">handle_delay_rule_sp</string>
+    <string name="handle_delay_rule_current_active_alarm_time_sp">handle_delay_rule_current_active_alarm_time_sp</string>
+
+    <string name="media_player_init_error">Unable to initialize media player </string>
+
+    <string name="play_audio">play_audio</string>
+    <string name="update_offer_audio_action">update_offer_audio_action</string>
+
+    <string name="app_default_media_name">media_name</string>
+    <string name="app_default_media_file_data">file_data</string>
+    <string name="signage_serv_logs_directory_name">SignageServ/Logs</string>
+
+    <string name="other_app_launch_setting">other_app_launch_setting</string>
+    <string name="other_app_package_name">other_app_package_name</string>
+
+    <string name="user_guide_channel_name">user_guide_channel_name</string>
+
+    <!-- muti region json keys -->
+    <string name="multi_region_type_json_key">type</string>
+    <string name="multi_region_width_json_key">width</string>
+    <string name="multi_region_height_json_key">height</string>
+    <string name="multi_region_top_margin_json_key">top_margin</string>
+    <string name="multi_region_bottom_margin_json_key">bottom_margin</string>
+    <string name="multi_region_left_margin_json_key">left_margin</string>
+    <string name="multi_region_right_margin_json_key">right_margin</string>
+    <string name="multi_region_media_name_json_key">media_name</string>
+    <string name="multi_region_default_scroll_text_value">ss_default_global_scroll_text</string>
+    <string name="multi_region_properties_json_key">properties</string>
+    <string name="multi_region_is_self_path_json_key">is_self_path</string>
+
+    <!-- save campaign images to -->
+    <string name="campaign_images_dir">/Media/CImages</string>
+
+    <string name="display_ad_scrolling_text_bg_color">#fbf5da0b</string>
+    <string name="display_ad_scrolling_text_color">#cc2507</string>
+
+    <string name="set_boot_time_settings_text">Set BootUp Time for Media</string>
+    <string name="select_screen_orientation_text">Select Screen Orientation</string>
+    <string name="select_accessibility_settings">Accessibility Service</string>
+    <string name="set_auto_restart_on_reboot">Set Auto Restart on Reboot</string>
+    <string name="set_play_campaign_on_reboot_only_once">Set Play Campaign on ReBoot Only Once</string>
+    <string name="other_app_launcher_settings_text">Set Other App Launch Setting</string>
+
+    <!--List of all the Requests for Customer Interactive Actions   -->
+    <string name="customer_interactive_actions_list_request">customer_interactive_actions_list_request</string>
+    <string name="customer_interactive_actions_list_response">customer_interactive_actions_list_response</string>
+    <string name="actions_list_based_on_status_request">actions_list_based_on_status_request</string>
+    <string name="actions_list_based_on_status_response">actions_list_based_on_status_response</string>
+
+    <string name="customer_interactive_update_actions_text_request">customer_interactive_update_actions_text_request</string>
+    <string name="customer_interactive_actions_close_request">customer_interactive_actions_close_request</string>
+
+    <string name="customer_interactive_action_settings_request">customer_interactive_action_settings_request</string>
+    <string name="customer_interactive_action_settings_response">customer_interactive_action_settings_response</string>
+
+    <string name="display_customer_interactive_actions_layout_request">display_customer_interactive_actions_layout_request</string>
+    <string name="display_customer_interactive_actions_text_request">display_customer_interactive_actions_text_request</string>
+    <string name="export_customer_interactive_actions_list_request">export_customer_interactive_actions_list_request</string>
+
+    <string name="interactive_od_id">_id</string>
+    <string name="interactive_od_value">value</string>
+    <string name="interactive_od_flag">flag</string>
+    <string name="interactive_optional_data">interactive_optional_data</string>
+    <string name="interactive_od_key">key</string>
+
+    <string name="restaurants_waiting_list_form">Customer Interaction Form</string>
+    <string name="customer_feed_back_form_alert_string">Please click DONE after URL Activity Completed.</string>
+    <string name="restaurants_waiting_list_string">Please Fill the Form</string>
+    <string name="app_default_submit_button_txt">Submit</string>
+    <string name="restaurants_waiting_list_data_record_string">Thank You. We will contact you soon</string>
+
+    <!-- multi region media info properties -->
+    <string name="has_video_with_sound_multi_reg_prop">hasVideoWithSound</string>
+    <string name="has_video">hasVideo</string>
+
+    <string name="payload_separator">:</string>
+
+    <string-array name="dont_scroll_url">
+        <item>youtube.com</item>
+        <item>youtu.be</item>
+    </string-array>
+
+    <string-array name="available_media_types">
+        <item>Video</item>
+        <item>Image</item>
+        <item>url</item>
+        <item>multi_region</item>
+    </string-array>
+
+    <!-- sm access modes -->
+    <string-array name="sm_access_modes">
+        <item>Nearby</item>
+        <item>Enterprise</item>
+    </string-array>
+
+    <string name="sm_access_near_by_mode">Nearby</string>
+    <string name="sm_access_enterprise_mode">Enterprise</string>
+
+
+
+    <string name="enterprise_mode_files_dir">Nearby</string>
+
+    <string name="ftp_command_file_prefix">AK_FTP_COMMAND</string>
+
+    <!-- ftp command types -->
+    <string name="media_request">media_request</string>
+    <string name="media_and_player_request">media_and_player_request</string>
+    <string name="device_settings_request">device_settings_request</string>
+    <string name="player_settings_request">player_settings_request</string>
+    <string name="interaction_settings_request">interaction_settings_request</string>
+    <string name="announcement_request">announcement_request</string>
+    <string name="campaign_rules_request">campaign_rules_request</string>
+
+
+    <!-- ftp commsnds json key-->
+    <string name="save_ftp_command_response_to_json_key">save_response_to</string>
+    <string name="delete_media_files_json_key">files</string>
+    <string name="ss_sm_mode_json_key">mode</string>
+    <string name="offset_json_key">offset</string>
+    <string name="settings_json_key">settings</string>
+    <string name="payload_string_json_key">payload_string</string>
+    <string name="update_settings_json_key">update_settings</string>
+    <string name="status_json_key">status</string>
+    <string name="service_action_start_date">start_date</string>
+    <string name="service_action_end_date">end_date</string>
+    <string name="c_id_json_key">c_id</string>
+    <string name="info_json_key">info</string>
+    <string name="get_player_volume_request_json_key">get_player_volume_request</string>
+    <string name="volume_json_key">volume</string>
+
+    <string name="get_campaign_rules_request">get_campaign_rules_request</string>
+    <string name="process_rules_request">process_rules_request</string>
+    <string name="campaign_rules_info">campaign_rules_info</string>
+    <string name="handle_rule_request">handle_rule_request</string>
+    <string name="campaign_rule">campaign_rule</string>
+    <string name="get_rule_names_request">get_rule_names_request</string>
+    <string name="auto_campaign_rule_setting_request">auto_campaign_rule_setting_request</string>
+    <string name="get_auto_campaign_rule_setting_request">get_auto_campaign_rule_setting_request</string>
+    <string name="update_auto_campaign_rule_setting">update_auto_campaign_rule_setting</string>
+
+    <!-- Campaign Rules Json String values -->
+    <string name="json_rule_id">_id</string>
+    <string name="json_rule_name">name</string>
+    <string name="json_rule_created_at">created_at</string>
+    <string name="json_rule_updated_at">updated_at</string>
+    <string name="json_rule_camp_info">camp_info</string>
+    <string name="json_new_rules_list">new_rules</string>
+    <string name="json_update_rules_list">update_rules</string>
+    <string name="json_delete_rule_list">delete_rules</string>
+    <!-- END OF Campaign Rules Json String values -->
+
+
+    <!-- screen orientation changes -->
+    <string-array name="screen_orientation">
+        <item>Landscape</item>
+        <item>Portrait</item>
+    </string-array>
+
+    <string name="landscape">Landscape</string>
+    <string name="portrait">Portrait</string>
+    <string name="mac_address_title">SS Player QR Code</string>
+    <string name="note_for_qr_code_scan">Note: Please scan this QR  code to add Player </string>
+    <string name="json_key_is_encoded">is_encoded</string>
+    <string name="json_key_mac">mac</string>
+
+    <!-- enterprise notification channel -->
+    <string name="enterprise_notify_ch_name">enterprise_notification</string>
+    <string name="enterprise_notify_ch_des">Enterprise settings status notification</string>
+    <string name="enterprise_notify_ch_id">enterprise_notification_id</string>
+
+    <!--default browser url's -->
+    <string-array name="def_browser_url">
+        <item>zoom.us</item>
+       <!-- <item>youtube.com</item>
+        <item>youtu.be</item>-->
+    </string-array>
+
+    <string name="def_zoom_us">zoom.us</string>
+    <string name="app_youtube_url">youtu.be</string>
+    <string name="youtube_url">youtube.com</string>
+    <string name="def_hdmi_in_package">com.zidoo.rtk.hdmi</string>
+    <string name="def_envy_hdmi_in_package">com.rtk.SourceIn</string>
+    <string name="zoom_packagename">us.zoom.videomeetings</string>
+
+    <!-- screen orientation changes -->
+    <string-array name="overlay_image_position">
+        <item>Choose Position</item>
+        <item>Right-Top</item>
+        <item>Right-Bottom</item>
+        <item>Left-Top</item>
+        <item>Left-Bottom</item>
+    </string-array>
+
+    <string name="message_accessibility_service_details">This service allows user to switch between Digital Signage and TV input with your android TV box remote control. Only Switch on this service if you are using TV box with extra hdmi input like Zidoo box, do not switch on this service in your mobiles. Note: We do not read any of your input data like credit card details or bank details and we do not share any of your data to any third party applications.
+    </string>
+
+    <string name="handle_key_command_process_sub_str">HandleKeyCommands</string>
+
+    <string name="optional_text_data_length">(250 chars)</string>
+
+
+    <string name="current_time_json_key">current_time_json_key</string>
+    <string name="app_default_update_current_time_request">app_default_update_current_time_request</string>
+    <string name ="required_asterisk"><![CDATA[<font color=\'#cc0029\'>&nbsp*</font>]]></string>
+
+    <string-array name="green_content_setting_array">
+        <item>Preview Campaigns</item>
+        <item>Download Campaigns</item>
+
+    </string-array>
+
+    <array name="green_content_setting_icons_array">
+
+        <item>@drawable/ic_preview</item>
+        <item>@drawable/ic_download_campaign</item>
+
+    </array>
+
+    <string name="green_content_management_page_title">Green Content CMS</string>
+    <string name="no_campaigns_found">No Campaigns Found...</string>
+    <string name="gc_download_campaigns_page_title">Campaigns List</string>
+
+
+    <!-- [+] shared preference strings for Green content user login info string-->
+    <string name="gc_user_id">gc_user_id</string>
+    <string name="gc_user_unique_key">gc_user_unique_key</string>
+    <string name="gc_user_email_id">gc_user_email_id</string>
+    <string name="gc_user_password">gc_user_password</string>
+    <string name="enterprise_user_email_id">enterprise_user_email_id</string>
+    <string name="enterprise_user_password">enterprise_user_password</string>
+    <string name="enter_prise_url">enter_prise_url</string>
+    <string name="gc_user_first_name">gc_user_first_name</string>
+    <string name="gc_user_last_name">gc_user_last_name</string>
+    <string name="campaign_user_profile">User Profile</string>
+    <string name="player_id">player_id</string>
+    <string name="player_mac">player_mac</string>
+
+    <string name="gc_login_page_title">Please Sign In</string>
+    <string name="gc_user_email_string">Email Id</string>
+    <string name="gc_user_password_string">Password</string>
+    <string name="gc_user_email_hint">Email Address</string>
+    <string name="gc_user_password_hint">Password</string>
+    <string name="gc_login_forget_password">Forgot Password?</string>
+    <string name="gc_new_user_string">New user?</string>
+    <string name="gc_create_new_user_account">Create new account</string>
+    <string name="gc_user_login_string">LogIn</string>
+    <string name="gc_contact_us_string">Contact Us</string>
+
+    <string name="gc_campaign_override_string">Dear User, Campaign is already exist.\nWould you like to Override it?</string>
+    <string name="gc_publish_campaigns_page_title">Publish Campaigns</string>
+    <string name="gc_preview_campaigns_page_title">Preview Campaigns</string>
+    <string name="gc_upload_campaigns_page_title">Upload Campaigns</string>
+    <string name="green_content_cms">Green Content CMS</string>
+    <string name="gc_user_email_err_msg">Please Enter Valid Email Address</string>
+    <string name="gc_user_password_err_msg">Please Enter Valid Password</string>
+    <string name="gc_user_logout_string">Dear User,\nAre you sure to Logout?</string>
+    <string name="export_data_format">dd-MM-yyyy HH:mm:ss</string>
+
+
+
+    <!-- User Guide Channels -->
+    <string-array name="user_guide_string_array">
+        <item>Green Content</item>
+        <item>Video Conferencing</item>
+        <item>Play Campaigns</item>
+        <item>DSP Settings</item>
+    </string-array>
+
+    <string-array name="user_guide_icons_array">
+        <item>@drawable/ic_content_yellow</item>
+        <item>@drawable/ic_video_yellow</item>
+        <item>@drawable/ic_publish</item>
+        <item>@drawable/ic_settings_yellow</item>
+    </string-array>
+
+    <string name="user_guide_string">Guide</string>
+    <string name="seconds_text_string">Seconds</string>
+
+    <string name="action_settings_string">Interactive Action Settings</string>
+    <string name="customer_interactive_action_switch_string">Enable Interactive Actions</string>
+    <string name="interactive_inactivity_timer_string">Action Inactivity Timer</string>
+    <string name="set_interactive_action_string">Set Interactive Activity</string>
+    <string name="customer_feedback_form_hint">Enter Form URL</string>
+    <string name="display_customer_feedback_form">Display URL Page</string>
+    <string name="set_optional_app_invoke">Choose App</string>
+    <string name="display_app_invoke_form">Display App Invoke Activity</string>
+    <string name="signage_mgr_url_err_msg">Please enter valid Form URL</string>
+
+
+    <string name="dndm_ss_ticker_txt">DNDM_SS_TICKER_TXT</string>
+
+    <string name="all_file_key">ALL_FILES</string>
+
+    <string name="rule_seperator">;</string>
+
+
+
+</resources>

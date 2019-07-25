@@ -1,0 +1,36 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@android:id/background">
+        <shape android:shape="rectangle" >
+            <solid android:color="@color/display_ad_progress_dialog_stroke_colour" />
+        </shape>
+    </item>
+
+    <item android:id="@android:id/secondaryProgress">
+        <clip>
+            <shape>
+                <gradient
+                    android:startColor="@color/display_ad_progress_dialog_stroke_colour"
+                    android:centerColor="@color/display_ad_progress_dialog_stroke_colour"
+                    android:centerY="0.75"
+                    android:endColor="@color/display_ad_progress_dialog_stroke_colour"
+                    android:angle="270"
+                    />
+            </shape>
+        </clip>
+    </item>
+
+    <item android:id="@android:id/progress">
+        <clip>
+            <shape>
+                <gradient
+                    android:startColor="@color/colorPrimary"
+                    android:centerColor="@color/colorPrimary"
+                    android:centerY="0.75"
+                    android:endColor="@color/colorPrimary"
+                    android:angle="270"
+                    />
+            </shape>
+        </clip>
+    </item>
+    </layer-list>

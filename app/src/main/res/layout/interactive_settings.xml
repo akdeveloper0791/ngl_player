@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:focusableInTouchMode="true"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_alignParentLeft="true"
+            android:textSize="@dimen/app_default_text_view_text_size"
+            android:text="@string/customer_interactive_action_switch_string"
+            android:textColor="@color/app_default_text_color"
+            android:layout_toLeftOf="@+id/action_btn"/>
+
+        <ToggleButton
+            android:id="@+id/action_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:layout_alignParentRight="true"
+            android:layout_margin="5dp"
+            android:layout_centerHorizontal="true"/>
+
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/activity_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_alignParentLeft="true"
+            android:textSize="@dimen/app_default_text_view_text_size"
+            android:text="@string/interactive_inactivity_timer_string"
+            android:textColor="@color/app_default_text_color"
+            android:layout_toLeftOf="@+id/timer_switch"/>
+
+
+        <ToggleButton
+            android:id="@+id/timer_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:layout_alignParentRight="true"
+            android:layout_margin="5dp"
+            android:layout_centerHorizontal="true"/>
+
+    </RelativeLayout>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp">
+
+        <RelativeLayout
+            android:id="@+id/duration_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusableInTouchMode="true"
+            android:gravity="left"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/duration_et"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:minLines="1"
+                android:background="@drawable/edit_text_focused"
+                android:maxLength="4"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textSize="18sp"
+                android:layout_centerVertical="true"
+                android:inputType="number"
+                android:textColor="#ad000000"
+                android:focusableInTouchMode="true"
+                android:hint="number"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/sec_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:gravity="center"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/duration_et"
+                android:text="@string/seconds_text_string"/>
+
+            <Button
+                android:id="@+id/set_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/sec_tv"
+                android:layout_centerVertical="true"
+                android:textColor="@color/white_color"
+                android:background="@drawable/button_background"
+                android:text="Set"/>
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="5dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/app_default_text_color"
+                android:textSize="@dimen/app_default_text_view_text_size"
+                android:text="@string/set_interactive_action_string" />
+
+            <RadioGroup
+                android:id="@+id/interactive_rg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RadioButton
+                    android:id="@+id/feedback_rb"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/display_customer_feedback_form"/>
+
+                <RadioButton
+                    android:id="@+id/app_invoke"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/display_app_invoke_form"/>
+
+            </RadioGroup>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="10dp"
+                android:visibility="gone"
+                android:focusableInTouchMode="true"
+                android:id="@+id/url_layout">
+
+                <EditText
+                    android:id="@+id/url_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edit_text_focused"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:minLines="2"
+                    android:paddingLeft="5dp"
+                    android:gravity="left"
+                    android:textSize="18sp"
+                    android:focusableInTouchMode="true"
+                    android:hint="@string/customer_feedback_form_hint" />
+
+                <Button
+                    android:id="@+id/save_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Save"
+                    android:layout_gravity="right"
+                    android:gravity="center"
+                    android:layout_centerVertical="true"
+                    android:textStyle="bold"
+                    android:textColor="@color/white_color"
+                    android:background="@drawable/button_background"/>
+
+            </LinearLayout>
+
+
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:focusableInTouchMode="true"
+                android:id="@+id/app_launcher_layout">
+
+                <Button
+                    android:id="@+id/choose_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Choose App"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/white_color"
+                    android:background="@drawable/button_background"
+                    android:layout_alignParentRight="true"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/name_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_default_margin"
+                    android:layout_centerVertical="true"
+                    android:minLines="2"
+                    android:text="@string/set_optional_app_invoke"
+                    android:background="@drawable/white_rectangle_orange_line"
+                    android:layout_toLeftOf="@+id/choose_btn"
+                    android:maxLines="3"/>
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>
+</ScrollView>

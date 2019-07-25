@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<LinearLayout
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select Playing Mode"
+        android:textStyle="bold"/>
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/cms_mode_layout">
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:id="@+id/near_by_mode"
+            android:text="NearBy - Mobile App CMS "/>
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:id="@+id/enterprise_mode"
+            android:text="Enterprise -  Private CMS "/>
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:id="@+id/cloud_mode"
+            android:text="Cloud- Shared CMS"/>
+
+    </RadioGroup>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/mode_details"
+            android:visibility="gone"
+            android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CMS Server Details"
+        android:textStyle="bold"/>
+
+
+        <EditText
+            android:id="@+id/url"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/app_default_edit_text_height"
+            android:layout_margin="@dimen/app_default_edit_text_margin"
+            android:layout_marginTop="@dimen/app_default_vertical_space"
+            android:layout_marginBottom="@dimen/app_default_vertical_space"
+            android:paddingLeft="@dimen/app_default_edit_text_horizontal_padding"
+            android:background="@drawable/edit_text_focused"
+            android:hint="Enter Url "
+            android:textColorHint="@color/app_default_edit_text_hint_color"
+            android:textColor="@color/app_default_text_color"
+            android:inputType="textUri"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/link_button"
+            android:layout_alignParentTop="true"
+            />
+
+
+            <EditText
+                android:id="@+id/user_name"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/app_default_edit_text_height"
+                android:layout_margin="@dimen/app_default_edit_text_margin"
+                android:layout_marginTop="@dimen/app_default_vertical_space"
+                android:layout_marginBottom="@dimen/app_default_vertical_space"
+                android:paddingLeft="@dimen/app_default_edit_text_horizontal_padding"
+                android:background="@drawable/edit_text_focused"
+                android:hint="Enter User Name "
+                android:textColorHint="@color/app_default_edit_text_hint_color"
+                android:textColor="@color/app_default_text_color"
+                android:inputType="textUri"
+                android:layout_alignParentLeft="true"
+                android:layout_toLeftOf="@+id/link_button"
+                android:layout_alignParentTop="true"
+                />
+
+            <EditText
+                android:id="@+id/user_pwd"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/app_default_edit_text_height"
+                android:layout_margin="@dimen/app_default_edit_text_margin"
+                android:layout_marginTop="@dimen/app_default_vertical_space"
+                android:layout_marginBottom="@dimen/app_default_vertical_space"
+                android:paddingLeft="@dimen/app_default_edit_text_horizontal_padding"
+                android:background="@drawable/edit_text_focused"
+                android:hint="Enter Password "
+                android:textColorHint="@color/app_default_edit_text_hint_color"
+                android:textColor="@color/app_default_text_color"
+                android:inputType="textPassword"
+                android:layout_alignParentLeft="true"
+                android:layout_toLeftOf="@+id/link_button"
+                android:layout_alignParentTop="true"
+                />
+        </LinearLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="  Update  "
+        android:id="@+id/update"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:textColor="@color/app_default_button_text_color"
+        android:background="@drawable/button_background"/>
+</LinearLayout>
+
+</ScrollView>

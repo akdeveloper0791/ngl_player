@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="10dp"
+
+        android:id="@+id/display_name_image"
+        android:src="@drawable/ic_display_gray"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Display Name"
+        android:textStyle="bold"
+        android:layout_margin="5dp"
+        android:id="@+id/display_name_tv"
+        android:layout_toRightOf="@+id/display_name_image"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="name"
+        android:layout_margin="5dp"
+        android:id="@+id/display_name"
+        android:layout_below="@+id/display_name_tv"
+        android:layout_toRightOf="@+id/display_name_image"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="5dp"
+        android:background="#E8EEEE"
+        android:layout_below="@+id/display_name_image"
+        android:layout_toRightOf="@+id/display_name_image"/>
+    />
+</RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="10dp"
+            android:id="@+id/location_image"
+            android:src="@drawable/ic_location"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Location"
+            android:layout_margin="5dp"
+            android:textStyle="bold"
+            android:id="@+id/location_tv"
+            android:layout_toRightOf="@+id/location_image"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="name"
+            android:id="@+id/location"
+            android:layout_margin="5dp"
+            android:layout_below="@+id/location_tv"
+            android:layout_toRightOf="@+id/location_image"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="5dp"
+            android:background="#E8EEEE"
+            android:layout_below="@+id/location_image"
+            android:layout_toRightOf="@+id/location_image"/>
+        />
+    </RelativeLayout>
+
+</LinearLayout>

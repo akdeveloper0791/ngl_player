@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#e77a31</color>
+    <color name="colorPrimaryDark">#df600a</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="app_default_text_color">#393938</color>
+    <color name="app_default_header_text_color">#e77a31</color>
+    <color name="app_default_layout__background_colour">#ffffff</color>
+    <color name="app_default_error_alert_color">#FF0000</color>
+    <color name="app_default_edit_text_hint_color">#c2bfbf</color>
+    <color name="app_default_progressbar_indicator_color">#01796F</color>
+    <color name="app_default_button_text_color">#FFFFFF</color>
+    <color name="app_default_solid_color">#FFFFFF</color>
+    <color name="app_default_stroke_color">#dbdfe1</color>
+    <color name="display_ad_progress_dialog_stroke_colour">#f7d8c8</color>
+    <color name="display_ad_scrolling_text_color">#cc2507</color>
+    <color name="date_time_picker_header_text_colour">#FFFFFF</color>
+    <color name="display_ad_error_text_color">#ffffff</color>
+    <color name="display_ad_scrolling_text_bg_color">#fbf5da0b</color>
+    <color name="app_service_name_text_clr">#059ec9</color>
+    <color name="light_black">#515050</color>
+
+    <color name="dialog_boarder_color">#1063f2</color>
+    <color name="material_circular_loading_color">#B71C1C</color>
+
+    <color name="action_bar_color">#dbdfe1</color>
+    <color name="action_bar_text_color">#000</color>
+    <color name="blue_color">#FF0000FF</color>
+
+    <color name="green">#008000</color>
+    <color name="grey">#8d8f8d</color>
+    <color name="lite_green">#acc9ac</color>
+    <color name="white_color">#FFFFFF</color>
+    <color name="black_color">#050505</color>
+    <color name="login_lite_blue">#6b4d98d6</color>
+    <color name="blue_clapp_default_stroke_colorr">#059ec9</color>
+    <color name="lite_blue_clr">#6b4d98d6</color>
+    <color name="red_clr">#6bb71708</color>
+    <color name="blue_clr">#C8195A8F</color>
+    <color name="light_gray">#5CCCCCCC</color>
+</resources>

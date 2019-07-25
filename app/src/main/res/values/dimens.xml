@@ -1,0 +1,34 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="activity_default_margin">16dp</dimen>
+
+    <dimen name="app_default_text_view_text_size">20sp</dimen>
+    <dimen name="app_default_edit_text_height">40dp</dimen>
+    <dimen name="app_default_edit_text_margin">10dp</dimen>
+    <dimen name="app_default_edit_text_horizontal_padding">5dp</dimen>
+    <dimen name="app_default_text__view_horizontal_padding">5dp</dimen>
+    <dimen name="app_default_vertical_space">10dp</dimen>
+    <dimen name="app_default_horizontal_space">10dp</dimen>
+    <dimen name="display_ad_percentage_progress_dialog_height">55dp</dimen>
+    <dimen name="display_ad_percentage_progress_dialog_width">55dp</dimen>
+    <dimen name="display_ad_percentage_download_progress_dialog_height">30dp</dimen>
+    <dimen name="display_ad_percentage_download_progress_dialog_width">30dp</dimen>
+    <dimen name="display_ad_percentage_progress_dialog_stroke_width">6dp</dimen>
+    <dimen name="display_ad_percentage_progress_dialog_percentage_tv_size">13sp</dimen>
+    <dimen name="display_ad_scrolling_tv_size">40sp</dimen>
+    <dimen name="display_ad_error_info_tv_size">23sp</dimen>
+    <dimen name="select_media_dialog_gap_view_height">10dp</dimen>
+    <dimen name="date_time_layout_header_layout_gap">20dp</dimen>
+    <dimen name="app_default_button_height">40dp</dimen>
+
+    <dimen name="signage_mgr_text_vertical_margin">10dp</dimen>
+    <dimen name="signage_mgr_text_horizontal_margin">10dp</dimen>
+    <dimen name="signage_mgr_toggle_btn_horizontal_margin">5dp</dimen>
+    <dimen name="signage_mgr_toggle_btn_vertical_margin">5dp</dimen>
+    <dimen name="signage_mgr_toggle_edit_button_vertical_margin">10dp</dimen>
+    <dimen name="app_default_text_view_header_size">23sp</dimen>
+    <dimen name="display_files_text_view_text_size">17sp</dimen>
+</resources>

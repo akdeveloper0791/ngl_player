@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle" >
+
+    <!-- Border width and color -->
+    <stroke
+        android:width="5dp"
+        android:color="@color/dialog_boarder_color"/>
+
+    <corners android:radius="7dp"/>
+
+    <!-- Background color -->
+    <solid android:color="@color/app_default_solid_color" />
+
+</shape>

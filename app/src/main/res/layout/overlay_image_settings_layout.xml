@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:text="@string/set_overlaying_settings"
+            android:layout_margin="5dp"
+            android:textStyle="bold" />
+
+        <Switch
+            android:id="@+id/setting_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:layout_marginLeft="5dp"
+            android:layout_centerHorizontal="true"
+            />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="10dp"
+        android:id="@+id/settings_info_layout"
+        android:background="#f2eae0">
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:id="@+id/overlaying_image_layout"
+        android:layout_gravity="center">
+
+        <ImageView
+            android:id="@+id/overlaying_image"
+            android:layout_width="148dp"
+            android:layout_height="148dp"
+            android:layout_gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:scaleType="fitXY"
+            android:shape="rectangle"
+            android:background="@drawable/rectangle">
+        </ImageView>
+
+        <ImageButton
+            android:id="@+id/image_capture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/from_camera"
+            android:background="@android:color/transparent" />
+
+    </RelativeLayout>
+
+        <EditText
+            android:id="@+id/width"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_text_focused"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:maxLines="1"
+            android:maxLength="2"
+            android:paddingLeft="5dp"
+            android:gravity="left"
+            android:textSize="18sp"
+            android:inputType="number"
+            android:textColor="#ad000000"
+            android:layout_margin="10dp"
+            android:focusableInTouchMode="true"
+            android:hint="Enter Image Width(%)"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+        />
+
+        <EditText
+            android:id="@+id/height"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_text_focused"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:maxLines="1"
+            android:maxLength="2"
+            android:paddingLeft="5dp"
+            android:gravity="left"
+            android:inputType="number"
+            android:textSize="18sp"
+            android:textColor="#ad000000"
+            android:layout_margin="10dp"
+            android:focusableInTouchMode="true"
+            android:hint="Enter Image Height(%)"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            />
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:id="@+id/position_type_spinner"
+            android:background="@drawable/edit_text_focused"
+            />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" Update "
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center"
+        android:textColor="@color/app_default_button_text_color"
+        android:background="@drawable/button_background"
+        android:id="@+id/update"
+        />
+    </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

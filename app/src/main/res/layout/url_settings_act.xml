@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:layout_margin="@dimen/activity_default_margin"
+        android:id="@+id/auto_scroll"
+        android:text="Scroll URL"
+        android:textOn="ON"
+        android:textOff="OFF"
+       />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/input_layout_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp" >
+
+    <EditText
+            android:id="@+id/auto_scroll_duration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Auto scroll duration delay (in sec)"
+            android:inputType="number"
+       />
+
+
+
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="  Update  "
+        android:id="@+id/update"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:textColor="@color/app_default_button_text_color"
+        android:background="@drawable/button_background"/>
+
+</LinearLayout>

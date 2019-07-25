@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/wrapper"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:keepScreenOn="true"
+    >
+
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="Testtttttttttttttttttttttttttttt"
+       android:textSize="25sp"
+       />
+
+    <VideoView
+        android:id="@+id/display_media_video_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        />
+
+    <LinearLayout
+        android:id="@+id/ticker_area"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#9CB1DD"
+        android:orientation="horizontal" >
+    </LinearLayout>
+
+</FrameLayout>
+
+

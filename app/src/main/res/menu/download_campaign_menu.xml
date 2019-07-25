@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+   >
+    <item
+        android:id="@+id/skip_all"
+        android:title="Skip All"
+        android:visible="true"
+        android:showAsAction="always"
+        android:actionLayout="@layout/switch_layout"/>
+
+    <item
+        android:id="@+id/search"
+        android:icon="@drawable/ic_search"
+        android:title="Search"
+        android:visible="false"
+        android:showAsAction="always"/>
+    <item
+        android:id="@+id/filter"
+        android:icon="@drawable/ic_filter"
+        android:title="Filter"
+        android:showAsAction="always" />
+
+
+    <item
+        android:id="@+id/profile"
+        android:icon="@drawable/ic_app_profile"
+        android:title="Profile"
+        android:visible="false"
+        android:showAsAction="always" />
+</menu>

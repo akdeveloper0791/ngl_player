@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    card_view:cardCornerRadius="5dp"
+    android:focusable="true"
+    android:clickable="true">
+
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/img_layout"
+            android:layout_width="62dp"
+            android:layout_height="62dp"
+            android:elevation="5dp"
+            app:cardCornerRadius="5dp"
+            android:layout_margin="5dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_centerHorizontal="true">
+
+            <ImageView
+                android:id="@+id/thumb_iv"
+                android:layout_height="62dp"
+                android:layout_width="62dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/default_campaign">
+            </ImageView>
+
+        </android.support.v7.widget.CardView>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/campaign_name"
+            android:minLines="1"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/blue_clr"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="5dp"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/img_layout"
+            android:layout_toLeftOf="@+id/preview_btn"
+            />
+        <ImageButton
+            android:id="@+id/preview_btn"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/image_button_style"
+            android:layout_toLeftOf="@+id/delete_btn"
+            android:src="@drawable/ic_preview_blue"/>
+        <ImageButton
+            android:id="@+id/delete_btn"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/image_button_style"
+            android:layout_toLeftOf="@+id/download_info"
+            android:src="@drawable/ic_delete_red"/>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:id="@+id/download_info">
+
+           <com.wang.avi.AVLoadingIndicatorView
+            android:id="@+id/download_dialog_avl"
+            android:layout_width="@dimen/display_ad_percentage_progress_dialog_width"
+            android:layout_height="@dimen/display_ad_percentage_progress_dialog_height"
+            android:visibility="gone"
+            app:indicator="BallSpinFadeLoader"
+            app:indicator_color="@color/lite_blue_clr"
+            android:layout_gravity="center"
+            />
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/progress_infoo_layout">
+
+                <com.liulishuo.magicprogresswidget.MagicProgressCircle
+                    android:id="@+id/download_dialog_pg_dialog_magic_circles"
+                    android:layout_width="@dimen/display_ad_percentage_progress_dialog_width"
+                    android:layout_height="@dimen/display_ad_percentage_progress_dialog_height"
+                    app:mpc_percent="@string/display_ads_layout_progress_dialog_default_percent"
+                    app:mpc_start_color="@color/blue_clr"
+                    app:mpc_end_color="@color/blue_clr"
+                    app:mpc_stroke_width="@dimen/display_ad_percentage_progress_dialog_stroke_width"
+                    app:mpc_default_color="@color/lite_blue_clr"
+                    android:layout_gravity="center"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/progress_info"
+                    android:layout_gravity="center"
+                    android:text="1"
+                    android:textColor="@color/blue_clr"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_toLeftOf="@+id/download_info"
+                    android:layout_centerVertical="true"/>
+
+            </FrameLayout>
+
+
+         <ImageButton
+             android:id="@+id/download_btn"
+             android:layout_width="60dp"
+             android:layout_height="60dp"
+             android:layout_marginTop="5dp"
+             android:visibility="gone"
+             android:background="@drawable/download_button_style"
+             android:src="@android:drawable/stat_sys_download"/>
+
+        </FrameLayout>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/created_by"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+   <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:layout_gravity="right"
+            android:layout_alignParentRight="true"
+            android:id="@+id/downloading_info_tv"
+            android:layout_margin="5dp"
+            android:textColor="@color/grey"
+            />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/activity_default_margin"
+            android:textOn="ON"
+            android:textOff="OFF"
+            android:text="SKIP"
+            android:textStyle="bold"
+            android:layout_marginLeft="5dp"
+            android:id="@+id/skip_button"
+            android:visibility="visible"/>
+
+
+        <TextView
+        android:id="@+id/created_at"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_alignParentLeft="true"
+        android:layout_width="match_parent"
+        android:layout_toLeftOf="@+id/skip_button"
+        android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:id="@+id/error_info_layout">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="error"
+            android:maxLines="2"
+            android:id="@+id/error_msg"
+            android:layout_margin="5dp"
+            android:textColor="@color/red_clr"
+            android:layout_toLeftOf="@+id/retry_btn"
+            />
+
+        <Button
+            android:id="@+id/retry_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:textColor="@color/white_color"
+            android:background="@drawable/blue_button_rectangle"
+            android:text="Retry"
+            android:layout_toLeftOf="@+id/skip_btn"
+            />
+
+
+        <Button
+            android:id="@+id/skip_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/white_color"
+            android:background="@drawable/blue_button_rectangle"
+            android:text="Skip"
+            />
+    </RelativeLayout>
+</LinearLayout>
+
+</android.support.v7.widget.CardView>

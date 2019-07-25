@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:keepScreenOn="true"
+    android:background="@color/app_default_layout__background_colour">
+
+    <ProgressBar
+        android:theme="@style/LinearProgress"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:id="@+id/url_progress_loading"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/material_circular_loading_color"
+        android:max="100"
+        android:min="0"
+        android:visibility="gone" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/display_media_view_layout">
+
+        <VideoView
+            android:id="@+id/display_media_video_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            />
+
+        <ImageView
+            android:id="@+id/display_media_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            />
+
+
+        <WebView
+            android:id="@+id/display_media_web_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            />
+
+
+    </FrameLayout>
+
+    <!-- layout for multi layout/ dynamic views -->
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/dynamic_view_parent"
+            android:visibility="gone" />
+
+        <com.serenegiant.usb.widget.UVCCameraTextureView
+            android:id="@+id/camera_view"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="right"
+            android:visibility="gone"/>
+
+
+        <!--action scrolling text-->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top">
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/action_scrolling_tv"
+                    android:text=""
+                    android:textColor="@color/display_ad_scrolling_text_color"
+                    android:singleLine="true"
+                    android:visibility="gone"
+                    android:ellipsize="marquee"
+                    android:gravity="center"
+                    android:background="@color/display_ad_scrolling_text_bg_color"
+                    android:marqueeRepeatLimit ="marquee_forever"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:scrollHorizontally="true"
+                    android:textStyle="bold"
+                    android:layout_marginTop="@dimen/app_default_vertical_space"
+                    android:textSize="@dimen/display_ad_scrolling_tv_size" />
+
+            </RelativeLayout>
+        </FrameLayout>
+
+
+        <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+
+        >
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+
+            >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/display_ad_scrolling_tv"
+            android:text=""
+            android:textColor="@color/display_ad_scrolling_text_color"
+            android:singleLine="true"
+            android:visibility="gone"
+            android:ellipsize="marquee"
+            android:gravity="center"
+            android:background="@color/display_ad_scrolling_text_bg_color"
+            android:marqueeRepeatLimit ="marquee_forever"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:scrollHorizontally="true"
+            android:textStyle="bold"
+            android:layout_marginBottom="@dimen/app_default_vertical_space"
+            android:textSize="@dimen/display_ad_scrolling_tv_size"
+            />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/add_local_schedules_layout"
+            android:orientation="horizontal"
+            android:layout_gravity="bottom"
+            android:visibility="gone"
+            android:background="@android:drawable/screen_background_dark_transparent"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_white_settings"
+                android:id="@+id/settings"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_alignParentLeft="true"
+                android:onClick="onClick"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/settings"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/app_default_button_text_color"
+                android:text="@string/app_default_action_settings"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_white_create"
+                android:id="@+id/add_local_schedules_button"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@+id/settings"
+                android:layout_toLeftOf="@+id/close_add_local_schedules"
+                android:onClick="onClick"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/add_local_schedules_button"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/add_schedule_tv"
+                android:layout_toRightOf="@+id/settings"
+                android:gravity="center"
+                android:layout_toLeftOf="@+id/close_add_local_schedules"
+                android:textColor="@color/app_default_button_text_color"
+                android:text="Add Schedules"/>
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_white_cancel"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="20dp"
+                android:id="@+id/close_add_local_schedules"
+                android:onClick="onClick"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/close_add_local_schedules"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_alignParentRight="true"
+                android:textColor="@color/app_default_button_text_color"
+                android:text="Cancel"/>
+
+        </RelativeLayout>
+    </FrameLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:layout_margin="6dp"
+            android:background="@android:color/transparent"
+            android:id="@+id/overlaying_image_layout"
+            >
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/media_paying_status_ic"
+            android:src="@drawable/ic_pause"
+            android:layout_margin="5dp"
+            android:layout_gravity="right"
+            android:visibility="gone"/>
+
+</FrameLayout>
+
+</LinearLayout>

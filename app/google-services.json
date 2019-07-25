@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "307559651",
+    "firebase_url": "https://adskitedigi-de5b0.firebaseio.com",
+    "project_id": "adskitedigi-de5b0",
+    "storage_bucket": "adskitedigi-de5b0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:307559651:android:e0cd6498a95c7502",
+        "android_client_info": {
+          "package_name": "com.ibetter.www.adskitedigi.adskitedigi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "307559651-h26ajs2ov79r4mo4s7gh1qcfaffe154e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ibetter.www.adskitedigi.adskitedigi",
+            "certificate_hash": "0dd8350fc18f28ae382503ca0b3253756ea684da"
+          }
+        },
+        {
+          "client_id": "307559651-arbfa9drc42a1g8h48sia9cj595hqtpo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhJy7SAZS13CL9PuVsLrlka0wJCeikvlE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "307559651-arbfa9drc42a1g8h48sia9cj595hqtpo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

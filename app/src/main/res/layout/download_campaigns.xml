@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/search_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@drawable/rectangel_search_box"
+        android:visibility="gone">
+        <EditText
+            android:id="@+id/search_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:hint="Enter campaign name"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/search_btn" />
+
+        <Button
+            android:id="@+id/search_btn"
+            android:text="Go"
+            android:layout_margin="5dp"
+            android:textColor="@color/blue_clr"
+            android:background="@drawable/white_rectangle_orange_line"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:clickable="true"
+            android:textStyle="bold"
+            android:layout_alignParentRight="true"/>
+
+    </RelativeLayout>
+
+   <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/campaigns_lv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible"
+                android:focusable="true"
+                android:layout_margin="5dp"
+                android:background="@drawable/bg_key"
+                android:scrollbars="horizontal">
+            </android.support.v7.widget.RecyclerView>
+
+       <LinearLayout
+           android:id="@+id/progress_layout"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:visibility="visible"
+           android:layout_gravity="center"
+           android:gravity="center"
+           android:background="@android:color/transparent"
+           android:orientation="vertical">
+
+           <ProgressBar
+               style="?android:attr/progress"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:indeterminate="true"
+               android:max="100"
+               android:min="0"
+               android:backgroundTint="@android:color/transparent"
+               android:indeterminateTint="@color/app_service_name_text_clr" />
+
+           <TextView
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center"
+               android:gravity="center"
+               android:textStyle="bold"
+               android:textColor="@color/black_color"
+               android:text="Please Wait..."/>
+
+       </LinearLayout>
+
+            <TextView
+                android:id="@+id/no_camp_tv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:visibility="gone"
+                android:textSize="16sp"
+                android:text="@string/no_campaigns_found"/>
+        </FrameLayout>
+
+</LinearLayout>

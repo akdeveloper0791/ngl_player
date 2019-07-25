@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item android:id="@+id/add_text"
+        android:icon="@drawable/ic_text"
+        android:title="add schedule"
+        android:visible="false"
+        android:showAsAction="always"
+        />
+
+    <item android:id="@+id/add_schedule"
+        android:icon="@drawable/ic_action_new"
+        android:title="add schedule"
+
+        android:showAsAction="always"
+        />
+
+</menu>

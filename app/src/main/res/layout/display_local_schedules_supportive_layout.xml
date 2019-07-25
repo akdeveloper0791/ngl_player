@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:id="@+id/display_schedule_main_layout"
+    android:layout_height="match_parent">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/digi_tv"
+        android:layout_marginTop="@dimen/app_default_vertical_space"
+        android:id="@+id/display_local_schedule_media_image"
+        android:layout_marginLeft="@dimen/app_default_horizontal_space"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="name"
+        android:maxLength="30"
+        android:layout_toRightOf="@+id/display_local_schedule_media_image"
+        android:id="@+id/display_local_schedules_media_name"
+        android:textSize="@dimen/app_default_text_view_text_size"
+        android:layout_marginTop="@dimen/app_default_vertical_space"
+        android:textStyle="bold"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:layout_marginLeft="@dimen/app_default_horizontal_space"
+        android:layout_toLeftOf="@+id/delete"
+    />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_delete"
+        android:layout_marginTop="@dimen/app_default_vertical_space"
+        android:id="@+id/delete"
+        android:layout_margin="@dimen/activity_default_margin"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="@dimen/app_default_horizontal_space"/>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_clock"
+        android:id="@+id/clock"
+        android:visibility="gone"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/display_local_schedule_media_image"
+        android:layout_marginLeft="@dimen/app_default_horizontal_space"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="jan to feb"
+        android:layout_toRightOf="@+id/clock"
+        android:id="@+id/display_local_schedules_time"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/display_local_schedule_media_image"
+        android:layout_marginLeft="@dimen/app_default_horizontal_space"
+        android:layout_marginBottom="@dimen/app_default_vertical_space"
+        />
+
+</RelativeLayout>

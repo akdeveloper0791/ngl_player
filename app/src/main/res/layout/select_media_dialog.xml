@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+ <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:id="@+id/select_media_center_view"/>
+
+<LinearLayout
+    android:id="@+id/select_media_gallery_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_margin="@dimen/activity_default_margin"
+    android:layout_toLeftOf="@+id/select_media_center_view">
+    <ImageButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/app_default_horizontal_space"
+        android:id="@+id/select_media_photos_action"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_image_action"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/select_media_photo_tv_text"
+        android:paddingLeft="5dp"
+        android:layout_marginBottom="@dimen/app_default_vertical_space"
+        android:textSize="@dimen/app_default_text_view_text_size"
+        android:textStyle="bold"
+        android:textColor="@color/app_default_header_text_color"/>
+
+</LinearLayout>
+
+
+<LinearLayout
+        android:id="@+id/select_media_camera_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/activity_default_margin"
+        android:layout_toRightOf="@+id/select_media_center_view">
+
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@+id/select_media_center_view"
+            android:layout_marginRight="@dimen/app_default_horizontal_space"
+            android:id="@+id/select_media_video_action"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_video_action"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/select_media_video_tv_text"
+            android:layout_marginBottom="@dimen/app_default_vertical_space"
+            android:textSize="@dimen/app_default_text_view_text_size"
+            android:textStyle="bold"
+            android:textColor="@color/app_default_header_text_color"/>
+
+    </LinearLayout>
+
+
+
+    <View
+        android:id="@+id/select_media_edit_photo_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/select_media_dialog_gap_view_height"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/activity_default_margin"
+        android:visibility="invisible"
+        android:layout_below="@+id/select_media_camera_layout" />
+
+</RelativeLayout>
+
