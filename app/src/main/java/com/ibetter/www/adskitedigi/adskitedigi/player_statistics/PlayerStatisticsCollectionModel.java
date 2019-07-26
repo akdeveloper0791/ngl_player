@@ -4,8 +4,11 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.ibetter.www.adskitedigi.adskitedigi.R;
+import com.ibetter.www.adskitedigi.adskitedigi.model.SharedPreferenceModel;
 import com.ibetter.www.adskitedigi.adskitedigi.model.User;
 
 import java.util.Calendar;
@@ -56,5 +59,24 @@ public class PlayerStatisticsCollectionModel
 
         }
     }
+
+    public static void setUploadingCampReportsLastTime(Context context,long lastUploadingTime)
+    {
+        SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.reports_sp),context. MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putLong(context.getString(R.string.last_campaign_reports_upload_time),lastUploadingTime);
+
+        editor.commit();
+
+    }
+
+    public static long getUploadingCampReportsLastTime(Context context)
+    {
+        SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.reports_sp),context. MODE_PRIVATE);
+
+        return sp.getLong(context.getString(R.string.last_campaign_reports_upload_time),0);
+    }
+
 
 }

@@ -88,11 +88,11 @@ public class AutoDownloadCampaignTriggerService extends Service implements AutoD
         super.onDestroy();
     }
 
-    @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
+
 
     private void checkAndStartForegroundNotification() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

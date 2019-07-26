@@ -331,7 +331,7 @@ public class GcDeviceRegister extends Activity implements View.OnClickListener{
                 //success
                 //start enterprise mode
 
-                checkAndRestartPlayerStatisticsCollectionService();
+              //  checkAndRestartPlayerStatisticsCollectionService();
                 checkRestartAutoCampaignDownloadService();
 
 

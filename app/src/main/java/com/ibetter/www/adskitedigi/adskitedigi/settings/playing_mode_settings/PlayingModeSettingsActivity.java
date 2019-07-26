@@ -358,7 +358,7 @@ public class PlayingModeSettingsActivity extends Activity
             {
                 resetTickerTextSettings();
                 resetIOTDevice();
-                checkAndRestartPlayerStatisticsCollectionService();
+               // checkAndRestartPlayerStatisticsCollectionService();
                 checkRestartAutoCampaignDownloadService(playingModeSettingsModel.getContext());
                 checkAndRestartImageCaptureService();
                 //EnterPriseSettingsModel.switchOffEnterPriseSettings(playingModeSettingsModel.getContext());

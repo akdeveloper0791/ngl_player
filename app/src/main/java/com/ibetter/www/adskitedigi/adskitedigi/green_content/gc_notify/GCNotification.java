@@ -206,7 +206,7 @@ public class GCNotification {
     {
         //create notification channel
         createChannel(context,DOWNLOAD_CAMPAIGN_SERVICE_CHANNEL_ID,DOWNLOAD_CAMPAIGN_SERVICE_CHANNEL_NAME,
-                DOWNLOAD_CAMPAIGN_DOWNLOAD_SUCCESS_CHANNEL_DES,NotificationManager.IMPORTANCE_DEFAULT);
+                DOWNLOAD_CAMPAIGN_DOWNLOAD_SUCCESS_CHANNEL_DES,NotificationManager.IMPORTANCE_LOW);
 
 
         return  new NotificationCompat.Builder(context,DOWNLOAD_CAMPAIGN_SERVICE_CHANNEL_ID)
@@ -214,7 +214,7 @@ public class GCNotification {
                 .setContentTitle(title)
                 .setOngoing(true)
                 .setWhen(System.currentTimeMillis())
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
                 .build();
 
     }
@@ -224,7 +224,7 @@ public class GCNotification {
     {
         //create notification channel
         createChannel(context,HANDLE_RULE_SERVICE_CHANNEL_ID,HANDLE_RULE_SERVICE_CHANNEL_NAME,
-                HANDLE_RULE_DES,NotificationManager.IMPORTANCE_DEFAULT);
+                HANDLE_RULE_DES,NotificationManager.IMPORTANCE_LOW);
 
 
         return  new NotificationCompat.Builder(context,HANDLE_RULE_SERVICE_CHANNEL_ID)
@@ -238,8 +238,7 @@ public class GCNotification {
     }
 
     public  NotificationCompat.Builder initCampaignResourceUploadProgress(Context context,
-                                                                          String title,String contentText,
-                                                                          String bigText)
+                                                                          String title,String contentText,String bigText)
     {
         //check and create notification channel first
 
@@ -264,7 +263,7 @@ public class GCNotification {
     {
         //create notification channel
         createChannel(context,AUTO_DOWNLOAD_CAMPAIGN_SERVICE_CHANNEL_ID,AUTO_DOWNLOAD_CAMPAIGN_SERVICE_CHANNEL_NAME,
-                AUTO_DOWNLOAD_CAMPAIGN_SERVICE_CHANNEL_DES,NotificationManager.IMPORTANCE_HIGH);
+                AUTO_DOWNLOAD_CAMPAIGN_SERVICE_CHANNEL_DES,NotificationManager.IMPORTANCE_LOW);
 
 
         return  new NotificationCompat.Builder(context,AUTO_DOWNLOAD_CAMPAIGN_SERVICE_CHANNEL_ID)
@@ -272,9 +271,8 @@ public class GCNotification {
                 .setContentTitle(title)
                 .setOngoing(true)
                 .setWhen(System.currentTimeMillis())
-                .setPriority(NotificationCompat.PRIORITY_MIN)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .build();
-
     }
 
 
@@ -283,7 +281,7 @@ public class GCNotification {
     {
         //create notification channel
         createChannel(context,PLAYER_STATISTICS_SERVICE_CHANNEL_ID,APLAYER_STATISTICS_SERVICE_CHANNEL_NAME,
-                PLAYER_STATISTICS_SERVICE_CHANNEL_DES,NotificationManager.IMPORTANCE_HIGH);
+                PLAYER_STATISTICS_SERVICE_CHANNEL_DES,NotificationManager.IMPORTANCE_LOW);
 
 
         return  new NotificationCompat.Builder(context,PLAYER_STATISTICS_SERVICE_CHANNEL_ID)

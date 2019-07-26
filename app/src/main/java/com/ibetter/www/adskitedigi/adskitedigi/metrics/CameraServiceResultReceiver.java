@@ -40,7 +40,6 @@ public class CameraServiceResultReceiver extends ResultReceiver
             case UPLOAD_METRICS_FILE_SERVICE:
                 callBack.uploadMetricsFileServiceResponse(values);
                 break;
-
         }
 
 

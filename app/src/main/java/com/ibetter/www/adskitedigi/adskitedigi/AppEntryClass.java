@@ -30,6 +30,7 @@ import com.ibetter.www.adskitedigi.adskitedigi.player_statistics.PlayerStatistic
 import com.ibetter.www.adskitedigi.adskitedigi.register.RegisterActivity;
 import com.ibetter.www.adskitedigi.adskitedigi.settings.advance_settings.ScreenOrientationModel;
 import com.ibetter.www.adskitedigi.adskitedigi.settings.user_channel_guide.UserGuideActivity;
+
 /**
  * Created by vineeth_ibetter on 11/17/16.
  */
@@ -53,29 +54,29 @@ public class AppEntryClass extends Activity
 
         mDetector = new GestureDetector(this,new MyGestureListener());
 
-        //setTime();
-
          /*check db updataions */
-        DataBaseHelper db = new DataBaseHelper(context);
+         DataBaseHelper db = new DataBaseHelper(context);
 
-        db.getWritableDatabase();
+         db.getWritableDatabase();
 
          checkAndRestartServices();
 
          checkUserLoginDetails();//app release
 
-
     }
-
 
     //check UserLogin xibo
     private void checkUserLoginDetails()
     {
+
         if (new Validations().validateMobileNumber(context, new User().getUserMobileNumber(context))) {
             checkUserRegisterDetails();
-        } else {
+        }
+        else
+            {
             invokeLoginActivity();
         }
+
     }
 
    /*private void checkUserLoginDetails()
@@ -90,6 +91,7 @@ public class AppEntryClass extends Activity
        }
    }
 */
+
    private void invokeGCLoginActivity()
    {
        Intent startRegisterActivityIntent = new Intent(context, GcDeviceRegister.class);
@@ -240,12 +242,12 @@ public class AppEntryClass extends Activity
                     break;
                 case Constants.CLOUD_MODE:
                     checkAndRestartImageCaptureService();
-                    checkAndRestartPlayerStatisticsCollectionService();
+                    //checkAndRestartPlayerStatisticsCollectionService();
                     checkRestartAutoCampaignDownloadService();
                     break;
                 case Constants.ENTERPRISE_MODE:
                     checkAndRestartImageCaptureService();
-                    checkAndRestartPlayerStatisticsCollectionService();
+                    //checkAndRestartPlayerStatisticsCollectionService();
                     checkRestartAutoCampaignDownloadService();
                     break;
             }

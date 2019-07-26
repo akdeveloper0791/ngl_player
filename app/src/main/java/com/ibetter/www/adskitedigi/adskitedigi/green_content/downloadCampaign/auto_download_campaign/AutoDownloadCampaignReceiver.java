@@ -25,10 +25,7 @@ public class AutoDownloadCampaignReceiver extends ResultReceiver {
         serviceContext = new WeakReference<>(context);
         this.callBack = callBacks;
     }
-
-
     public interface CallBack {
-
         void initDownloadListApiError(Bundle values);
         void initDownloadListApiResponse(Bundle values);
         void stopService(Bundle values);
@@ -67,15 +64,6 @@ public class AutoDownloadCampaignReceiver extends ResultReceiver {
                 Log.d("SyncRulesService","Inside SyncRules syncRulesApiSuccess receiver ");
                 callBack.syncRulesApiSuccess(values);
                 break;
-
-
-
         }
-
-
-
-
     }
-
-
 }

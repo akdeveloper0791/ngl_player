@@ -108,6 +108,11 @@
     <string name="is_auto_download_campaign">is_auto_download_campaign</string>
     <string name="auto_campaign_download_duration">auto_campaign_download_duration</string>
 
+    <string name="reports_sp">reports_sp</string>
+
+    <string name="last_campaign_reports_upload_time">last_campaign_reports_upload_time</string>
+
+
     <string name="player_statistics_collection">player_statistics_collection</string>
     <string name="player_statistics_collection_duration">player_statistics_collection_duration</string>
 

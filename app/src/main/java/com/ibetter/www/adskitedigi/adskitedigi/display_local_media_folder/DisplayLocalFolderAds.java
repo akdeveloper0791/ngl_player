@@ -36,6 +36,7 @@ import android.support.v4.util.SimpleArrayMap;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
+import android.util.TimeUtils;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -81,6 +82,8 @@ import com.ibetter.www.adskitedigi.adskitedigi.model.SharedPreferenceModel;
 import com.ibetter.www.adskitedigi.adskitedigi.model.User;
 import com.ibetter.www.adskitedigi.adskitedigi.model.Validations;
 import com.ibetter.www.adskitedigi.adskitedigi.multi_region.MultiRegionSupport;
+import com.ibetter.www.adskitedigi.adskitedigi.player_statistics.PlayerStatisticsCollectionModel;
+import com.ibetter.www.adskitedigi.adskitedigi.player_statistics.PlayerStatisticsCollectionService;
 import com.ibetter.www.adskitedigi.adskitedigi.settings.advance_settings.ScreenOrientationModel;
 import com.ibetter.www.adskitedigi.adskitedigi.settings.announcement_settings.AnnouncementSettingsConstants;
 import com.ibetter.www.adskitedigi.adskitedigi.settings.audio_settings.AudioSettingsConstants;
@@ -2846,6 +2849,18 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
 
                     CampaignReportsDBModel.insertCampaignReportsInfo(cv, context);
 
+                    if(new User().isPlayerStatisticsCollectionOn(context)&& User.isPlayerRegistered(context))
+                    {
+                        long currentTime = Calendar.getInstance().getTimeInMillis() - TimeUnit.MINUTES.toMillis(new User().getPlayerStatisticsCollectionDuration(context));
+                        if (PlayerStatisticsCollectionModel.getUploadingCampReportsLastTime(context) <= currentTime) {
+                            Log.i("reports", "uploading");
+
+
+                            startService(new Intent(context, PlayerStatisticsCollectionService.class));
+                        } else {
+                            Log.i("reports", "less minuites--" + new User().getPlayerStatisticsCollectionDuration(context));
+                        }
+                    }
                 }
 
             } catch (Exception E) {

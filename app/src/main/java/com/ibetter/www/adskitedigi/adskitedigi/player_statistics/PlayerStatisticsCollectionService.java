@@ -179,7 +179,8 @@ public class PlayerStatisticsCollectionService extends Service implements Player
 
     private void onCompleted()
     {
-        PlayerStatisticsCollectionModel.checkRestartUploadCampaignReportsService(context);
+        PlayerStatisticsCollectionModel.setUploadingCampReportsLastTime(context,Calendar.getInstance().getTimeInMillis());
+        //PlayerStatisticsCollectionModel.checkRestartUploadCampaignReportsService(context);
         stopSelf();
     }
 

@@ -78,16 +78,16 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".AppEntryClass">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
+
         </activity> <!-- login activity -->
 
         <activity android:name=".RestartApp" />
@@ -357,6 +357,11 @@
         </receiver>
 
 
+        <receiver android:name=".green_content.downloadCampaign.auto_download_campaign.AutoCampaignDownloadAlarmRX" >
+            <intent-filter>
+                <action android:name="com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.auto_download_campaign.AutoCampaignDownloadAlarmRX" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
