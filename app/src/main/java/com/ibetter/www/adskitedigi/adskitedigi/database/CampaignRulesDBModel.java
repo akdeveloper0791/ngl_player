@@ -51,6 +51,7 @@ public class CampaignRulesDBModel
 
 
 
+
     public CampaignRulesDBModel(Context context)
     {
         this.context = context;

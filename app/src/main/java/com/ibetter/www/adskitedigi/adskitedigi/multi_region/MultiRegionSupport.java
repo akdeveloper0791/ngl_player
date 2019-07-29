@@ -328,7 +328,7 @@ public class MultiRegionSupport
     }
 
 
-    private int calculateRequiredPixel(int orginalValue,int percentage)
+    public final static int calculateRequiredPixel(int orginalValue,int percentage)
     {
         return (int)Math.round(new Constants().getPercentageAmount((double)orginalValue,percentage));
     }

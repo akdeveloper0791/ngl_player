@@ -192,6 +192,9 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
 
     public static boolean isSkipContinuousPlay = false;
 
+    protected Timer rssFeedsTimer;
+    protected ArrayList<Long> runningFeeds = new ArrayList<>(5);
+
     private UVCCameraHelper.OnMyDevConnectListener listener = new UVCCameraHelper.OnMyDevConnectListener()
     {
         @Override
@@ -308,6 +311,7 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
             }
         }
     };
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         setRequestedOrientation(ScreenOrientationModel.getSelectedScreenOrientation(this));
@@ -344,6 +348,8 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
         setAnnouncementSettings();
 
         userMetricsTask();
+
+
 
     }
 
@@ -892,6 +898,9 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
     protected void onStart()
     {
         super.onStart();
+
+        startRenderRSSFeed();
+
         try
         {
             if (new User().isMetricsOn(context)&& new User().isExternalCamType(context)&& User.isPlayerRegistered(context))
@@ -1025,6 +1034,13 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
                 new DisplayDebugLogs(context).execute("\nonStop:closeCamera&release");
                 imgPath = null;
             }
+        }
+
+        if(rssFeedsTimer!=null)
+        {
+            rssFeedsTimer.cancel();
+            rssFeedsTimer.purge();
+            rssFeedsTimer=null;
         }
 
         super.onStop();
@@ -3465,6 +3481,15 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
                 softIotFCMReceiver=null;
             }
         }
+    }
+
+    private void startRenderRSSFeed()
+    {
+        //start render feeds threads
+        rssFeedsTimer = new Timer();
+        RenderRSSFeeds renderRSSFeeds = new RenderRSSFeeds(this,this,new Handler());
+        Thread thread = new Thread(renderRSSFeeds);
+        thread.start();
     }
 
 }

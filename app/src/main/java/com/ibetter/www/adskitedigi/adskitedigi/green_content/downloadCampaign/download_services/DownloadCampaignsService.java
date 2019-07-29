@@ -473,6 +473,7 @@ public class DownloadCampaignsService extends Service implements DownloadCampaig
 
        // Uri infoUri = new GalleryMediaModel(context).getTextToFile(pendingCampaigns.get(inProgressCampaign).getInfo(), inProgressCampaign, context);
         boolean infoUri = CampaignsDBModel.setCampaignDownloadedTrue(context,pendingCampaigns.get(inProgressCampaign).getServerId());
+        Log.d("DownloadCampaign","Inside download campaign service info uri "+infoUri);
         if (infoUri==false)
         {
 
@@ -726,17 +727,20 @@ public class DownloadCampaignsService extends Service implements DownloadCampaig
 
         if(isServiceOn) {
             if(isAutoSyc) {
+
                 String thumbFileName = getString(R.string.do_not_display_media) + "-" + getString(R.string.media_thumbnail) + "-" + inProgressCampaign + getString(R.string.media_thumbnail_extention);
 
-                if (downloadProgressFileInfo!=null&&(downloadingFiles.size() > 0) && (thumbFileName.equalsIgnoreCase(downloadProgressFileInfo.currentDownloadingResourceFileName)))
+                if (downloadProgressFileInfo!=null&&(downloadingFiles.size() > 0) && (thumbFileName.equalsIgnoreCase(downloadProgressFileInfo.currentDownloadingResourceFileName)) &&
+                !error.equals("Unable to set download status"))
                 {
+
                   //delete thumb nail
                   deleteTempThumbNail(thumbFileName);
                   checkAndUploadResourceFile();
                  }
                   else
                   {
-                    Log.i("Download autoRetry ",""+autoRetry);
+
                     if(autoRetry<=3) {
                         ++autoRetry;
 
@@ -754,7 +758,7 @@ public class DownloadCampaignsService extends Service implements DownloadCampaig
                         skipCampaign();
                         autoRetry=0;
 
-                        Log.i("Dow autoRetry skipped ",""+autoRetry);
+                        Log.i("Dow autoRetry skipped ","Dow autoRetry skipped "+autoRetry);
                     }
                 }
 

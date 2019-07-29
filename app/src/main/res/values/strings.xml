@@ -876,6 +876,7 @@
 
     <string name="rule_seperator">;</string>
 
+    <string name="multi_feed_split">;</string>
 
 
 </resources>

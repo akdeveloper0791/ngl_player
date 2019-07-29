@@ -17,6 +17,7 @@ import static com.ibetter.www.adskitedigi.adskitedigi.database.CampaignsDBModel.
 import static com.ibetter.www.adskitedigi.adskitedigi.database.CampaignsDBModel.CAMPAIGN_TABLE_IS_CAMPAIGN_DOWNLOADED;
 import static com.ibetter.www.adskitedigi.adskitedigi.database.CampaignsDBModel.CAMPAIGN_TABLE_SCHEDULE_PRIORITY;
 import static com.ibetter.www.adskitedigi.adskitedigi.database.CampaignsDBModel.CAMPAIGN_TABLE_SCHEDULE_TYPE;
+import static com.ibetter.www.adskitedigi.adskitedigi.database.CampaignsDBModel.CREATE_RSS_FEED_TABLE;
 import static com.ibetter.www.adskitedigi.adskitedigi.database.CampaignsDBModel.CREATE_SCHEDULE_CAMPAIGNS_TABLE;
 import static com.ibetter.www.adskitedigi.adskitedigi.database.CampaignsDBModel.DELETE_SCHEDULE_CAMPAIGNS_TRIGGER;
 import static com.ibetter.www.adskitedigi.adskitedigi.database.CampaignsDBModel.SCHEDULE_CAMPAIGNS_TABLE;
@@ -33,7 +34,7 @@ import static com.ibetter.www.adskitedigi.adskitedigi.metrics.HandleDelayRulesDB
 public class DataBaseHelper extends SQLiteOpenHelper {
 
     public static boolean isDBUpdated = false;
-    private static final int DATABASE_VERSION =25;//15
+    private static final int DATABASE_VERSION =26;//15
 
     //private static SQLiteDatabase mDb;
     private static final String TAG = "AdsKite Digi";
@@ -102,6 +103,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.execSQL(CampaignRulesDBModel.CREATE_RULE_CAMPAIGNS_TABLE);
         db.execSQL(DELETE_RULE_CAMPAIGNS_TRIGGER);
         db.execSQL(CREATE_HANDLE_DELAY_RULE_TABLE);
+        db.execSQL(CREATE_RSS_FEED_TABLE);
     }
 
     @Override
@@ -237,6 +239,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     break;
                 case 25:
                     writableDb.execSQL(CREATE_HANDLE_DELAY_RULE_TABLE);
+                    break;
+                case 26:
+                    writableDb.execSQL(CREATE_RSS_FEED_TABLE);
                     break;
 
 

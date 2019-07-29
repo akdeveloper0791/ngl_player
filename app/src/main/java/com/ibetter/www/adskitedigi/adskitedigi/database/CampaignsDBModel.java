@@ -9,8 +9,6 @@ import com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.mo
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import static com.ibetter.www.adskitedigi.adskitedigi.nearby.service.GetModifyFilesService.CHUNK_LIMIT;
-
 public class CampaignsDBModel
 {
     public final static String LOCAL_ID="_id";
@@ -79,6 +77,19 @@ public class CampaignsDBModel
 
     public final static String DELETE_SCHEDULE_CAMPAIGNS_TRIGGER =" CREATE TRIGGER IF NOT EXISTS delete_schedule_campaign_trigger AFTER DELETE ON "+
             CAMPAIGNS_TABLE+" FOR EACH ROW BEGIN DELETE from "+SCHEDULE_CAMPAIGNS_TABLE+"  WHERE "+SCHEDULE_CAMPAIGNS_CS_ID+" = OLD."+CAMPAIGNS_TABLE_SERVER_ID+"; END";
+
+    public final static String RSS_FEEDS_TABLE = "rss_feeds";
+    public final static String RSS_FEED_CAMPAIGN_SERVER_ID = "rss_server_id";
+    public final static String RSS_FEED_IS_SKIP = "rss_feed_is_skip";
+    public final static String RSS_FEED_INFO = "info";
+
+    public final static String CREATE_RSS_FEED_TABLE = "CREATE TABLE "+RSS_FEEDS_TABLE+
+            " ("+ "_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+            RSS_FEED_CAMPAIGN_SERVER_ID+" INTEGER DEFAULT 0," +
+            RSS_FEED_IS_SKIP+" INTEGER DEFAULT 1," +
+            RSS_FEED_INFO+" TEXT," +
+            CAMPAIGN_TABLE_SCHEDULE_TYPE+" INTEGER DEFAULT 10 );";
+
 
     public static Cursor getCampaigns(Context context)
     {
@@ -421,5 +432,64 @@ public class CampaignsDBModel
             e.printStackTrace();
             return null;
         }
+    }
+
+    //get saved rss feeds
+    public static  Cursor getSavedFeeds(String serverIdList,Context context)
+    {
+
+        String sqlQuery =String.format("SELECT "+RSS_FEED_CAMPAIGN_SERVER_ID+" FROM "+RSS_FEEDS_TABLE+" WHERE " +RSS_FEED_CAMPAIGN_SERVER_ID+" IN ("+serverIdList+ ");");
+        return DataBaseHelper.initializeDataBase(context).getRecord(sqlQuery);
+
+    }
+
+    public static Cursor getRSSFeeds(Context context)
+    {
+        String sqlQuery = "SELECT * FROM "+RSS_FEEDS_TABLE+" WHERE "+RSS_FEED_IS_SKIP+" = 0";
+        return DataBaseHelper.initializeDataBase(context).getRecord(sqlQuery);
+    }
+
+    public static  boolean deleteGarbageFeeds(String serverIds,Context context)
+    {
+
+        String whereCondition=RSS_FEED_CAMPAIGN_SERVER_ID+">0 AND "+RSS_FEED_CAMPAIGN_SERVER_ID+" NOT IN("+serverIds+")";
+
+        if(serverIds!=null)
+        {
+
+
+            long status= DataBaseHelper.initializeDataBase(context).deleteRecordFromDBTable(RSS_FEEDS_TABLE,whereCondition);
+
+            if(status>0)
+            {
+                return true;
+            }
+            return false;
+        }
+        else
+        {
+
+            return false;
+        }
+
+    }
+
+    public static Cursor getActiveFeeds(Context context,String serverIds)
+    {
+        String whereCondition=CAMPAIGNS_TABLE_SERVER_ID+">0 AND "+CAMPAIGNS_TABLE_SERVER_ID+" NOT IN("+serverIds+")";
+
+        if(serverIds!=null)
+        {
+
+            String sqlQuery =String.format("SELECT * FROM "+CAMPAIGNS_TABLE+" WHERE " + whereCondition+ ";");
+            return DataBaseHelper.initializeDataBase(context).getRecord(sqlQuery);
+
+        }
+        else
+        {
+
+            return null;
+        }
+
     }
 }
