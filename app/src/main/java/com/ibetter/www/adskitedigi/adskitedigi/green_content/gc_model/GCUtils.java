@@ -24,7 +24,7 @@ public class GCUtils
 
     public static final String GET_GC_ALL_CAMPAIGNS_URL="https://www.signageserv.ai/campaign_downloads_api/";
     public static final String GET_GC_ALL_DROP_BOX_CAMPAIGNS_URL="https://www.signageserv.ai/player/getPlayerCampaigns/";
-    public static final String GET_SCHEDULE_CAMPAIGNS_URL="https://www.signageserv.ai/player/getSchedulePlayerCampaigns/";
+    public static final String GET_SCHEDULE_CAMPAIGNS_URL="https://www.signageserv.ai/player/getDSPCampaigns/";
     public static final String GET_PLAYER_CA_RULE_URL="https://www.signageserv.ai/player/getCARules/";
 
     public static final String UPLOAD_CAMPAIGN_SUPPORT_FILE_URL= "https://www.signageserv.ai/campaign_upload_files_api/";
@@ -43,7 +43,7 @@ public class GCUtils
     public static final String UPLOAD_PLAYER_STATISTICS_COLLECTION_URL= "https://www.signageserv.ai/player/saveCampaignReports/";
 
     public static final String GET_ALL_DROP_BOX_CAMPAIGNS_URL_END_POINT="player/getPlayerCampaigns/";
-    public static final String ENTERPRISE_SCHEDULE_CAMPAIGNS_URL="player/getSchedulePlayerCampaigns/";
+    public static final String ENTERPRISE_SCHEDULE_CAMPAIGNS_URL="player/getDSPCampaigns/";
     public static final String UPLOAD_METRICS_FILE_URL_END_POINT= "iot_device/metrics";
     public static final String UPLOAD_PLAYER_STATISTICS_COLLECTION_URL_END_POINT= "player/saveCampaignReports/";
     public static final String GET_PLAYER_CA_RULE_URL_ENTERPRISE="player/getCARules/";

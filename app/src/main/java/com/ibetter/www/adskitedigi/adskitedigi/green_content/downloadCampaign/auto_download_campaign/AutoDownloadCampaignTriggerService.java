@@ -8,11 +8,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.ibetter.www.adskitedigi.adskitedigi.R;
 import com.ibetter.www.adskitedigi.adskitedigi.database.CampaignsDBModel;
@@ -88,11 +85,11 @@ public class AutoDownloadCampaignTriggerService extends Service implements AutoD
         super.onDestroy();
     }
 
-    @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
+
 
     private void checkAndStartForegroundNotification() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -107,7 +104,7 @@ public class AutoDownloadCampaignTriggerService extends Service implements AutoD
                 Intent startIntent = new Intent(context, AutoCampDownloadListService.class);
                 startService(startIntent);
             } else {
-                Toast.makeText(context, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+               // Toast.makeText(context, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
 
                 onCompleted();
             }
@@ -144,6 +141,7 @@ public class AutoDownloadCampaignTriggerService extends Service implements AutoD
     @Override
     public void initDownloadListApiResponse(Bundle resultData)
     {
+
         try
         {
             if (resultData.getBoolean("flag")) {
@@ -385,7 +383,7 @@ public class AutoDownloadCampaignTriggerService extends Service implements AutoD
     @Override
     public void syncRulesApiSuccess(Bundle resultData)
     {
-        Log.d("SyncRulesService","Inside SyncRules syncRulesApiSuccess ");
+
         onCompletedSyncRulesList();
     }
 

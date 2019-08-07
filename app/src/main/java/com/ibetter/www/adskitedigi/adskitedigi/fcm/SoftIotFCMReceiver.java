@@ -15,6 +15,7 @@ public class SoftIotFCMReceiver extends BroadcastReceiver {
 
     public void onReceive(Context context, Intent intent)
     {
+
         switch(intent.getIntExtra("metrics_service",-1))
         {
             case CAMERA_METRICS:

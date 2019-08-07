@@ -11,7 +11,6 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -103,13 +102,10 @@ public class MultiRegionSupport
                  }else if(type.equalsIgnoreCase(
                          activity.getString(R.string.app_default_url_name)))
                  {
-                     addRSSRegion(info);
+                     addURLRegion(info);
                  } else if(type.equalsIgnoreCase(activity.getString(R.string.app_default_file_name)))
                  {
                      addFileRegion(info);
-                 }else if(type.equalsIgnoreCase(activity.getString(R.string.app_default_rss_name)))
-                 {
-                     addRSSRegion(info);
                  }
 
             }catch (JSONException e)
@@ -499,6 +495,21 @@ public class MultiRegionSupport
 
     }
 
+    private View.OnTouchListener touchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            if(activity instanceof DisplayLocalFolderAds)
+            {
+                DisplayLocalFolderAds ads = (DisplayLocalFolderAds)activity;
+                return ads.mDetector.onTouchEvent(motionEvent);
+            }else
+            {
+                return false;
+            }
+
+        }
+    };
+
     //add url region
     private void addURLRegion(JSONObject info) throws JSONException
     {
@@ -506,6 +517,7 @@ public class MultiRegionSupport
                 calculateRequiredPixel(deviceInfo.get("height"), info.getInt(activity.getString(R.string.multi_region_height_json_key))));
 
         final WebView web = new WebView(context);
+        web.setOnTouchListener(touchListener);
         web.setLayoutParams(parentLayoutParams);
 
         //adding margins
@@ -586,8 +598,15 @@ public class MultiRegionSupport
                     //checkAndDismissWebViewProgressBar();
 
                     isLoadingError = true;
+                    if(view!=null && description.equalsIgnoreCase("net::err_address_unreachable") ||
+                            description.equalsIgnoreCase("net::err_name_not_resolved")||
+                            description.equalsIgnoreCase("net::err_connection_reset")||
+                            description.equalsIgnoreCase("net::err_timed_out"))
+                    {
+                        view.loadUrl(failingUrl);
+                    }
                     //if there’s an error loading the page, make a toast
-                    // Log.i("Process files","description - "+description);
+                     Log.d("MultiReg","Inside display web view failure errorcode"+errorCode+"description - "+description);
                     // Toast.makeText(mContext, description + ".", Toast.LENGTH_SHORT.show();
 
                 } catch (IllegalArgumentException e) {
@@ -917,20 +936,5 @@ public class MultiRegionSupport
         ((DisplayLocalFolderAds)activity).pdfScrollHandlerRunnable.run();
     }
 
-    private void addRSSRegion(JSONObject info) throws JSONException
-    {
-        RelativeLayout.LayoutParams parentLayoutParams = new RelativeLayout.LayoutParams(calculateRequiredPixel(deviceInfo.get("width"), info.getInt(activity.getString(R.string.multi_region_width_json_key))),
-                calculateRequiredPixel(deviceInfo.get("height"), info.getInt(activity.getString(R.string.multi_region_height_json_key))));
 
-        final RecyclerView rss = new RecyclerView(context);
-        rss.setLayoutParams(parentLayoutParams);
-
-        //adding margins
-        ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) rss.getLayoutParams();
-        marginLayoutParams.leftMargin = calculateRequiredPixel(deviceInfo.get("width"), info.getInt(activity.getString(R.string.multi_region_left_margin_json_key)));
-        marginLayoutParams.rightMargin = calculateRequiredPixel(deviceInfo.get("width"), info.getInt(activity.getString(R.string.multi_region_right_margin_json_key)));
-        marginLayoutParams.topMargin = calculateRequiredPixel(deviceInfo.get("height"), info.getInt(activity.getString(R.string.multi_region_top_margin_json_key)));
-        marginLayoutParams.bottomMargin = calculateRequiredPixel(deviceInfo.get("height"), info.getInt(activity.getString(R.string.multi_region_bottom_margin_json_key)));
-        parentLayout.addView(rss);
-    }
 }

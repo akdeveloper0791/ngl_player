@@ -81,6 +81,8 @@ import com.ibetter.www.adskitedigi.adskitedigi.model.SharedPreferenceModel;
 import com.ibetter.www.adskitedigi.adskitedigi.model.User;
 import com.ibetter.www.adskitedigi.adskitedigi.model.Validations;
 import com.ibetter.www.adskitedigi.adskitedigi.multi_region.MultiRegionSupport;
+import com.ibetter.www.adskitedigi.adskitedigi.player_statistics.PlayerStatisticsCollectionModel;
+import com.ibetter.www.adskitedigi.adskitedigi.player_statistics.PlayerStatisticsCollectionService;
 import com.ibetter.www.adskitedigi.adskitedigi.settings.advance_settings.ScreenOrientationModel;
 import com.ibetter.www.adskitedigi.adskitedigi.settings.announcement_settings.AnnouncementSettingsConstants;
 import com.ibetter.www.adskitedigi.adskitedigi.settings.audio_settings.AudioSettingsConstants;
@@ -193,7 +195,7 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
     public static boolean isSkipContinuousPlay = false;
 
     protected Timer rssFeedsTimer;
-    protected ArrayList<Long> runningFeeds = new ArrayList<>(5);
+    protected Vector<Long> runningFeeds = new Vector<>(5);
 
     private UVCCameraHelper.OnMyDevConnectListener listener = new UVCCameraHelper.OnMyDevConnectListener()
     {
@@ -407,11 +409,18 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
         @Override
         public boolean onDoubleTapEvent(MotionEvent event) {
             //check and display add local schedule layout
-            displayAddLocalScheduleLayout();
+            //displayAddLocalScheduleLayout();
+            redirectToSettings();
             return true;
         }
 
 
+    }
+
+    private void redirectToSettings()
+    {
+        startActivity(new Intent(displayLocalFolderAdsModel.getContext(), UserGuideActivity.class));
+        finish();
     }
 
     //check and display add local schedule layout
@@ -2862,6 +2871,14 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
 
                     CampaignReportsDBModel.insertCampaignReportsInfo(cv, context);
 
+                    if(new User().isPlayerStatisticsCollectionOn(context)&& User.isPlayerRegistered(context))
+                    {
+                        long currentTime = Calendar.getInstance().getTimeInMillis() - TimeUnit.MINUTES.toMillis(new User().getPlayerStatisticsCollectionDuration(context));
+                        if (PlayerStatisticsCollectionModel.getUploadingCampReportsLastTime(context) <= currentTime) {
+
+                            startService(new Intent(context, PlayerStatisticsCollectionService.class));
+                        }
+                    }
                 }
 
             } catch (Exception E) {

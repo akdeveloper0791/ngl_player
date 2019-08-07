@@ -256,7 +256,7 @@ public class SyncRulesService extends IntentService {
 
     private void processRules(JSONArray rulesArray) throws JSONException, Exception
     {
-        Log.i("rules array result",""+rulesArray);
+
       for(int i=0;i<rulesArray.length();i++)
       {
           JSONObject ruleObj = rulesArray.getJSONObject(i);

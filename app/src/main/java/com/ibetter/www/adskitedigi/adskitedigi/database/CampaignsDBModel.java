@@ -474,22 +474,5 @@ public class CampaignsDBModel
 
     }
 
-    public static Cursor getActiveFeeds(Context context,String serverIds)
-    {
-        String whereCondition=CAMPAIGNS_TABLE_SERVER_ID+">0 AND "+CAMPAIGNS_TABLE_SERVER_ID+" NOT IN("+serverIds+")";
 
-        if(serverIds!=null)
-        {
-
-            String sqlQuery =String.format("SELECT * FROM "+CAMPAIGNS_TABLE+" WHERE " + whereCondition+ ";");
-            return DataBaseHelper.initializeDataBase(context).getRecord(sqlQuery);
-
-        }
-        else
-        {
-
-            return null;
-        }
-
-    }
 }

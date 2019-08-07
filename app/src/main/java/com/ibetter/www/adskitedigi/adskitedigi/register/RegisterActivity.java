@@ -152,7 +152,7 @@ public class RegisterActivity extends Activity {
             //start enterprise mode
             EnterPriseSettingsModel.startEnterPriseModel(this);
 
-            checkAndRestartPlayerStatisticsCollectionService();
+           // checkAndRestartPlayerStatisticsCollectionService();
             checkRestartAutoCampaignDownloadService();
 
             new User().checkExistingScheduleFiles(RegisterActivity.this);
@@ -188,7 +188,7 @@ public class RegisterActivity extends Activity {
                 new User().updateUserPlayingMode(registerActivityModel.getRegisterActivityContext(), Constants.NEAR_BY_MODE, null,null,null);
                 //start enterprise mode
                 EnterPriseSettingsModel.startEnterPriseModel(this);
-                checkAndRestartPlayerStatisticsCollectionService();
+               // checkAndRestartPlayerStatisticsCollectionService();
                 checkRestartAutoCampaignDownloadService();
 
                 new User().checkExistingScheduleFiles(RegisterActivity.this);

@@ -76,7 +76,7 @@ public class BootCompletedIntentReceiver extends BroadcastReceiver {
                ContextCompat.startForegroundService(context, new Intent(context, CheckAndRestartSMServiceOreo.class) );
 
                checkAndRestartImageCaptureService();
-               checkAndRestartPlayerStatisticsCollectionService();
+             //  checkAndRestartPlayerStatisticsCollectionService();
                checkRestartAutoCampaignDownloadService();
            break;
        }

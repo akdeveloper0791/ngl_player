@@ -72,7 +72,6 @@ public class PlayerStatisticsSettings extends AppCompatActivity implements Compo
         // Take appropriate action for each action item click
         switch (item.getItemId())
         {
-
             case android.R.id.home:
                 onBackPressed();
                 return true;
@@ -127,7 +126,7 @@ public class PlayerStatisticsSettings extends AppCompatActivity implements Compo
                 durationEt.setVisibility(View.VISIBLE);
                 submitButton.setVisibility(View.VISIBLE);
 
-                PlayerStatisticsCollectionModel.checkRestartUploadCampaignReportsService(context);
+              //  PlayerStatisticsCollectionModel.checkRestartUploadCampaignReportsService(context);
 
             }else
             {

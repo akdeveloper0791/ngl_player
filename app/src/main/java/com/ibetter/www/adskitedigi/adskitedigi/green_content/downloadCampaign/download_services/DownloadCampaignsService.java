@@ -161,7 +161,7 @@ public class DownloadCampaignsService extends Service implements DownloadCampaig
 
     @Override
     public void onDestroy() {
-        Log.i("downlaod","downlaod campa is destoreyd");
+
         isServiceOn = false;
         unRegisterNotificationRx();
         stopForeground(true);
@@ -295,7 +295,7 @@ public class DownloadCampaignsService extends Service implements DownloadCampaig
         {
             if(isAutoSyc)
             {
-                Log.i("Download isAutoSyc","info file is null");
+
                 skipCampaign();
 
             }else {
@@ -367,7 +367,7 @@ public class DownloadCampaignsService extends Service implements DownloadCampaig
         removeDownloadProgressNotification();
         removeNotification(DOWNLOAD_CAMPAIGN_RESOURCE_FAIL_NOTIFY_ID);
 
-        Log.i("INFO","service stoped");
+
 
         if(isAutoSyc)
         {
@@ -890,7 +890,7 @@ public class DownloadCampaignsService extends Service implements DownloadCampaig
                 if(file.exists())
                 {
                     file.delete();
-                    Log.i("file",fileName+"file is deleted");
+
                 }
             }
         }
@@ -1070,7 +1070,7 @@ public class DownloadCampaignsService extends Service implements DownloadCampaig
 
     @Override
     public void stopService(Bundle values) {
-        Log.i("info","finish service");
+
         finishService();
     }
 

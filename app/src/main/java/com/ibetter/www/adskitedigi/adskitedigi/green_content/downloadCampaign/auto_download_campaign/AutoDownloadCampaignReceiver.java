@@ -3,7 +3,7 @@ package com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.a
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
-import android.util.Log;
+
 
 import java.lang.ref.WeakReference;
 
@@ -25,10 +25,7 @@ public class AutoDownloadCampaignReceiver extends ResultReceiver {
         serviceContext = new WeakReference<>(context);
         this.callBack = callBacks;
     }
-
-
     public interface CallBack {
-
         void initDownloadListApiError(Bundle values);
         void initDownloadListApiResponse(Bundle values);
         void stopService(Bundle values);
@@ -64,18 +61,9 @@ public class AutoDownloadCampaignReceiver extends ResultReceiver {
 
             case SYNC_RULES_API_SUCCESS:
 
-                Log.d("SyncRulesService","Inside SyncRules syncRulesApiSuccess receiver ");
+
                 callBack.syncRulesApiSuccess(values);
                 break;
-
-
-
         }
-
-
-
-
     }
-
-
 }

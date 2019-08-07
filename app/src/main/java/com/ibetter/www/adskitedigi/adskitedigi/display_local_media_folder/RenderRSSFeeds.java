@@ -117,7 +117,7 @@ public class RenderRSSFeeds implements Runnable {
         //refresh rss feeds task
         if(isActivityOn() && actReference.get().rssFeedsTimer!=null)
         {
-            actReference.get().rssFeedsTimer.scheduleAtFixedRate(new RefreshFeeds(),0,60000);//every minute
+            actReference.get().rssFeedsTimer.scheduleAtFixedRate(new RefreshFeeds(),0,30000);//every minute
         }
 
     }
@@ -160,6 +160,11 @@ public class RenderRSSFeeds implements Runnable {
 
            if(parentLayout!=null)
            {
+               if(parentLayout.getVisibility()==View.GONE)
+               {
+                   parentLayout.setVisibility(View.VISIBLE);
+               }
+
                parentLayout.addView(rss);
 
            }
@@ -178,6 +183,7 @@ public class RenderRSSFeeds implements Runnable {
         private int currentDisplayUrlPosition=0,textSize=15;
         private long feedsloadedTimeInMs = 0;
 
+
         public RetrieveFeeds(int viewId,String urlString,long refreshDuration,String textColor,long campaignId,int textSize)
         {
             this.viewId = viewId;
@@ -187,11 +193,14 @@ public class RenderRSSFeeds implements Runnable {
             this.campaignId = campaignId;
             this.textSize = textSize;
 
+
             //check whether it is multiple feeds
             isMultiple = (urlString!=null && (urlString.split(context.getString(R.string.multi_feed_split))).length>=2);
 
 
         }
+
+
 
         public void run()
         {
@@ -539,6 +548,9 @@ public class RenderRSSFeeds implements Runnable {
             linearSmoothScroller.setTargetPosition(position);
             startSmoothScroll(linearSmoothScroller);
         }
+
+
+
     }
 
     private boolean isActivityOn()
@@ -549,6 +561,8 @@ public class RenderRSSFeeds implements Runnable {
 
     private class RefreshFeeds extends TimerTask
     {
+
+
         public void run()
         {
 
@@ -560,10 +574,7 @@ public class RenderRSSFeeds implements Runnable {
 
                 if(activeFeedsCursor!=null && activeFeedsCursor.moveToNext())
                 {
-                    if(parentLayout.getVisibility()==View.GONE)
-                    {
-                        parentLayout.setVisibility(View.VISIBLE);
-                    }
+
 
                     ArrayList<Long> tempActiveFeeds = new ArrayList<>(activeFeedsCursor.getCount());
                    do {
@@ -574,8 +585,7 @@ public class RenderRSSFeeds implements Runnable {
                            try
                            {
                            String info = activeFeedsCursor.getString(activeFeedsCursor.getColumnIndex(CampaignsDBModel.RSS_FEED_INFO));
-                           //new feed
-                           actReference.get().runningFeeds.add(campaignId);
+
 
                            JSONObject infoObject = new JSONObject(info);
                            JSONArray regions = infoObject.getJSONArray("regions");
@@ -593,6 +603,9 @@ public class RenderRSSFeeds implements Runnable {
 
                                ++ids;
                            }
+
+                               //new feed
+                               actReference.get().runningFeeds.add(campaignId);
 
 
                            }catch(Exception e)

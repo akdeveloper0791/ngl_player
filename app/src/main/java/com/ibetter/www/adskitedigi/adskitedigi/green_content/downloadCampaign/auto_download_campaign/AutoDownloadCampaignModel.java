@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.ibetter.www.adskitedigi.adskitedigi.R;
+import com.ibetter.www.adskitedigi.adskitedigi.model.AlarmConstants;
 import com.ibetter.www.adskitedigi.adskitedigi.model.User;
 
 import java.io.File;
@@ -28,9 +29,10 @@ public class AutoDownloadCampaignModel
         {
             AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
 
-            Intent intent = new Intent(context, AutoDownloadCampaignTriggerService.class);
+            Intent intent = new Intent(context, AutoCampaignDownloadAlarmRX.class);
+            intent.setAction(AutoCampaignDownloadAlarmRX.ACTION);
 
-            PendingIntent reminderPI = PendingIntent.getService(context, AUTO_SYN_ALARM, intent, 0);
+            PendingIntent reminderPI = PendingIntent.getBroadcast(context, AUTO_SYN_ALARM, intent, 0);
 
             am.set(AlarmManager.RTC_WAKEUP, ((Calendar.getInstance().getTimeInMillis()) + TimeUnit.MINUTES.toMillis(new User().getAutoCampaignDownloadDuration(context))), reminderPI);
         }
@@ -42,9 +44,11 @@ public class AutoDownloadCampaignModel
 
         AlarmManager am=(AlarmManager)context.getSystemService(ALARM_SERVICE);
 
-        Intent intent = new Intent(context, AutoDownloadCampaignTriggerService.class);
 
-        PendingIntent reminderPI = PendingIntent.getService(context, AUTO_SYN_ALARM,intent,0);
+        Intent intent = new Intent(context, AutoCampaignDownloadAlarmRX.class);
+        intent.setAction(AutoCampaignDownloadAlarmRX.ACTION);
+
+        PendingIntent reminderPI = PendingIntent.getBroadcast(context, AUTO_SYN_ALARM, intent, 0);
 
         reminderPI.cancel();
 

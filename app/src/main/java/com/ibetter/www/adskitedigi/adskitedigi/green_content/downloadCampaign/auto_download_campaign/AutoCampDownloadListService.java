@@ -173,12 +173,27 @@ public class AutoCampDownloadListService extends IntentService
 
                         long serverId = campObject.getLong("id");
                         int campaignType = campObject.getInt("camp_type");
+                        int scheduleType = ScheduleCampaignModel.CONTINUOUS_PLAY;
+                        int isSkip = 0,priority=0;
+
+                        if(Constants.convertToLong(campObject.getString("pc_id"))>0)
+                        {
+                            scheduleType = campObject.getInt("schedule_type");
+                            isSkip = campObject.getInt("is_skip");
+                            priority = campObject.getInt("pc_priority");
+                        }else if(Constants.convertToLong(campObject.getString("dgc_id"))>0)
+                        {
+                            scheduleType = campObject.getInt("dgc_schedule_type");
+                            isSkip = campObject.getInt("dgc_is_skip");
+                            priority = campObject.getInt("dgc_priority");
+                        }
+
                         if(campaignType==2)
                         {
                            if(!serverRSSFeeds.containsKey(serverId))
                            {
-                               serverRSSFeeds.put(serverId,new RSSModel(serverId,campObject.getInt("is_skip"),
-                                       campObject.getString("info"),campObject.getInt("schedule_type")));
+                               serverRSSFeeds.put(serverId,new RSSModel(serverId,isSkip,
+                                       campObject.getString("info"),scheduleType));
                            }
                         }else {
 
@@ -199,9 +214,9 @@ public class AutoCampDownloadListService extends IntentService
                                 gcModel.setUpdatedAt(campObject.getString("updated_date"));
                                 gcModel.setCampaignUploadedBy(campObject.getLong("campaign_uploaded_by"));
                                 gcModel.setSource(campObject.getInt("source"));
-                                gcModel.setIsSkip(campObject.getInt("is_skip"));
-                                gcModel.setScheduleType(campObject.getInt("schedule_type"));
-                                gcModel.setCampaignPriority(campObject.getInt("pc_priority"));
+                                gcModel.setIsSkip(isSkip);
+                                gcModel.setScheduleType(scheduleType);
+                                gcModel.setCampaignPriority(priority);
 
                                 serverCampaigns.put(serverId, gcModel);
 
@@ -325,6 +340,7 @@ public class AutoCampDownloadListService extends IntentService
 
     private void sendSuccessResponse()
     {
+        Log.d("Sync","Inside auto camp download list service  sendSuccessResponse"+isStopped);
         if(!isStopped) {
             Bundle bundle = new Bundle();
             bundle.putBoolean("flag", true);
@@ -766,6 +782,9 @@ private synchronized void bulkCampaignsUpdate(ArrayList<GCModel> updateData)
         //delete unknown campaigns
         deleteUnknownCampaigns();
 
+        //delete unknown rss feeds
+        deleteUnknownFeeds();
+
         //send success response
         sendSuccessResponse();
     }
@@ -773,9 +792,10 @@ private synchronized void bulkCampaignsUpdate(ArrayList<GCModel> updateData)
     //process rss feeds data
     private void processRSSFeedsData()
     {
+        deleteUnknownFeeds();
         if(serverRSSFeeds.size()>=1)
         {
-            deleteUnknownFeeds();
+
             checkAndInsertNewFeeds();
         }
     }
