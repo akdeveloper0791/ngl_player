@@ -38,6 +38,7 @@
     <string name="app_default_multi_region">multi_region</string>
     <string name="app_default_file_name">File</string>
     <string name="app_default_rss_name">rss</string>
+    <string name="app_default_excel_file_name">Excel</string>
     <string name="app_default_get_video_text">video/*</string>
     <string name="app_default_date_time_layout_time_et_hint">Select time</string>
     <string name="app_default_date_time_layout_date_hint">Select date</string>

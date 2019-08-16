@@ -63,19 +63,15 @@ public class RenderRSSFeeds implements Runnable {
     
     public void run()
     {
-        //private ArrayList<>
         //get rss feeds
         Cursor cursor = CampaignsDBModel.getRSSFeeds(context);
         if(cursor!=null && cursor.moveToFirst())
         {
 
-
            parentLayout.setVisibility(View.VISIBLE);
-
 
             //has rss feeds
             do {
-
                if(isActivityOn()) {
                    String info = cursor.getString(cursor.getColumnIndex(CampaignsDBModel.RSS_FEED_INFO));
                    long campaignId = cursor.getLong(cursor.getColumnIndex(CampaignsDBModel.RSS_FEED_CAMPAIGN_SERVER_ID));
@@ -197,9 +193,7 @@ public class RenderRSSFeeds implements Runnable {
             //check whether it is multiple feeds
             isMultiple = (urlString!=null && (urlString.split(context.getString(R.string.multi_feed_split))).length>=2);
 
-
         }
-
 
 
         public void run()
@@ -487,8 +481,6 @@ public class RenderRSSFeeds implements Runnable {
 
                 titleTextView = view.findViewById(R.id.feed_title);
                 titleTextView.setTextColor(Color.parseColor(textColor));
-
-
             }
         }
 
@@ -508,7 +500,6 @@ public class RenderRSSFeeds implements Runnable {
             }
 
             viewHolder.titleTextView.setTextSize(textSize);
-
 
         }
 
@@ -561,7 +552,6 @@ public class RenderRSSFeeds implements Runnable {
 
     private class RefreshFeeds extends TimerTask
     {
-
 
         public void run()
         {

@@ -174,7 +174,8 @@ public class EnterPriseSettingsService extends Service {
                 if(propertiesFile.createNewFile())
                 {
                     return propertiesFile;
-                }else
+                }
+                else
                 {
                     //unable to create properties file ,, display notification
                     ftpSetUpError("Unable to create properties file");
@@ -267,6 +268,7 @@ public class EnterPriseSettingsService extends Service {
             //Deal with exception as you need
             ex.printStackTrace();
             Toast.makeText(this,"FTP Error "+ex.getMessage(),Toast.LENGTH_SHORT).show();
+
             ftpSetUpError("FTP Error "+ex.getMessage());
             //unable to start the server,, display error notification
 
@@ -393,12 +395,14 @@ public class EnterPriseSettingsService extends Service {
     //start ftp error restart timer
     private void errorRestartFTPServerTimer()
     {
+
         if(errorRestartFTPServerTimer!=null)
         {
             stopErrorRestartTimer();
         }
         errorRestartFTPServerTimer= new Timer();
         errorRestartFTPServerTimer.schedule(new CheckAndRestartFTPServer(),RESTART_ERROR_FTP_TIMER_PERIOD);
+
     }
 
     private void stopErrorRestartTimer()
@@ -518,7 +522,6 @@ public class EnterPriseSettingsService extends Service {
                     processProcessedText(processedText);
                 }
             }
-
             return commandFile;
         }
 

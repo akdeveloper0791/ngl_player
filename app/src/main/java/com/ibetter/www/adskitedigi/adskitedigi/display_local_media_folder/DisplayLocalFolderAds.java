@@ -129,7 +129,8 @@ import static com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCamp
 
 /**
  * Created by vineeth_ibetter on 1/8/18.
- */
+*/
+
 
 public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClickListener,
        TextToSpeech.OnInitListener, MediaPlayer.OnPreparedListener,MediaPlayer.OnErrorListener, CameraDialog.CameraDialogParent, CameraViewInterface.Callback {
@@ -174,6 +175,7 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
     public static ActionReceiver actionReceiver;
 
     public Handler pdfScrollHandler;
+
     public Runnable pdfScrollHandlerRunnable;
     public static final long DEFAULT_PDF_SCROLL_SPEED = 10000;
 
@@ -324,8 +326,6 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
 
         context = DisplayLocalFolderAds.this;
 
-
-
         backGroundAudioHandler = new BackGroundAudioHandler(DisplayLocalFolderAds.this, false);
 
         setContentView(R.layout.display_local_folder_media);
@@ -350,7 +350,6 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
         setAnnouncementSettings();
 
         userMetricsTask();
-
 
 
     }
@@ -3022,6 +3021,7 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
         }
     }
 
+
     private void reCapturingFrame()
     {
         disconnectHandler.postDelayed(new Runnable()
@@ -3073,9 +3073,10 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
 
                     }
 
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     new DisplayDebugLogs(context).execute("\nreCaptureFrame:InterruptedException:"+e.toString());
-
                 }
 
             }
@@ -3413,7 +3414,8 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
                                 checkWeekDaysArray.add(weekDaysArray.getInt(arrayIndex));
                             }
                             int checkedDays=0;
-                            do {
+                            do
+                            {
                                 calendar.add(Calendar.HOUR,24);
                                 int nextCheckWeekDay = DateTimeModel.getDayOfWeek(calendar);
                                 if(checkWeekDaysArray.contains(nextCheckWeekDay))
@@ -3421,7 +3423,8 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
                                     nextScheduleAt = sdf.format(calendar.getTime());
                                     break;
                                 }
-                             }while(checkedDays<=7);
+                             }
+                            while(checkedDays<=7);
                         }
                 }
 
@@ -3459,7 +3462,6 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
                 }
 
                 return false;
-
             }catch(JSONException e)
             {
                 return false;
@@ -3508,5 +3510,8 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
         Thread thread = new Thread(renderRSSFeeds);
         thread.start();
     }
+
+
+
 
 }
