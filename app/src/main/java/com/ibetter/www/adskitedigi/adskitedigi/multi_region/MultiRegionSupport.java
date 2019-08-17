@@ -513,26 +513,47 @@ public class MultiRegionSupport
     //add url region
     private void addURLRegion(JSONObject info) throws JSONException
     {
-        RelativeLayout.LayoutParams parentLayoutParams = new RelativeLayout.LayoutParams(calculateRequiredPixel(deviceInfo.get("width"), info.getInt(activity.getString(R.string.multi_region_width_json_key))),
-                calculateRequiredPixel(deviceInfo.get("height"), info.getInt(activity.getString(R.string.multi_region_height_json_key))));
+        String url = info.getString(context.getString(R.string.multi_region_media_name_json_key));
+        boolean isopenWithThirdPartyApp = false;
+        String[] browserURLs = context.getResources().getStringArray(R.array.def_browser_url);
+        for (String browserURL : browserURLs) {
+            if (url.contains(browserURL)) {
+                isopenWithThirdPartyApp = true;
+                break;
+            }
+        }
 
-        final WebView web = new WebView(context);
-        web.setOnTouchListener(touchListener);
-        web.setLayoutParams(parentLayoutParams);
+        if (isopenWithThirdPartyApp) {
+            if(activity instanceof DisplayLocalFolderAds)
+            {
+                DisplayLocalFolderAds act = (DisplayLocalFolderAds)activity;
+                act.openWithThirdPartyApp(url);
+            }
 
-        //adding margins
-        ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) web.getLayoutParams();
-        marginLayoutParams.leftMargin = calculateRequiredPixel(deviceInfo.get("width"), info.getInt(activity.getString(R.string.multi_region_left_margin_json_key)));
-        marginLayoutParams.rightMargin = calculateRequiredPixel(deviceInfo.get("width"), info.getInt(activity.getString(R.string.multi_region_right_margin_json_key)));
-        marginLayoutParams.topMargin = calculateRequiredPixel(deviceInfo.get("height"), info.getInt(activity.getString(R.string.multi_region_top_margin_json_key)));
-        marginLayoutParams.bottomMargin = calculateRequiredPixel(deviceInfo.get("height"), info.getInt(activity.getString(R.string.multi_region_bottom_margin_json_key)));
-        parentLayout.addView(web);
-        //initialize web view
-        // web settings
-        initWebView(web);
+        }else {
+            RelativeLayout.LayoutParams parentLayoutParams = new RelativeLayout.LayoutParams(calculateRequiredPixel(deviceInfo.get("width"), info.getInt(activity.getString(R.string.multi_region_width_json_key))),
+                    calculateRequiredPixel(deviceInfo.get("height"), info.getInt(activity.getString(R.string.multi_region_height_json_key))));
 
-        web.loadUrl(info.getString(context.getString(R.string.multi_region_media_name_json_key)));
+            final WebView web = new WebView(context);
+            web.setOnTouchListener(touchListener);
+            web.setLayoutParams(parentLayoutParams);
+
+            //adding margins
+            ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) web.getLayoutParams();
+            marginLayoutParams.leftMargin = calculateRequiredPixel(deviceInfo.get("width"), info.getInt(activity.getString(R.string.multi_region_left_margin_json_key)));
+            marginLayoutParams.rightMargin = calculateRequiredPixel(deviceInfo.get("width"), info.getInt(activity.getString(R.string.multi_region_right_margin_json_key)));
+            marginLayoutParams.topMargin = calculateRequiredPixel(deviceInfo.get("height"), info.getInt(activity.getString(R.string.multi_region_top_margin_json_key)));
+            marginLayoutParams.bottomMargin = calculateRequiredPixel(deviceInfo.get("height"), info.getInt(activity.getString(R.string.multi_region_bottom_margin_json_key)));
+            parentLayout.addView(web);
+            //initialize web view
+            // web settings
+            initWebView(web);
+
+            web.loadUrl(url);
+        }
     }
+
+
 
     private void initWebView(WebView web)
     {

@@ -703,7 +703,7 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
     }
 
     //open with def browser
-    private void openWithThirdPartyApp(String url) {
+    public void openWithThirdPartyApp(String url) {
         try {
             if (url.contains(getString(R.string.def_zoom_us))) {
                 //check and open zoom app
