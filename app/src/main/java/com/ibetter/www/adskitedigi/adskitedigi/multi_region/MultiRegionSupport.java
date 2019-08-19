@@ -11,6 +11,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -37,6 +38,7 @@ import com.github.barteksc.pdfviewer.listener.OnRenderListener;
 import com.github.barteksc.pdfviewer.util.FitPolicy;
 import com.ibetter.www.adskitedigi.adskitedigi.R;
 import com.ibetter.www.adskitedigi.adskitedigi.display_local_media_folder.DisplayLocalFolderAds;
+import com.ibetter.www.adskitedigi.adskitedigi.display_local_media_folder.ReadExcelFile;
 import com.ibetter.www.adskitedigi.adskitedigi.model.Constants;
 import com.ibetter.www.adskitedigi.adskitedigi.model.DeviceModel;
 import com.ibetter.www.adskitedigi.adskitedigi.model.SharedPreferenceModel;
@@ -106,6 +108,9 @@ public class MultiRegionSupport
                  } else if(type.equalsIgnoreCase(activity.getString(R.string.app_default_file_name)))
                  {
                      addFileRegion(info);
+                 }else  if(type.equalsIgnoreCase(activity.getString(R.string.app_default_excel_file_name)))
+                 {
+                     addExcelFileRegion(info);
                  }
 
             }catch (JSONException e)
@@ -957,5 +962,70 @@ public class MultiRegionSupport
         ((DisplayLocalFolderAds)activity).pdfScrollHandlerRunnable.run();
     }
 
+    //add file multi region
+    private synchronized void addExcelFileRegion(final JSONObject info) throws JSONException
+    {
+        String dir= new User().getUserPlayingFolderModePath(activity);
+        String imagePath = dir+"/"+info.getString(activity.getString(R.string.multi_region_media_name_json_key));
+        final File dirFile=new File(imagePath);
+
+        if(dirFile.exists())
+        {
+            final Uri uri = Uri.fromFile(dirFile);
+
+            // Check what kind of file you are trying to open, by comparing the url with extensions.
+            // When the if condition is matched, plugin sets the correct intent (mime) type,
+            // so Android knew what application to use to open the file
+
+            if(uri.toString().contains(context.getString(R.string.media_file_xls)))//For PDF file
+            {
+                Log.i("Process Files","file  Found- pdf");
+
+                // Do something for lollipop and above versions
+                //PDF file
+
+                RecyclerView.LayoutParams parentLayoutPARAM = new RecyclerView.LayoutParams(calculateRequiredPixel(deviceInfo.get("width"), info.getInt(activity.getString(R.string.multi_region_width_json_key))),
+                        calculateRequiredPixel(deviceInfo.get("height"), info.getInt(activity.getString(R.string.multi_region_height_json_key))));
+
+                // RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+
+
+                final RecyclerView excelLayout = new RecyclerView(activity,null);
+                excelLayout.setLayoutParams(parentLayoutPARAM);
+
+                //adding margins
+                ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) excelLayout.getLayoutParams();
+                marginLayoutParams.leftMargin = calculateRequiredPixel(deviceInfo.get("width"), info.getInt(activity.getString(R.string.multi_region_left_margin_json_key)));
+                marginLayoutParams.rightMargin = calculateRequiredPixel(deviceInfo.get("width"), info.getInt(activity.getString(R.string.multi_region_right_margin_json_key)));
+                marginLayoutParams.topMargin = calculateRequiredPixel(deviceInfo.get("height"), info.getInt(activity.getString(R.string.multi_region_top_margin_json_key)));
+                marginLayoutParams.bottomMargin = calculateRequiredPixel(deviceInfo.get("height"), info.getInt(activity.getString(R.string.multi_region_bottom_margin_json_key)));
+
+
+
+                parentLayout.addView(excelLayout);
+
+                startReadExcelFile(excelLayout,imagePath);
+            }else {
+
+                Toast.makeText(context, "Unsupported file format.", Toast.LENGTH_SHORT).show();
+
+            }
+        }else
+        {
+            //invalid file , try play next media
+            //resource not found
+            Log.i("Process Files","File not found -"+dirFile.getPath());
+        }
+
+    }
+    private void startReadExcelFile(RecyclerView excelLayout,String path)
+    {
+
+
+        ReadExcelFile readExcelFile = new ReadExcelFile(path,context,new Handler(),excelLayout);
+        Thread thread = new Thread(readExcelFile);
+        thread.start();
+
+    }
 
 }
