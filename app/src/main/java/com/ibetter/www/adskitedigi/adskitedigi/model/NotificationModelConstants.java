@@ -26,6 +26,7 @@ public class NotificationModelConstants {
     public static final int SYNCHRONIZING_FCM_ID = 8021917;
     public static final int CAPTURE_IMAGE_NOTIFY_ID = 8021918;
     public static final int HANDLE_DELAY_RULE = 8021919;
+    public static final int LICENCE_SERVICE_ID = 8021920;
 
     public static int getNotificationIdForDOWNLOADSUCCESSCAMPAIGN()
     {
@@ -67,7 +68,7 @@ public class NotificationModelConstants {
                     .setPriority(android.app.Notification.PRIORITY_HIGH)
                     .setOngoing(true)
                     .setWhen(System.currentTimeMillis())
-                    .setContentTitle("BizMaxer")
+                    .setContentTitle(contentText)
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher));
             //.setChannelId("Test");
@@ -85,6 +86,7 @@ public class NotificationModelConstants {
                     NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle()
                             .bigText(msg);
                     builder.setStyle(style);
+
 
                 } else {
                     builder.setContentText(msg);

@@ -48,7 +48,7 @@ public class Constants
     public final static String LOCAL_SAVE_DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
     public final static int FCM_MAX_DELAY = 1; //in minutes
 
-
+    public final static String GC_SERVER_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
 
     //convert to long
     public static Long convertToLong(String value)
@@ -70,6 +70,7 @@ public class Constants
             return Integer.parseInt(value);
         }catch (Exception e)
         {
+            e.printStackTrace();
             return 0;
         }
     }

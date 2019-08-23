@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -449,9 +450,14 @@ public class MultiRegionSupport
                         try {
                             mediaPlayer.start();
                             mediaPlayer.setLooping(true);
-                            mediaPlayer.setVolume(properties.getInt("volume"),properties.getInt("volume"));
+
+                            float volume = getVolumeStreamIndex(properties.getInt("volume"));
+                            Log.d("AdskiteDigi","Inside video view properties "+volume);
+                            mediaPlayer.setVolume(volume,volume);
+
                         }catch (Exception e)
                         {
+                            Log.d("AdskiteDigi","Inside video view properties error");
                             e.printStackTrace();
                         }
                     }
@@ -1026,6 +1032,14 @@ public class MultiRegionSupport
         Thread thread = new Thread(readExcelFile);
         thread.start();
 
+    }
+
+    private int getVolumeStreamIndex(int volume)
+    {
+        final AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+        int maxVolumeStream = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+
+        return Math.round((volume*maxVolumeStream)/100.00f);
     }
 
 }

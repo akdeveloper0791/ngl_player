@@ -101,6 +101,25 @@ public class User
         return userDetailsSPEditor.commit();
 
     }
+
+    public static boolean saveDeviceLicenceDetails(Context context,int licenceStatus,String expiryDate,String expiryCheckedAt)
+    {
+
+        SharedPreferences.Editor userDetailsSPEditor = new SharedPreferenceModel().getUserDetailsSharedPreference(context).edit();
+        userDetailsSPEditor.putInt(context.getString(R.string.user_display_status), licenceStatus);
+        userDetailsSPEditor.putString(context.getString(R.string.device_expiry_date_sp), expiryDate);
+        userDetailsSPEditor.putString(context.getString(R.string.device_expiry_checked_at_sp), expiryCheckedAt);
+
+        return userDetailsSPEditor.commit();
+
+    }
+
+    public static String getDeviceExpiryDate(Context context)
+    {
+        SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.user_details_sp),Context.MODE_PRIVATE);
+        return sp.getString(context.getString(R.string.device_expiry_date_sp),null);
+    }
+
         public  long getDisplayCreatedTime(Context context)
     {
         SharedPreferences userDetailsSPEditor = new SharedPreferenceModel().getUserDetailsSharedPreference(context);
@@ -113,7 +132,7 @@ public class User
     {
         SharedPreferences userDetailsSPEditor = new SharedPreferenceModel().getUserDetailsSharedPreference(context);
 
-        return   userDetailsSPEditor.getInt(context.getString(R.string.user_display_status),Constants.DISPLAY_TRIAL_PERIOD_STATUS);
+        return   userDetailsSPEditor.getInt(context.getString(R.string.user_display_status),Constants.DISPLAY_EXPIRED_STATUS);
 
     }
 
@@ -188,10 +207,10 @@ public class User
 
     }
 
-    public  String   getDeviceName(Context context)
+    public static String  getDeviceName(Context context)
     {
 
-        return new SharedPreferenceModel().getUserDetailsSharedPreference(context).getString(context.getString(R.string.sp_device_name),null);
+        return new SharedPreferenceModel().getUserDetailsSharedPreference(context).getString(context.getString(R.string.user_display_name),null);
 
     }
 

@@ -25,14 +25,14 @@ import com.ibetter.www.adskitedigi.adskitedigi.R;
 import com.ibetter.www.adskitedigi.adskitedigi.database.CampaignReportsDBModel;
 import com.ibetter.www.adskitedigi.adskitedigi.database.CampaignsDBModel;
 import com.ibetter.www.adskitedigi.adskitedigi.fcm.MyFirebaseMessagingService;
+import com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.DeleteUnknownCampaigns;
 import com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.auto_download_campaign.AutoDownloadCampaignModel;
 import com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.auto_download_campaign.AutoDownloadCampaignTriggerService;
+import com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.model.GCModel;
 import com.ibetter.www.adskitedigi.adskitedigi.login.GCRegisterDeviceService;
 import com.ibetter.www.adskitedigi.adskitedigi.metrics.MetricsModel;
-import com.ibetter.www.adskitedigi.adskitedigi.model.CampaignModel;
 import com.ibetter.www.adskitedigi.adskitedigi.model.Constants;
 import com.ibetter.www.adskitedigi.adskitedigi.model.DeviceModel;
-import com.ibetter.www.adskitedigi.adskitedigi.model.MediaModel;
 import com.ibetter.www.adskitedigi.adskitedigi.model.SharedPreferenceModel;
 import com.ibetter.www.adskitedigi.adskitedigi.model.User;
 import com.ibetter.www.adskitedigi.adskitedigi.player_statistics.PlayerStatisticsCollectionModel;
@@ -409,6 +409,54 @@ public class PlayingModeSettingsActivity extends Activity
         }
     }
 
+    private void deleteUnknownCampaigns()
+    {
+        try {
+            ArrayList<GCModel> deletedCampaigns = new ArrayList<>();
+            Cursor garbageCampaigns = CampaignsDBModel.getServerCampaigns(this);
+
+            if (garbageCampaigns != null && garbageCampaigns.moveToFirst()) {
+                do {
+                    GCModel gcModel = new GCModel();
+                    gcModel.setCampaignName(garbageCampaigns.getString(garbageCampaigns.getColumnIndex(CampaignsDBModel.CAMPAIGNS_TABLE_CAMPAIGN_NAME)));
+                    gcModel.setInfo(garbageCampaigns.getString(garbageCampaigns.getColumnIndex(CampaignsDBModel.CAMPAIGN_TABLE_CAMPAIGN_INFO)));
+                    gcModel.setCampaignLocalId(garbageCampaigns.getLong(garbageCampaigns.getColumnIndex(CampaignsDBModel.LOCAL_ID)));
+                    deletedCampaigns.add(gcModel);
+
+                    if (deletedCampaigns.size() >= 100) {
+                        //start service
+                        Intent intent = new Intent(this, DeleteUnknownCampaigns.class);
+                        intent.putExtra("unknown_campaigns", deletedCampaigns);
+                        startService(intent);
+
+                        deletedCampaigns.clear();
+                    }
+
+                } while (garbageCampaigns.moveToNext());
+
+
+                if (deletedCampaigns.size() >= 1) {
+
+                    //start service
+                    Intent intent = new Intent(this, DeleteUnknownCampaigns.class);
+                    intent.putExtra("unknown_campaigns", deletedCampaigns);
+                    startService(intent);
+
+                    deletedCampaigns.clear();
+                }
+
+            }
+
+            CampaignsDBModel.deleteServerCampaigns(playingModeSettingsModel.getContext());
+
+            CampaignReportsDBModel.deleteAllServerReportsCollection(playingModeSettingsModel.getContext());
+
+        }catch(Exception e)
+        {
+            Log.d("auto download campaigns","Error in deleting unknown campaigns"+e.getMessage());
+        }
+    }
+
     private void deleteGarbageFiles()
     {
         Cursor garbageCampaigns= CampaignsDBModel.getServerCampaigns(playingModeSettingsModel.getContext());
@@ -417,10 +465,9 @@ public class PlayingModeSettingsActivity extends Activity
             do {
                 String campaignName = garbageCampaigns.getString(garbageCampaigns.getColumnIndex(CampaignsDBModel.CAMPAIGNS_TABLE_CAMPAIGN_NAME));
 
+                String campaignInfo = garbageCampaigns.getString(garbageCampaigns.getColumnIndex(CampaignsDBModel.CAMPAIGN_TABLE_CAMPAIGN_INFO));
 
-                File garbageCampaignFile = new File(DOWNLOAD_CAMPAIGNS_PATH, campaignName + ".txt");
-
-                removeCampaignResources(campaignName, garbageCampaignFile);
+                removeCampaignResources(campaignName, campaignInfo);
 
             }while (garbageCampaigns.moveToNext());
 
@@ -432,11 +479,11 @@ public class PlayingModeSettingsActivity extends Activity
 
     }
 
-    private void removeCampaignResources(String fileName,File file)
+    private void removeCampaignResources(String fileName,String campaignInfo)
     {
         ArrayList<String> dataList=new ArrayList<>();
 
-        if(file.exists())
+        if(campaignInfo!=null)
         {
             File thumbFile=new File(DOWNLOAD_CAMPAIGNS_PATH+File.separator+playingModeSettingsModel.getContext().getString(R.string.do_not_display_media)+"-"+playingModeSettingsModel.getContext().getString(R.string.media_thumbnail)+"-"+fileName+".jpg");
             Log.i("thumbFile","delete"+thumbFile);
@@ -446,31 +493,24 @@ public class PlayingModeSettingsActivity extends Activity
                 thumbFile.delete();
             }
 
-            String fileJson = new MediaModel().readTextFile(file.getPath());
-            // Log.i("PreviewCampaign","deleteCampaignResources:"+fileJson);
             try
             {
-                JSONObject jsonObject = new JSONObject(fileJson);
+                JSONObject jsonObject = new JSONObject(campaignInfo);
                 String type = jsonObject.getString("type");
 
                 if(type.equalsIgnoreCase(playingModeSettingsModel.getContext().getString(R.string.app_default_image_name)))
                 {
-                    dataList.add(file.getName());
                     dataList.add(jsonObject.getString("resource"));
 
                 }else if(type.equalsIgnoreCase(playingModeSettingsModel.getContext().getString(R.string.app_default_video_name)))
                 {
-                    dataList.add(file.getName());
                     dataList.add(jsonObject.getString("resource"));
 
                 }else if(type.equalsIgnoreCase(playingModeSettingsModel.getContext().getString(R.string.app_default_multi_region)))
                 {
                     dataList= processMultiRegionFile(jsonObject.getJSONArray("regions"));
-                    dataList.add(file.getName());
 
-                }else if(type.equalsIgnoreCase(playingModeSettingsModel.getContext().getString(R.string.url_txt)))
-                {
-                    dataList.add(file.getName());
+
                 }
 
                 if(dataList!=null && dataList.size()>0)
@@ -480,7 +520,7 @@ public class PlayingModeSettingsActivity extends Activity
                     for(String fileString:dataList)
                     {
                         //  Log.i("PreviewCampaign","deleted campaign file:"+fileString);
-                        File resourceFile=new File(CampaignModel.getAdsKiteNearByDirectory(playingModeSettingsModel.getContext())+File.separator+fileString);
+                        File resourceFile=new File(DOWNLOAD_CAMPAIGNS_PATH+File.separator+fileString);
                         if(resourceFile.exists())
                         {
                             Log.i("PreviewCampaign","file is deleted:"+resourceFile.getAbsolutePath());
@@ -497,6 +537,9 @@ public class PlayingModeSettingsActivity extends Activity
                 e.printStackTrace();
             }
 
+        }else
+        {
+            Log.i("campaignInfo not ","exoist"+campaignInfo);
         }
 
 

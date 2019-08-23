@@ -102,7 +102,7 @@
     <string name="overlaying_image_setting_info">overlaying_image_setting_info</string>
     <string name="is_overlaying_image_on">is_overlaying_image_on</string>
     <string name="user_display_created_time">user_display_created_time</string>
-    <string name="user_display_status">user_display_status</string>
+
     <string name="image_capture_duration">image_capture_duration</string>
     <string name="is_metrics_on">is_metrics_on</string>
     <string name="metrics_camera_type">metrics_camera_type</string>
@@ -884,5 +884,12 @@
 
     <string name="multi_feed_split">;</string>
 
+    <!-- device license details -->
+    <string name="user_display_status">user_display_status</string>
+    <string name="device_expiry_date_sp">device_expiry_date_sp</string>
+    <string name="device_expiry_checked_at_sp">device_expiry_checked_at_sp</string>
+
+    <string name="customer_care_number">+919900819475</string>
+    <string name="cc_email">contact@adskite.com</string>
 
 </resources>

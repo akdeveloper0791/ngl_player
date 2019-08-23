@@ -97,6 +97,9 @@
 
         <service android:name=".register.RegisterDisplayService" /> <!-- required_schedule_files -->
 
+        <!-- licence -->
+        <service android:name=".register.CheckLicenceService" />
+
         <!-- get file  service -->
         <!-- display ads -->
         <!-- add schedules locally -->
@@ -362,6 +365,18 @@
                 <action android:name="com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.auto_download_campaign.AutoCampaignDownloadAlarmRX" />
             </intent-filter>
         </receiver>
+
+        <provider android:authorities="com.ibetter.www.adskitedigi.adskitedigi.provider" android:name="android.support.v4.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true" >
+
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_provide_paths" />
+        </provider>
+
+
+
     </application>
 
 </manifest>

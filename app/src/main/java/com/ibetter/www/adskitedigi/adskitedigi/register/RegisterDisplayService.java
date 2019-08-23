@@ -3,32 +3,19 @@ package com.ibetter.www.adskitedigi.adskitedigi.register;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Build;
 import android.util.Log;
 
 import com.ibetter.www.adskitedigi.adskitedigi.R;
-import com.ibetter.www.adskitedigi.adskitedigi.fcm.MyFirebaseMessagingService;
-import com.ibetter.www.adskitedigi.adskitedigi.logs.DisplayDebugLogs;
+import com.ibetter.www.adskitedigi.adskitedigi.model.Constants;
 import com.ibetter.www.adskitedigi.adskitedigi.model.DeviceModel;
-import com.ibetter.www.adskitedigi.adskitedigi.model.NetworkModel;
-import com.ibetter.www.adskitedigi.adskitedigi.model.SharedPreferenceModel;
 import com.ibetter.www.adskitedigi.adskitedigi.model.User;
-import com.ibetter.www.adskitedigi.adskitedigi.xiboServices.Xibo;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.ksoap2.SoapFault;
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.serialization.SoapSerializationEnvelope;
-import org.ksoap2.transport.HttpTransportSE;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.IOException;
-import java.io.StringReader;
-import java.net.Proxy;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -38,7 +25,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-
 
 import static com.ibetter.www.adskitedigi.adskitedigi.green_content.gc_model.GCUtils.LICENCE_REGISTER;
 
@@ -120,7 +106,10 @@ public class RegisterDisplayService  extends IntentService
 
             if(info.getInt("statusCode")==0)
             {
-                sendResponse(true,"Registered Successfully",info.getString("d_status"));
+                int status = info.getInt("d_status");
+                String expiryDate = info.getString("expiry_date");
+                saveLicenseDetails(status,expiryDate);
+                sendResponse(true,"Registered Successfully",String.valueOf(status));
 
             }else
             {
@@ -161,6 +150,13 @@ public class RegisterDisplayService  extends IntentService
     }
 
 
+    private void saveLicenseDetails(int status,String expiryDate)
+    {
 
+        SimpleDateFormat expiryCheckDateSDF = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        String expiryDateCheckedAt = expiryCheckDateSDF.format(calendar.getTime());
+        User.saveDeviceLicenceDetails(context,status,expiryDate,expiryDateCheckedAt);
+    }
 
 }

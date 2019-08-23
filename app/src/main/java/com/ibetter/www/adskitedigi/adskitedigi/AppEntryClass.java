@@ -27,6 +27,7 @@ import com.ibetter.www.adskitedigi.adskitedigi.model.User;
 import com.ibetter.www.adskitedigi.adskitedigi.model.Validations;
 import com.ibetter.www.adskitedigi.adskitedigi.nearby.CheckAndRestartSMServiceOreo;
 import com.ibetter.www.adskitedigi.adskitedigi.player_statistics.PlayerStatisticsCollectionModel;
+import com.ibetter.www.adskitedigi.adskitedigi.register.CheckLicenceService;
 import com.ibetter.www.adskitedigi.adskitedigi.register.RegisterActivity;
 import com.ibetter.www.adskitedigi.adskitedigi.settings.advance_settings.ScreenOrientationModel;
 import com.ibetter.www.adskitedigi.adskitedigi.settings.user_channel_guide.UserGuideActivity;
@@ -129,16 +130,20 @@ public class AppEntryClass extends Activity
         if(licenceStatus==)*/
 
 
-        int statusCode = Constants.convertToInt(new User().getRegisterStatus(context));
+        int statusCode = (new User().getDisplayLicenceStatus(context));
         Log.i("successCodeString",""+statusCode);
         switch (statusCode)
         {
             case 0:
                 checkForTrailPeriod();
+                //start service to check licence
+                startLicenceCheck();
                 break;
 
             case 1:
                 new User().checkExistingScheduleFiles(AppEntryClass.this);
+                //start service to check licence
+                startLicenceCheck();
                 break;
 
             case 2:
@@ -147,7 +152,12 @@ public class AppEntryClass extends Activity
                 checkForTrailPeriod();
                 break;
 
+            case Constants.DISPLAY_EXPIRED_STATUS:
+                displayExpiredInfo();
+                break;
+
             default:
+
 
                 invokeRegisterActivity();
 
@@ -335,6 +345,42 @@ public class AppEntryClass extends Activity
       {
           displayRegisterInfo("Your Display Licence period has been expired please contact our support team 8105303245");
       }
+   }
+
+   private void startLicenceCheck()
+   {
+      ContextCompat.startForegroundService(context,new Intent(this, CheckLicenceService.class));
+
+   }
+
+   private void displayExpiredInfo()
+   {
+       String alertMsg = "Dear user, your DSP ("+User.getDeviceName(this)+") with MAC ("+
+               DeviceModel.getMacAddress()+") licence has been expired, please contact us on "+
+               getString(R.string.customer_care_number)+"/"+getString(R.string.cc_email)+" to extend your licence";
+
+       AlertDialog.Builder successInfoDialog = new AlertDialog.Builder(context);
+       successInfoDialog.setTitle(getString(R.string.app_default_alert_title_info));
+       successInfoDialog.setMessage(alertMsg);
+       successInfoDialog.setCancelable(false);
+
+       successInfoDialog.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+           @Override
+           public void onClick(DialogInterface dialog, int which) {
+
+               dialog.dismiss();
+               finish();
+           }
+       });
+
+       successInfoDialog.setPositiveButton("REFRESH", new DialogInterface.OnClickListener() {
+           @Override
+           public void onClick(DialogInterface dialogInterface, int i) {
+               invokeRegisterActivity();
+           }
+       });
+
+       successInfoDialog.create().show();
    }
 
 }

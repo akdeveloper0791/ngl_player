@@ -6,13 +6,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.ibetter.www.adskitedigi.adskitedigi.R;
 import com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.auto_download_campaign.AutoDownloadCampaignModel;
-import com.ibetter.www.adskitedigi.adskitedigi.logs.DisplayDebugLogs;
 import com.ibetter.www.adskitedigi.adskitedigi.model.Constants;
+import com.ibetter.www.adskitedigi.adskitedigi.model.DeviceModel;
 import com.ibetter.www.adskitedigi.adskitedigi.model.DisplayDialog;
 import com.ibetter.www.adskitedigi.adskitedigi.model.NetworkModel;
 import com.ibetter.www.adskitedigi.adskitedigi.model.User;
@@ -146,7 +147,7 @@ public class RegisterActivity extends Activity {
 
         if(successCode==0)
         {
-            User.setLicenceStatus(RegisterActivity.this,Constants.DISPLAY_SUCCESS_STATUS);
+            //User.setLicenceStatus(RegisterActivity.this,Constants.DISPLAY_SUCCESS_STATUS);
 
             new User().updateUserPlayingMode(registerActivityModel.getRegisterActivityContext(), Constants.NEAR_BY_MODE, null,null,null);
             //start enterprise mode
@@ -167,7 +168,11 @@ public class RegisterActivity extends Activity {
 
             if(User.getDisplayLicenceStatus(this)==Constants.DISPLAY_EXPIRED_STATUS)
             {
-                AlertDialog.Builder successInfoDialog = registerActivityModel.getRegisterDialogModel().displayAlertDialog(registerActivityModel.getRegisterActivityContext(), successMessage+getString(R.string.app_default_contact_info), getString(R.string.app_default_alert_title_info), false);
+                String alertMsg = "Dear user, your DSP ("+User.getDeviceName(this)+") with MAC ("+
+                        DeviceModel.getMacAddress()+") licence has been expired, please contact us on "+
+                        getString(R.string.customer_care_number)+"/"+getString(R.string.cc_email)+" to extend your licence";
+
+                AlertDialog.Builder successInfoDialog = registerActivityModel.getRegisterDialogModel().displayAlertDialog(registerActivityModel.getRegisterActivityContext(), alertMsg, getString(R.string.app_default_alert_title_info), false);
                 successInfoDialog.setNegativeButton(registerActivityModel.getRegisterActivityContext().getString(R.string.app_default_alert_negative_button_ok_text), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -176,6 +181,7 @@ public class RegisterActivity extends Activity {
                         finish();
                     }
                 });
+
 
 
                 successInfoDialog.create().show();
