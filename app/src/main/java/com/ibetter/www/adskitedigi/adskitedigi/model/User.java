@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.ibetter.www.adskitedigi.adskitedigi.R;
 import com.ibetter.www.adskitedigi.adskitedigi.display_local_media_folder.DisplayLocalFolderAds;
 import com.ibetter.www.adskitedigi.adskitedigi.download_media.DownloadMediaHelper;
@@ -80,6 +82,30 @@ public class User
 
         return userDetailsSPEditor.commit();
 
+    }
+
+    public static boolean updateLocation(Context context, Location location)
+    {
+        SharedPreferences.Editor userDetailsSPEditor = new SharedPreferenceModel().getUserDetailsSharedPreference(context).edit();
+        userDetailsSPEditor.putString(context.getString(R.string.user_display_location_lat),String.valueOf(location.getLatitude()));
+        userDetailsSPEditor.putString(context.getString(R.string.user_display_location_lng),String.valueOf(location.getLongitude()));
+        return userDetailsSPEditor.commit();
+
+    }
+
+    public static LatLng getDeviceLocation(Context context)
+    {
+        SharedPreferences sp = new SharedPreferenceModel().getUserDetailsSharedPreference(context);
+        String lat  = sp.getString(context.getString(R.string.user_display_location_lat),null);
+        String lng = sp.getString(context.getString(R.string.user_display_location_lng),null);
+        if(lat!=null && lng!=null)
+        {
+
+            return new LatLng(Constants.convertToDouble(lat),Constants.convertToDouble(lng));
+        }else
+        {
+            return null;
+        }
     }
 
     public static boolean initNewDevice(Context context)

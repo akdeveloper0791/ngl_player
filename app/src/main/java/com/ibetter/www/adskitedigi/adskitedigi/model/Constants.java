@@ -74,6 +74,20 @@ public class Constants
             return 0;
         }
     }
+
+    //convert to long
+    public static Double convertToDouble(String value)
+    {
+        try {
+            return Double.parseDouble(value);
+
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            return (double)0;
+        }
+    }
+
     public static String capitalize(String str)
     {
         if (TextUtils.isEmpty(str)) {

@@ -55,6 +55,10 @@
         android:textColor="@color/app_default_text_color"
     />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
     <EditText
         android:id="@+id/register_layout_display_location_info_et"
         android:layout_width="fill_parent"
@@ -67,7 +71,15 @@
         android:hint="@string/register_layout_location_display_info_edit_text_hint"
         android:textColorHint="@color/app_default_edit_text_hint_color"
         android:textColor="@color/app_default_text_color"
+        android:layout_weight="0.75"
     />
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/ic_dialog_map"
+                android:id="@+id/search_location_button"/>
+
+        </LinearLayout>
 
       <Button
        android:id="@+id/register_layout_register_button"

@@ -375,7 +375,13 @@
                 android:resource="@xml/file_provide_paths" />
         </provider>
 
+    <!--location -->
+        <activity android:name=".location.SearchLocation" />
+        <service android:name=".location.GetAddressFromLocation" />
 
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAdCZgV6XwZAnnpXtJ10tRiBVYiaZj3e3Q" />
 
     </application>
 

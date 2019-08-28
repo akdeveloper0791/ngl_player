@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,9 +14,11 @@ import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.ibetter.www.adskitedigi.adskitedigi.R;
+import com.ibetter.www.adskitedigi.adskitedigi.location.SearchLocation;
 import com.ibetter.www.adskitedigi.adskitedigi.model.Constants;
 import com.ibetter.www.adskitedigi.adskitedigi.model.DisplayDialog;
 import com.ibetter.www.adskitedigi.adskitedigi.model.NetworkModel;
@@ -33,8 +36,11 @@ public class LoginActivity extends Activity implements LoginInterface
     private  static  int WRITABLE_PERMISSION_REQUEST=1;
     private final int ENTERPRISE_MODE_PERMISSIONS_REQUEST = 2;
     private  static  final int PICK_FILE_REQUEST_CODE=2;
+    private static final int PICK_LOCATION_REQUEST_CODE=3;
     private boolean is_from_login=false;
     private static final  int SYSTEM_ALERT_WINDOW_PERMISSION=200;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -51,6 +57,8 @@ public class LoginActivity extends Activity implements LoginInterface
         setLoginAction();
 
         checkForPermissions();
+
+        getLocation();
 
     }
 
@@ -330,6 +338,19 @@ public class LoginActivity extends Activity implements LoginInterface
             case SYSTEM_ALERT_WINDOW_PERMISSION:
                 Toast.makeText(this, "App overlay permission is granted", Toast.LENGTH_SHORT).show();
                 break;
+            case PICK_LOCATION_REQUEST_CODE:
+                if(resultCode==RESULT_OK)
+                {
+                    User.updateLocation(this,(Location) data.getParcelableExtra("location"));
+
+                    if(data.hasExtra("address"))
+                    {
+                        ((EditText)findViewById(R.id.register_layout_display_location_info_et)).setText(data.getStringExtra("address"));
+                    }
+
+
+                }
+                break;
         }
 
     }
@@ -339,5 +360,17 @@ public class LoginActivity extends Activity implements LoginInterface
         Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
         startActivityForResult(intent, SYSTEM_ALERT_WINDOW_PERMISSION);
     }
+
+    private void getLocation()
+    {
+        findViewById(R.id.search_location_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivityForResult(new Intent(LoginActivity.this, SearchLocation.class),PICK_LOCATION_REQUEST_CODE);
+            }
+        });
+    }
+
+
 
 }

@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -79,6 +80,17 @@
             android:layout_below="@+id/location_image"
             android:layout_toRightOf="@+id/location_image"/>
         />
+
+        <Button android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="Edit"
+            android:id="@+id/edit_profile_btn"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:onClick="onClick"/>
+
     </RelativeLayout>
+
+
 
 </LinearLayout>

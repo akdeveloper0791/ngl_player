@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.ibetter.www.adskitedigi.adskitedigi.R;
 import com.ibetter.www.adskitedigi.adskitedigi.fcm.MyFirebaseMessagingService;
 import com.ibetter.www.adskitedigi.adskitedigi.model.Constants;
@@ -103,13 +104,30 @@ public class GCRegisterDeviceService extends IntentService {
             pwd = intent.getStringExtra(pwdPARAM);
             playingMode = intent.getIntExtra(playing_mode_PARAM, Constants.CLOUD_MODE);
             //prepare data
+            String registerData = intent.getStringExtra(dataPARAM);
+            LatLng deviceLocation = User.getDeviceLocation(context);
+            if(deviceLocation!=null)
+            {
+                try {
+                    JSONObject registerDataJSON = new JSONObject(registerData);
+                    registerDataJSON.put("player_lat", deviceLocation.latitude);
+                    registerDataJSON.put("player_lng", deviceLocation.longitude);
+                    registerData = registerDataJSON.toString();
+                }catch (JSONException ex)
+                {
+                    ex.printStackTrace();
+                }
+            }
+
+
+            Log.d("Register","registerData - "+registerData);
 
             RequestBody requestBody = new MultipartBody.Builder()
                     .setType(MultipartBody.FORM)
                     .addFormDataPart("user_email", intent.getStringExtra(userEmail_PARAM))
                     .addFormDataPart("pwd", intent.getStringExtra(pwdPARAM))
                     .addFormDataPart("isAdskite", String.valueOf(intent.getBooleanExtra(isAdsKitePARAM, false)))
-                    .addFormDataPart("data", intent.getStringExtra(dataPARAM))
+                    .addFormDataPart("data", registerData)
                     .build();
 
             String URL = null;

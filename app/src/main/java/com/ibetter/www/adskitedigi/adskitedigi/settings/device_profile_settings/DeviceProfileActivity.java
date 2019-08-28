@@ -10,8 +10,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,15 +24,17 @@ import android.widget.Toast;
 
 import com.ibetter.www.adskitedigi.adskitedigi.R;
 import com.ibetter.www.adskitedigi.adskitedigi.fcm.MyFirebaseMessagingService;
+import com.ibetter.www.adskitedigi.adskitedigi.location.SearchLocation;
 import com.ibetter.www.adskitedigi.adskitedigi.login.GCRegisterDeviceService;
 import com.ibetter.www.adskitedigi.adskitedigi.model.Constants;
 import com.ibetter.www.adskitedigi.adskitedigi.model.DeviceModel;
 import com.ibetter.www.adskitedigi.adskitedigi.model.User;
 import com.ibetter.www.adskitedigi.adskitedigi.settings.advance_settings.ScreenOrientationModel;
+
 import org.json.JSONObject;
 
 
-public class DeviceProfileActivity extends Activity
+public class DeviceProfileActivity extends Activity implements View.OnClickListener
 {
     private Context context;
 
@@ -40,6 +42,8 @@ public class DeviceProfileActivity extends Activity
 
     private ProgressDialog busyDialog;
     private RegisterServiceReceiver registerServiceReceiver;
+    private static final int PICK_LOCATION_REQUEST_CODE=3;
+    private View editLayout;
 
     public void onCreate(Bundle savedInstanceState)
     {
@@ -130,13 +134,13 @@ public class DeviceProfileActivity extends Activity
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View layout = inflater.inflate(R.layout.edit_display_profile, null);
-        alertDialog.setView(layout);
+        editLayout = inflater.inflate(R.layout.edit_display_profile, null);
+        alertDialog.setView(editLayout);
 
-        final Button update=layout.findViewById(R.id.update);
+        final Button update=editLayout.findViewById(R.id.update);
 
-        final EditText displayNameET=layout.findViewById(R.id.display_name);
-        final EditText locationEt=layout.findViewById(R.id.location);
+        final EditText displayNameET=editLayout.findViewById(R.id.display_name);
+        final EditText locationEt=editLayout.findViewById(R.id.location);
 
 
 
@@ -378,6 +382,43 @@ public class DeviceProfileActivity extends Activity
         if(busyDialog!=null && busyDialog.isShowing())
         {
             busyDialog.dismiss();
+        }
+    }
+
+    public void onClick(View view)
+    {
+        switch (view.getId())
+        {
+            case R.id.edit_profile_btn:
+                editDisplayProfile();
+                break;
+            case R.id.edit_location_btn:
+                getLocation();
+                break;
+        }
+    }
+
+    private void getLocation()
+    {
+        startActivityForResult(new Intent(context, SearchLocation.class),PICK_LOCATION_REQUEST_CODE);
+    }
+
+    public void onActivityResult(int requestCode,int resultCode,Intent data)
+    {
+        switch (requestCode)
+        {
+            case PICK_LOCATION_REQUEST_CODE:
+                if(resultCode==RESULT_OK)
+                {
+                    User.updateLocation(this,(Location) data.getParcelableExtra("location"));
+
+                    if(data.hasExtra("address") && editLayout!=null)
+                    {
+                        ((EditText)editLayout.findViewById(R.id.location)).setText(data.getStringExtra("address"));
+                    }
+
+                }
+             break;
         }
     }
 }

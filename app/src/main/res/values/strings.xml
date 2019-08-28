@@ -82,6 +82,8 @@
     <string name="user_mobile_number">user_mobile_number</string>
     <string name="user_display_name">user_display_name</string>
     <string name="user_display_location_desc">user_display_location_desc</string>
+    <string name="user_display_location_lat">user_display_location_lat</string>
+    <string name="user_display_location_lng">user_display_location_lng</string>
     <string name="local_scroll_text">local_scroll_text</string>
     <string name="local_scroll_text_italic">local_scroll_text_italic</string>
     <string name="local_scroll_text_bold">local_scroll_text_bold</string>

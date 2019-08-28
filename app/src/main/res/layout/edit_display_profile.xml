@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent" >
 
     <TextView
         android:id="@+id/display_name_tv"
@@ -39,10 +43,18 @@
         android:layout_margin="5dp"
         android:textStyle="bold" />
 
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:src="@android:drawable/ic_dialog_map"
+        android:id="@+id/edit_location_btn"
+        android:onClick="onClick"/>
+
     <EditText
         android:id="@+id/location"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/app_default_edit_text_height"
+        android:layout_height="wrap_content"
         android:layout_margin="@dimen/app_default_edit_text_margin"
         android:layout_marginTop="@dimen/app_default_vertical_space"
         android:layout_marginBottom="@dimen/app_default_vertical_space"
@@ -53,6 +65,7 @@
         android:textColor="@color/app_default_text_color"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:minLines="4"
         />
 
     <Button
@@ -66,4 +79,5 @@
         android:background="@drawable/button_background"
         android:id="@+id/update"
         />
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>
