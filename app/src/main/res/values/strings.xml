@@ -87,6 +87,8 @@
     <string name="user_display_location_lng">user_display_location_lng</string>
     <string name="can_update_location_bg_sp">can_update_location_bg_sp</string>
     <string name="local_scroll_text">local_scroll_text</string>
+    <string name="local_scroll_text_style_id">local_scroll_text_style_id</string>
+
     <string name="local_scroll_text_italic">local_scroll_text_italic</string>
     <string name="local_scroll_text_bold">local_scroll_text_bold</string>
     <string name="scroll_text_text_size">scroll_text_text_size</string>

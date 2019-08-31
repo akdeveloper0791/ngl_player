@@ -302,7 +302,7 @@ public class DisplayLocalFolderAdsModel
 
     }
 
-    private void setProperties()
+    protected void setProperties()
     {
         Log.i("text BG CLR",""+new User().getScrollTextBgColor(context));
         Log.i("text CLR",""+new User().getScrollTextTextColor(context));
@@ -1112,7 +1112,7 @@ public class DisplayLocalFolderAdsModel
     {
         try {
             activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
-        } catch (android.content.ActivityNotFoundException anfe)
+        } catch (ActivityNotFoundException anfe)
         {
             activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
         }

@@ -413,4 +413,23 @@ private boolean DEFAULT_SCROLL_TEXT_VALUE = true;
         e.printStackTrace();
      }
     }
+
+
+    public long getLocalScrollTextStyleId() {
+
+        SharedPreferences saveSP = new SharedPreferenceModel().getLocalScrollTextSharedPreference(scrollTextContext);
+
+        return saveSP.getLong(scrollTextContext.getString(R.string.local_scroll_text_style_id),0);
+
+    }
+
+    public String getLocalScrollLocalText() {
+
+        SharedPreferences saveSP = new SharedPreferenceModel().getLocalScrollTextSharedPreference(scrollTextContext);
+
+        //return saveSP.getString(scrollTextContext.getString(R.string.local_scroll_text));
+
+      return   saveSP.getString(scrollTextContext.getString(R.string.local_scroll_text),"");
+    }
+
 }

@@ -90,6 +90,17 @@ public class CampaignsDBModel
             RSS_FEED_INFO+" TEXT," +
             CAMPAIGN_TABLE_SCHEDULE_TYPE+" INTEGER DEFAULT 10 );";
 
+    public final static String TICKER_TEXT_TABLE = "ticker_text";
+    public final static String TICKER_TEXT_SERVER_ID = "ticker_text_server_id";
+    public final static String TICKER_TEXT_IS_SKIP = "ticker_text_is_skip";
+    public final static String TICKER_TEXT_INFO = "info";
+
+    public final static String CREATE_TICKER_TEXT_TABLE = "CREATE TABLE "+TICKER_TEXT_TABLE+
+            " ("+ "_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+            TICKER_TEXT_SERVER_ID+" INTEGER DEFAULT 0," +
+            TICKER_TEXT_IS_SKIP+" INTEGER DEFAULT 1," +
+            TICKER_TEXT_INFO+" TEXT," +
+            CAMPAIGN_TABLE_SCHEDULE_TYPE+" INTEGER DEFAULT 10 );";
 
     public static Cursor getCampaigns(Context context)
     {
@@ -200,6 +211,8 @@ public class CampaignsDBModel
 
 
     }
+
+
 
     public static  Cursor getSavedSchedules(String serverIdList,Context context)
     {
@@ -443,6 +456,8 @@ public class CampaignsDBModel
 
     }
 
+
+
     public static Cursor getRSSFeeds(Context context)
     {
         String sqlQuery = "SELECT * FROM "+RSS_FEEDS_TABLE+" WHERE "+RSS_FEED_IS_SKIP+" = 0";
@@ -473,6 +488,45 @@ public class CampaignsDBModel
         }
 
     }
+
+    //get saved rss feeds
+    public static  Cursor getSavedTickerTexts(String serverIdList,Context context)
+    {
+
+        String sqlQuery =String.format("SELECT "+TICKER_TEXT_SERVER_ID+" FROM "+TICKER_TEXT_TABLE+" WHERE " +TICKER_TEXT_SERVER_ID+" IN ("+serverIdList+ ");");
+        return DataBaseHelper.initializeDataBase(context).getRecord(sqlQuery);
+
+    }
+
+    public static  boolean deleteGarbageTickers(String serverIds,Context context)
+    {
+
+        String whereCondition=TICKER_TEXT_SERVER_ID+">0 AND "+TICKER_TEXT_SERVER_ID+" NOT IN("+serverIds+")";
+
+        if(serverIds!=null)
+        {
+
+            long status= DataBaseHelper.initializeDataBase(context).deleteRecordFromDBTable(TICKER_TEXT_TABLE,whereCondition);
+
+            if(status>0)
+            {
+                return true;
+            }
+            return false;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    //get saved ticker text
+    public static  Cursor getTickerTexts(Context context)
+    {
+        String sqlQuery =String.format("SELECT * FROM "+TICKER_TEXT_TABLE+" WHERE "+ TICKER_TEXT_IS_SKIP+"=0 ORDER BY " +LOCAL_ID +" ASC");
+        return DataBaseHelper.initializeDataBase(context).getRecord(sqlQuery);
+    }
+
 
 
 }

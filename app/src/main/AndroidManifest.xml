@@ -354,6 +354,9 @@
 
         <service android:name=".green_content.contextual_ads.SyncRulesService" />
 
+        <service android:name=".green_content.downloadCampaign.auto_download_campaign.UpdateTickerTextService" />
+
+
         <receiver android:name=".metrics.HandleDelayRuleReceiver">
             <intent-filter>
                 <action android:name="com.ibetter.www.adskitedigi.adskitedigi.metrics.HandleDelayRuleReceiver" />
