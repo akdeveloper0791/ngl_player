@@ -4,16 +4,13 @@ import android.content.Context;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 
 import com.ibetter.www.adskitedigi.adskitedigi.R;
 import com.ibetter.www.adskitedigi.adskitedigi.model.Constants;
 import com.ibetter.www.adskitedigi.adskitedigi.model.User;
-import com.ibetter.www.adskitedigi.adskitedigi.model.Validations;
 
 /**
  * Created by vineeth_ibetter on 12/31/17.
@@ -156,6 +153,9 @@ public class PlayingModeSettingsModel {
         if(GCUserMailId!=null)
         {
             userNameET.setText(GCUserMailId);
+        }else if(User.getUserEmailAddress(context)!=null)
+        {
+            userNameET.setText(User.getUserEmailAddress(context));
         }else
         {
             userNameET.setText("");
