@@ -1923,6 +1923,7 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
                         SharedPreferences saveSP = new SharedPreferenceModel().getLocalScrollTextSharedPreference(displayLocalFolderAdsModel.getContext());
                         String tickerText = saveSP.getString(getString(R.string.local_scroll_text), getString(R.string.display_ads_layout_scrolling_text));
                         displayLocalFolderAdsModel.setMediaDefaultScrollText(tickerText);
+
                     }
                 } else if (jsonObject.has(getString(R.string.offer_txt_json_key))) {
                     String offerText = jsonObject.getString(getString(R.string.offer_txt_json_key));
@@ -2159,6 +2160,9 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
         try {
             if(mediaInfo!=null)
                 checkAndScrollTextFromJSON(mediaInfo.getInfoJson());
+                if(displayLocalFolderAdsModel!=null)
+                    displayLocalFolderAdsModel.setProperties();
+
         } catch (Exception e) {
             e.printStackTrace();
         }

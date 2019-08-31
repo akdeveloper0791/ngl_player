@@ -83,6 +83,8 @@
     <string name="user_display_name">user_display_name</string>
     <string name="user_display_location_desc">user_display_location_desc</string>
     <string name="local_scroll_text">local_scroll_text</string>
+    <string name="local_scroll_text_style_id">local_scroll_text_style_id</string>
+
     <string name="local_scroll_text_italic">local_scroll_text_italic</string>
     <string name="local_scroll_text_bold">local_scroll_text_bold</string>
     <string name="scroll_text_text_size">scroll_text_text_size</string>

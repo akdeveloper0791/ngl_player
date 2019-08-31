@@ -25,6 +25,7 @@ import com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.mo
 import com.ibetter.www.adskitedigi.adskitedigi.green_content.gc_model.GCUtils;
 import com.ibetter.www.adskitedigi.adskitedigi.model.Constants;
 import com.ibetter.www.adskitedigi.adskitedigi.model.RSSModel;
+import com.ibetter.www.adskitedigi.adskitedigi.model.TickerTextModel;
 import com.ibetter.www.adskitedigi.adskitedigi.model.User;
 import com.ibetter.www.adskitedigi.adskitedigi.settings.text_settings.ScrollTextSettingsModel;
 
@@ -32,9 +33,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -67,6 +66,7 @@ public class AutoCampDownloadListService extends IntentService
     private HashMap<Long,GCModel> serverCampaigns = new HashMap<>();
     private ArrayMap<Long,ScheduleCampaignModel> schedules = new ArrayMap<>();
     private HashMap<Long, RSSModel> serverRSSFeeds = new HashMap<>();
+    private HashMap<Long, TickerTextModel> serverTickers = new HashMap<>();
 
 
     @Override
@@ -150,6 +150,7 @@ public class AutoCampDownloadListService extends IntentService
 
     private synchronized void processResponse(String response)
     {
+        Log.i("response",response);
         try
         {
             JSONObject responseObject=new JSONObject(response);
@@ -195,6 +196,14 @@ public class AutoCampDownloadListService extends IntentService
                                serverRSSFeeds.put(serverId,new RSSModel(serverId,isSkip,
                                        campObject.getString("info"),scheduleType));
                            }
+                        }
+                        if(campaignType==3)
+                        {
+                            if(!serverTickers.containsKey(serverId))
+                            {
+                                serverTickers.put(serverId,new TickerTextModel(serverId,isSkip,
+                                        campObject.getString("info"),scheduleType));
+                            }
                         }else {
 
 
@@ -220,28 +229,6 @@ public class AutoCampDownloadListService extends IntentService
 
                                 serverCampaigns.put(serverId, gcModel);
 
-                                //check for ticker text
-                                if (campaignName.equalsIgnoreCase(getString(R.string.dndm_ss_ticker_txt))) {
-                                    serverCampaigns.remove(serverId);
-
-                                    isTickerActivate = true;
-
-                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-                                    String lastUpadtedString = new User().getScrollTextUpdatedAt(context);
-
-                                    if (lastUpadtedString != null) {
-                                        Date lastUpdated = sdf.parse(lastUpadtedString);
-                                        Date updatedAt = sdf.parse(gcModel.getUpdatedAt());
-
-                                        if (lastUpdated.getTime() < updatedAt.getTime()) {
-                                            isTickerTextUpdated = true;
-                                            updateTickerValue(gcModel);
-                                        }
-                                    } else {
-                                        isTickerTextUpdated = true;
-                                        updateTickerValue(gcModel);
-                                    }
-                                }
                             }
                         }
 
@@ -271,25 +258,27 @@ public class AutoCampDownloadListService extends IntentService
                         //process rss feeds data
                         processRSSFeedsData();
 
+                        processTickerTextData();
+
                     if(serverCampaigns!=null && serverCampaigns.size()>0)
                     {
                         //check and update ticker text
-                        checkAndUpdateTickerText(isTickerActivate,isTickerTextUpdated);
+
                         processCampaignsData();
                     }else
                     {
-                        noCampaignsFound(isTickerActivate,isTickerTextUpdated);
+                        noCampaignsFound();
                     }
 
                 }else
                 {
-                    noCampaignsFound(false,true);
+                    noCampaignsFound();
                 }
 
             }else if(statusCode==2)
             {
                 //no campaigns found
-                noCampaignsFound(false,true);
+                noCampaignsFound();
             }
             else
             {
@@ -745,45 +734,28 @@ private synchronized void bulkCampaignsUpdate(ArrayList<GCModel> updateData)
     }
 
 
-    private void checkAndUpdateTickerText(boolean isTickerActivate,boolean isTickerUpdated)
-    {
 
-        boolean previousTickerValue = new ScrollTextSettingsModel(context).isScrollTextOn();
-        if((previousTickerValue&&isTickerActivate==false) || (previousTickerValue==false && isTickerActivate) || isTickerUpdated)
-        {
+    private void checkAndUpdateTickerText() {
 
-            new ScrollTextSettingsModel(context).setScrollTextStatus(isTickerActivate);
-            updateTickerTextSettings();
-        }
-
+        startService(new Intent(context, UpdateTickerTextService.class));
     }
 
-    private void updateTickerTextSettings()
-    {
-        Intent intent = new Intent(DisplayLocalFolderAds.SM_UPDATES_INTENT_ACTION);
-        intent.addCategory(Intent.CATEGORY_DEFAULT);
-        intent.putExtra(context.getString(R.string.action),context.getString(R.string.update_scroll_text_action));
 
-        context.sendBroadcast(intent);
-    }
-
-    private void updateTickerValue(GCModel model)
-    {
-        ScrollTextSettingsModel.updateTickerValuesFromJson(context,model.getInfo(),model.getUpdatedAt());
-    }
 
     //handle no campaigns found
-    private void noCampaignsFound(boolean isTickerActive,boolean isTickerUpdated)
+    private void noCampaignsFound()
     {
-
-        //update ticker texe
-        checkAndUpdateTickerText(isTickerActive,isTickerUpdated);
 
         //delete unknown campaigns
         deleteUnknownCampaigns();
 
         //delete unknown rss feeds
         deleteUnknownFeeds();
+
+        deleteUnknownTickers();
+
+        //update ticker texe
+        checkAndUpdateTickerText();
 
         //send success response
         sendSuccessResponse();
@@ -795,10 +767,169 @@ private synchronized void bulkCampaignsUpdate(ArrayList<GCModel> updateData)
         deleteUnknownFeeds();
         if(serverRSSFeeds.size()>=1)
         {
-
             checkAndInsertNewFeeds();
         }
     }
+
+
+    //process rss feeds data
+    private void processTickerTextData()
+    {
+        deleteUnknownTickers();
+        if(serverTickers.size()>=1)
+        {
+
+            checkAndInsertNewTickerTexts();
+
+        }else
+        {
+            checkAndUpdateTickerText();
+        }
+    }
+
+    private synchronized void  checkAndInsertNewTickerTexts()
+    {
+        ArrayList<TickerTextModel> updateData = new ArrayList<>();
+        try {
+            //check campaign record to update or insert to the local database
+            Cursor campaignsCursor = CampaignsDBModel.getSavedTickerTexts(TextUtils.join(", ", serverTickers.keySet()), context);
+
+            if (campaignsCursor != null && campaignsCursor.moveToFirst()) {
+                do {
+                    long serverId = campaignsCursor.getLong(campaignsCursor.getColumnIndex(CampaignsDBModel.TICKER_TEXT_SERVER_ID));
+                    if (serverId > 0) {
+                        //insert to update list and remove from
+                        updateData.add(serverTickers.remove(serverId));
+                    }
+
+                } while (campaignsCursor.moveToNext());
+
+            }
+
+            //after removing duplicate items do bulk insert schedules
+            if(serverTickers.size()>=1)
+            {
+                bulkInsertTickerTexts();
+            }
+
+            if(updateData.size()>=1)
+            {
+                bulkTickerTextsUpdate(updateData);
+            }
+
+        }catch(Exception e)
+        {
+
+        }finally
+        {
+            checkAndUpdateTickerText();
+
+        }
+
+    }
+    private void bulkInsertTickerTexts()
+    {
+        SQLiteDatabase mDb = DataBaseHelper.initializeDataBase(context.getApplicationContext()).getDb();
+
+        try {
+
+            mDb.beginTransaction();
+
+            String insertQuery = "INSERT INTO " + CampaignsDBModel.TICKER_TEXT_TABLE + "(" +
+                    CampaignsDBModel.TICKER_TEXT_SERVER_ID + ","
+                    + CampaignsDBModel.TICKER_TEXT_IS_SKIP + ","
+                    + CampaignsDBModel.TICKER_TEXT_INFO+","
+                    + CampaignsDBModel.CAMPAIGN_TABLE_SCHEDULE_TYPE + ") VALUES(?,?,?,?)";
+
+
+            SQLiteStatement insert = mDb.compileStatement(insertQuery);
+
+            Iterator it = serverTickers.entrySet().iterator();
+            while (it.hasNext())
+            {
+                Map.Entry pair = (Map.Entry)it.next();
+                TickerTextModel tickerTextModel = (TickerTextModel) pair.getValue();
+
+                insert.bindLong(1, tickerTextModel.getServerId());
+                insert.bindLong(2, tickerTextModel.getIsSkip());
+                insert.bindString(3, tickerTextModel.getInfo());
+                insert.bindLong(4,tickerTextModel.getScheduleType());
+
+                insert.execute();
+
+                //it.remove(); // avoids a ConcurrentModificationException
+            }
+
+
+        }
+        catch (Exception e)
+        {
+
+            Log.w("XML:",e );
+        }
+        finally
+        {
+            mDb.setTransactionSuccessful();
+            mDb.endTransaction();
+            serverTickers.clear();
+        }
+    }
+
+    private synchronized void bulkTickerTextsUpdate(ArrayList<TickerTextModel> updateData)
+    {
+
+        SQLiteDatabase mDb = DataBaseHelper.initializeDataBase(context.getApplicationContext()).getDb();
+
+        try {
+            mDb.beginTransaction();
+
+            String updateQuary="UPDATE " + CampaignsDBModel.TICKER_TEXT_TABLE + " SET " +
+                    CampaignsDBModel.TICKER_TEXT_IS_SKIP + " =?, " +
+                    CampaignsDBModel.CAMPAIGN_TABLE_SCHEDULE_TYPE +" =?"+
+                    "WHERE " + CampaignsDBModel.TICKER_TEXT_SERVER_ID + " =?";
+
+            SQLiteStatement update = mDb.compileStatement(updateQuary);
+
+            for(TickerTextModel tickerTextModel:updateData)
+            {
+
+                update.bindLong(1, tickerTextModel.getIsSkip());
+                update.bindLong(2, tickerTextModel.getScheduleType());
+                update.bindLong(3, tickerTextModel.getServerId());
+
+
+                update.execute();
+
+
+            }
+        }
+        catch (Exception e)
+        {
+            Log.w("XML:",e );
+        }
+        finally
+        {
+            mDb.setTransactionSuccessful();
+            mDb.endTransaction();
+            updateData.clear();
+        }
+
+    }
+
+
+    private void deleteUnknownTickers()
+    {
+        try {
+            CampaignsDBModel.deleteGarbageTickers(TextUtils.join(", ", serverTickers.keySet()), context);
+        }catch(Exception e)
+        {
+            Log.d("auto download campaigns","Error in deleting unknown TICKERS"+e.getMessage());
+        }
+    }
+
+
+
+
 
 
     private synchronized void  checkAndInsertNewFeeds()
@@ -843,7 +974,6 @@ private synchronized void bulkCampaignsUpdate(ArrayList<GCModel> updateData)
 
     }
 
-
     private void bulkInsertFeeds()
     {
         SQLiteDatabase mDb = DataBaseHelper.initializeDataBase(context.getApplicationContext()).getDb();
@@ -866,9 +996,6 @@ private synchronized void bulkCampaignsUpdate(ArrayList<GCModel> updateData)
             {
                 Map.Entry pair = (Map.Entry)it.next();
                 RSSModel rssModel = (RSSModel) pair.getValue();
-
-
-
 
                 insert.bindLong(1, rssModel.getServerId());
                 insert.bindLong(2, rssModel.getIsSkip());
@@ -901,7 +1028,6 @@ private synchronized void bulkCampaignsUpdate(ArrayList<GCModel> updateData)
         SQLiteDatabase mDb = DataBaseHelper.initializeDataBase(context.getApplicationContext()).getDb();
 
         try {
-
             mDb.beginTransaction();
 
             String updateQuary="UPDATE " + CampaignsDBModel.RSS_FEEDS_TABLE + " SET " +
