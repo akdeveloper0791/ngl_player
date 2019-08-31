@@ -7,14 +7,10 @@ import android.net.wifi.WifiManager;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-import com.ibetter.www.adskitedigi.adskitedigi.R;
 import com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.auto_download_campaign.AutoDownloadCampaignModel;
-import com.ibetter.www.adskitedigi.adskitedigi.model.Constants;
-import com.ibetter.www.adskitedigi.adskitedigi.model.User;
 import com.ibetter.www.adskitedigi.adskitedigi.nearby.CheckAndRestartSMServiceOreo;
 import com.ibetter.www.adskitedigi.adskitedigi.player_statistics.PlayerStatisticsCollectionModel;
-import com.ibetter.www.adskitedigi.adskitedigi.settings.signage_manager_settings.SignageMgrAccessModel;
-import com.ibetter.www.adskitedigi.adskitedigi.settings.signage_manager_settings.enter_prise_mode.EnterPriseSettingsModel;
+import com.ibetter.www.adskitedigi.adskitedigi.register.CheckLicenceService;
 
 import static com.ibetter.www.adskitedigi.adskitedigi.fcm.MyFirebaseMessagingService.checkAndUploadFCM;
 
@@ -53,6 +49,9 @@ public class MonitorInternetChanges extends BroadcastReceiver {
 
             //check and upload fcm
             checkAndUploadFCM(context);
+
+            //check for licence
+            ContextCompat.startForegroundService(context,new Intent(context, CheckLicenceService.class));
 
 
         }

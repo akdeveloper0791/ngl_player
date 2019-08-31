@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-import com.ibetter.www.adskitedigi.adskitedigi.nearby.CheckAndRestartSMServiceOreo;
+import com.ibetter.www.adskitedigi.adskitedigi.register.CheckLicenceService;
 
 import static com.ibetter.www.adskitedigi.adskitedigi.fcm.MyFirebaseMessagingService.checkAndUploadFCM;
 
@@ -29,6 +29,10 @@ public class RestartEnterpriseSettingsMode extends JobService {
         EnterPriseSettingsModel.startEnterPriseModel(context);
 
         checkAndUploadFCM(context);
+
+
+        //check for licence
+        ContextCompat.startForegroundService(context,new Intent(context, CheckLicenceService.class));
 
         jobFinished (jobParameters,false);
         onStopJob(jobParameters);

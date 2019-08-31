@@ -36,6 +36,7 @@ public class GCUtils
     public static final String GC_IOT_DEVICE_REGISTER_URL="https://www.signageserv.ai/iot_device/register";
 
     public static final String LICENCE_REGISTER="https://www.signageserv.ai/license/register";
+    public static final String SEND_OTP_REGISTER="https://www.signageserv.ai/license/sendOTP";
 
     public static final String UPLOAD_METRICS_FILE_URL= "https://www.signageserv.ai/iot_device/metrics";
 

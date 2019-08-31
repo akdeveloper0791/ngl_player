@@ -4,11 +4,13 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -42,6 +44,7 @@ public class AppEntryClass extends Activity
 
     private GestureDetector mDetector;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -54,6 +57,7 @@ public class AppEntryClass extends Activity
         context = AppEntryClass.this;
 
         mDetector = new GestureDetector(this,new MyGestureListener());
+
 
          /*check db updataions */
          DataBaseHelper db = new DataBaseHelper(context);
@@ -355,32 +359,12 @@ public class AppEntryClass extends Activity
 
    private void displayExpiredInfo()
    {
-       String alertMsg = "Dear user, your DSP ("+User.getDeviceName(this)+") with MAC ("+
-               DeviceModel.getMacAddress()+") licence has been expired, please contact us on "+
-               getString(R.string.customer_care_number)+"/"+getString(R.string.cc_email)+" to extend your licence";
+       invokeRegisterActivity();
 
-       AlertDialog.Builder successInfoDialog = new AlertDialog.Builder(context);
-       successInfoDialog.setTitle(getString(R.string.app_default_alert_title_info));
-       successInfoDialog.setMessage(alertMsg);
-       successInfoDialog.setCancelable(false);
-
-       successInfoDialog.setNegativeButton("OK", new DialogInterface.OnClickListener() {
-           @Override
-           public void onClick(DialogInterface dialog, int which) {
-
-               dialog.dismiss();
-               finish();
-           }
-       });
-
-       successInfoDialog.setPositiveButton("REFRESH", new DialogInterface.OnClickListener() {
-           @Override
-           public void onClick(DialogInterface dialogInterface, int i) {
-               invokeRegisterActivity();
-           }
-       });
-
-       successInfoDialog.create().show();
    }
+
+
+
+
 
 }

@@ -93,6 +93,7 @@
         <activity android:name=".RestartApp" />
         <activity android:name=".StopApp" /> <!-- login activity -->
         <activity android:name=".login.LoginActivity" /> <!-- register display activity -->
+        <service android:name=".login.SendOTPService" />
         <activity android:name=".register.RegisterActivity" />
 
         <service android:name=".register.RegisterDisplayService" /> <!-- required_schedule_files -->
@@ -378,6 +379,7 @@
     <!--location -->
         <activity android:name=".location.SearchLocation" />
         <service android:name=".location.GetAddressFromLocation" />
+        <service android:name=".location.SearchLocationBgService" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

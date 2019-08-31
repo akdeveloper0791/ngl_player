@@ -12,6 +12,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 import com.ibetter.www.adskitedigi.adskitedigi.R;
 import com.ibetter.www.adskitedigi.adskitedigi.fcm.MyFirebaseMessagingService;
 import com.ibetter.www.adskitedigi.adskitedigi.location.SearchLocation;
+import com.ibetter.www.adskitedigi.adskitedigi.location.SearchLocationBgService;
 import com.ibetter.www.adskitedigi.adskitedigi.login.GCRegisterDeviceService;
 import com.ibetter.www.adskitedigi.adskitedigi.model.Constants;
 import com.ibetter.www.adskitedigi.adskitedigi.model.DeviceModel;
@@ -200,6 +202,7 @@ public class DeviceProfileActivity extends Activity implements View.OnClickListe
                    alertDialog.dismiss();
                    Toast.makeText(context,"Updated Successfully",Toast.LENGTH_SHORT).show();
 
+
                }else {
 
                    //
@@ -235,12 +238,17 @@ public class DeviceProfileActivity extends Activity implements View.OnClickListe
 
                            GCRegisterDeviceService.startAction(context, mode, new User().getEnterPriseURL(context), displayName, new User().getEnterpriseUserMailId(context), new User().getEnterpriseUserPwd(context), false,
                                    array.toString(), intentAction);
+
+
+
                        } else if (mode == Constants.CLOUD_MODE) {
 
 
 
                            GCRegisterDeviceService.startAction(context, mode, null, displayName, new User().getGCUserMailId(context), new User().getGCUserPwd(context), false,
                                    array.toString(), intentAction);
+
+
                        }
 
                        displayBusyDialog("Updating...");
@@ -421,4 +429,6 @@ public class DeviceProfileActivity extends Activity implements View.OnClickListe
              break;
         }
     }
+
+
 }

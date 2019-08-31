@@ -81,9 +81,11 @@
     <string name="last_played_schedule_Media_stop_position">last_played_schedule_Media_stop_position</string>
     <string name="user_mobile_number">user_mobile_number</string>
     <string name="user_display_name">user_display_name</string>
+    <string name="user_display_org_email">user_display_org_email</string>
     <string name="user_display_location_desc">user_display_location_desc</string>
     <string name="user_display_location_lat">user_display_location_lat</string>
     <string name="user_display_location_lng">user_display_location_lng</string>
+    <string name="can_update_location_bg_sp">can_update_location_bg_sp</string>
     <string name="local_scroll_text">local_scroll_text</string>
     <string name="local_scroll_text_italic">local_scroll_text_italic</string>
     <string name="local_scroll_text_bold">local_scroll_text_bold</string>
@@ -158,6 +160,7 @@
 
     <!-- [+] login layout strings -->
     <string name="register_layout_header_text">Register to SignageServ</string>
+    <string name="register_layout_org_email_edit_text_hint">Enter Email Address</string>
     <string name="register_layout_mobile_number_edit_text_hint">Enter Mobile Number</string>
     <string name="register_layout_register_button_text">Register</string>
     <string name="register_layout_path_edit_text_hint">Select Folder Path</string>
@@ -202,6 +205,7 @@
 
     <!-- [+] login action strings -->
     <string name="login_action_mobile_number_et_error_msg">Please enter valid 10 digit mobile number</string>
+    <string name="login_action_org_email_et_error_msg">Please enter valid email address</string>
     <string name="login_action_folder_path_et_error_msg">Please enter valid folder path </string>
     <string name="login_action_display_name_et_error_msg">Please enter valid Display Name </string>
     <string name="login_action_playing_mode_selection_spinner_error_msg">Please Select Playing Media Mode</string>

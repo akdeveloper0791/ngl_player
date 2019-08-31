@@ -15,6 +15,7 @@ import com.ibetter.www.adskitedigi.adskitedigi.model.Constants;
 import com.ibetter.www.adskitedigi.adskitedigi.model.DeviceModel;
 import com.ibetter.www.adskitedigi.adskitedigi.model.NotificationModelConstants;
 import com.ibetter.www.adskitedigi.adskitedigi.model.User;
+import com.ibetter.www.adskitedigi.adskitedigi.model.Validations;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -56,30 +57,36 @@ public class CheckLicenceService extends Service {
 
     private void checkForLicence()
     {
+
         SharedPreferences licenceSp = getSharedPreferences(getString(R.string.user_details_sp),MODE_PRIVATE);
-        String lastExpiredCheckedAt = licenceSp.getString(getString(R.string.device_expiry_checked_at_sp),null);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String today = sdf.format(Calendar.getInstance().getTime());
-        if(!(lastExpiredCheckedAt!=null && lastExpiredCheckedAt.equals(today)))
+
+        if(new Validations().validateMobileNumber(context, new User().getUserMobileNumber(context))) {
+            String lastExpiredCheckedAt = licenceSp.getString(getString(R.string.device_expiry_checked_at_sp), null);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String today = sdf.format(Calendar.getInstance().getTime());
+            if (!(lastExpiredCheckedAt != null && lastExpiredCheckedAt.equals(today))) {
+                //check in server
+                IntentFilter intentFilter = new IntentFilter(RegisterServiceReceiver.INTENT_ACTION);
+                intentFilter.addCategory(Intent.CATEGORY_DEFAULT);
+
+                registerReceiver(new RegisterServiceReceiver(), intentFilter);
+
+                //start service to check licence
+                //start register service
+                Intent intent = new Intent(context, RegisterDisplayService.class);
+                intent.putExtra(getString(R.string.app_default_intent_action_text), RegisterServiceReceiver.INTENT_ACTION);
+                startService(intent);
+            } else {
+                Log.d("Licence", "Inside register licence already checked for " + lastExpiredCheckedAt);
+                stopSelf();
+
+
+            }
+        }else
         {
-          //check in server
-            IntentFilter intentFilter = new IntentFilter(RegisterServiceReceiver.INTENT_ACTION);
-            intentFilter.addCategory(Intent.CATEGORY_DEFAULT);
 
-            registerReceiver(new RegisterServiceReceiver(),intentFilter);
-
-            //start service to check licence
-            //start register service
-            Intent intent = new Intent(context, RegisterDisplayService.class);
-            intent.putExtra(getString(R.string.app_default_intent_action_text), RegisterServiceReceiver.INTENT_ACTION);
-            startService(intent);
-        }
-        else
-        {
-          Log.d("Licence","Inside register licence already checked for "+lastExpiredCheckedAt);
-          stopSelf();
-
-
+            Log.d("Licence", "Inside register licence device not yet logged in");
+            stopSelf();
         }
     }
 
@@ -134,6 +141,7 @@ public class CheckLicenceService extends Service {
         }
 
         DeviceModel.restartApp(context);
+        stopSelf();
     }
 
     private void sendResetIsRelaunchAppOnStop(boolean status)
@@ -176,6 +184,9 @@ public class CheckLicenceService extends Service {
         {
             User.setLicenceStatus(context,Constants.DISPLAY_EXPIRED_STATUS);
             licenceExpired();
+        }else
+        {
+            stopSelf();
         }
     }
 }

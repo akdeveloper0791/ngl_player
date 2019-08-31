@@ -50,6 +50,8 @@ public class Constants
 
     public final static String GC_SERVER_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
 
+    public final static long LICENCE_AUTO_REFRESH_INTERVAL = 5*60*1000;//every five minutes
+
     //convert to long
     public static Long convertToLong(String value)
     {

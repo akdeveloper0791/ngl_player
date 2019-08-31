@@ -2,13 +2,15 @@ package com.ibetter.www.adskitedigi.adskitedigi.register;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.ibetter.www.adskitedigi.adskitedigi.R;
 import com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.auto_download_campaign.AutoDownloadCampaignModel;
@@ -22,6 +24,8 @@ import com.ibetter.www.adskitedigi.adskitedigi.send_mail.SendMailToDigiContact;
 import com.ibetter.www.adskitedigi.adskitedigi.settings.advance_settings.ScreenOrientationModel;
 import com.ibetter.www.adskitedigi.adskitedigi.settings.signage_manager_settings.enter_prise_mode.EnterPriseSettingsModel;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created by vineeth_ibetter on 11/17/16.
  */
@@ -29,6 +33,10 @@ import com.ibetter.www.adskitedigi.adskitedigi.settings.signage_manager_settings
 public class RegisterActivity extends Activity {
 
     private RegisterActivityModel registerActivityModel;
+
+    private Handler handler;
+
+    private Dialog licenceExpiryDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -39,6 +47,7 @@ public class RegisterActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         initializeRegisterActivityModel();
+        handler = new Handler(getMainLooper());
 
         saveRegisterDetails();
 
@@ -161,30 +170,11 @@ public class RegisterActivity extends Activity {
         else
         {
 
-            if(successCode==1||successCode==2)
-            {
-                sendMail();
-            }
+
 
             if(User.getDisplayLicenceStatus(this)==Constants.DISPLAY_EXPIRED_STATUS)
             {
-                String alertMsg = "Dear user, your DSP ("+User.getDeviceName(this)+") with MAC ("+
-                        DeviceModel.getMacAddress()+") licence has been expired, please contact us on "+
-                        getString(R.string.customer_care_number)+"/"+getString(R.string.cc_email)+" to extend your licence";
-
-                AlertDialog.Builder successInfoDialog = registerActivityModel.getRegisterDialogModel().displayAlertDialog(registerActivityModel.getRegisterActivityContext(), alertMsg, getString(R.string.app_default_alert_title_info), false);
-                successInfoDialog.setNegativeButton(registerActivityModel.getRegisterActivityContext().getString(R.string.app_default_alert_negative_button_ok_text), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        dialog.dismiss();
-                        finish();
-                    }
-                });
-
-
-
-                successInfoDialog.create().show();
+                displayExpiredInfo();
             }else
             {
                 //for new install extend trail period and proceed
@@ -254,6 +244,20 @@ public class RegisterActivity extends Activity {
             }
         });
 
+        failureInfoDialog.setPositiveButton("REFRESH", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                removeLicenceAutoRefreshCB();
+                invokeRegisterDisplayService();
+            }
+        });
+
+        licenceExpiryDialog = failureInfoDialog.create();
+        licenceExpiryDialog.show();
+
+        //start auto licence refresh
+        startLicenceAutoRefresh();
+
         failureInfoDialog.create().show();
     }
 
@@ -264,8 +268,75 @@ public class RegisterActivity extends Activity {
 
         registerActivityModel.unRegisterRegisterDisplayReceiver();
 
+        removeLicenceAutoRefreshCB();
+
     }
 
 
+    private void displayExpiredInfo()
+    {
+        String alertMsg = "Dear user, your DSP ("+User.getDeviceName(this)+") with MAC ("+
+                DeviceModel.getMacAddress()+") licence has been expired, please contact us on "+
+                getString(R.string.customer_care_number)+"/"+getString(R.string.cc_email)+" to extend your licence";
 
+        AlertDialog.Builder successInfoDialog = new AlertDialog.Builder(this);
+        successInfoDialog.setTitle(getString(R.string.app_default_alert_title_info));
+        successInfoDialog.setMessage(alertMsg);
+        successInfoDialog.setCancelable(false);
+
+        successInfoDialog.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                dialog.dismiss();
+                finish();
+            }
+        });
+
+        successInfoDialog.setPositiveButton("REFRESH", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                removeLicenceAutoRefreshCB();
+                invokeRegisterDisplayService();
+            }
+        });
+
+        licenceExpiryDialog = successInfoDialog.create();
+        licenceExpiryDialog.show();
+
+        //start auto licence refresh
+        startLicenceAutoRefresh();
+    }
+
+    private void startLicenceAutoRefresh()
+    {
+        if(handler!=null)
+        {
+            handler.postDelayed(LicenceExpireAutoRefreshCB,Constants.LICENCE_AUTO_REFRESH_INTERVAL);
+
+            Toast.makeText(this,"Auto refresh will start in "+ TimeUnit.MILLISECONDS.toMinutes(Constants.LICENCE_AUTO_REFRESH_INTERVAL)
+            +" Minutes",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private Runnable LicenceExpireAutoRefreshCB  = new Runnable() {
+        @Override
+        public void run() {
+            if(licenceExpiryDialog!=null && licenceExpiryDialog.isShowing())
+            {
+
+                licenceExpiryDialog.dismiss();
+            }
+            invokeRegisterDisplayService();
+        }
+    };
+
+
+  private void removeLicenceAutoRefreshCB()
+    {
+        if(handler!=null)
+        {
+            handler.removeCallbacks(LicenceExpireAutoRefreshCB);
+        }
+    }
 }

@@ -128,6 +128,7 @@ public class PlayingModeSettingsActivity extends Activity
                     {
                         case NEAR_BY_MODE:
                             saveDetails(Constants.NEAR_BY_MODE);
+                            setBGLocationUpdates(false);
                             break;
                         case ENTERPRISE_MODE:
                             selectedMode = Constants.ENTERPRISE_MODE;
@@ -368,8 +369,11 @@ public class PlayingModeSettingsActivity extends Activity
                 Toast.makeText(playingModeSettingsModel.getContext(), "Updated", Toast.LENGTH_SHORT).show();
                 //redirect to app entry activity
                 redirectToMainSettingsActivity();
+
+                setBGLocationUpdates(true);
             }else
             {
+
                 Toast.makeText(context,intent.getStringExtra("status"),Toast.LENGTH_SHORT).show();
             }
         }
@@ -595,6 +599,19 @@ public class PlayingModeSettingsActivity extends Activity
 
         new MetricsModel().stopMetricsService();
 
+    }
+
+    private void setBGLocationUpdates(boolean flag)
+    {
+        Log.d("Location","setBGLocationUpdates "+flag);
+        User.setCanUpdateBGLocation(this,flag);
+        if(flag)
+        {
+            //SearchLocationBgService.restartService(this);
+        }else
+        {
+            //SearchLocationBgService.stopServiceReceiver(this);
+        }
     }
 
 

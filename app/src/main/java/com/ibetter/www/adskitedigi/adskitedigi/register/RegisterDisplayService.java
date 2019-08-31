@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.ibetter.www.adskitedigi.adskitedigi.R;
-import com.ibetter.www.adskitedigi.adskitedigi.model.Constants;
 import com.ibetter.www.adskitedigi.adskitedigi.model.DeviceModel;
 import com.ibetter.www.adskitedigi.adskitedigi.model.User;
 
@@ -54,6 +53,11 @@ public class RegisterDisplayService  extends IntentService
             JSONObject jsonObject = new JSONObject();
 
             jsonObject.put("mac", new DeviceModel().getMacAddress());
+            jsonObject.put("mobile_number", new User().getUserMobileNumber(context));
+            String email =  new User().getUserEmailAddress(context);
+            if(email!=null) {
+                jsonObject.put("org_email", email);
+            }
 
             RequestBody requestBody = new MultipartBody.Builder()
                     .setType(MultipartBody.FORM)
@@ -157,6 +161,7 @@ public class RegisterDisplayService  extends IntentService
         Calendar calendar = Calendar.getInstance();
         String expiryDateCheckedAt = expiryCheckDateSDF.format(calendar.getTime());
         User.saveDeviceLicenceDetails(context,status,expiryDate,expiryDateCheckedAt);
+
     }
 
 }

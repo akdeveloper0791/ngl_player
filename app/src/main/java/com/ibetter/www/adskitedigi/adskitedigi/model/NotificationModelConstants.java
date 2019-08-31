@@ -27,6 +27,7 @@ public class NotificationModelConstants {
     public static final int CAPTURE_IMAGE_NOTIFY_ID = 8021918;
     public static final int HANDLE_DELAY_RULE = 8021919;
     public static final int LICENCE_SERVICE_ID = 8021920;
+    public static final int LOCATION_SERVICE_ID = 8021921;
 
     public static int getNotificationIdForDOWNLOADSUCCESSCAMPAIGN()
     {

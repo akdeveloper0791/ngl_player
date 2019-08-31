@@ -3,8 +3,12 @@ package com.ibetter.www.adskitedigi.adskitedigi.login;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
@@ -13,8 +17,10 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ibetter.www.adskitedigi.adskitedigi.R;
@@ -24,6 +30,7 @@ import com.ibetter.www.adskitedigi.adskitedigi.model.DisplayDialog;
 import com.ibetter.www.adskitedigi.adskitedigi.model.NetworkModel;
 import com.ibetter.www.adskitedigi.adskitedigi.model.Permissions;
 import com.ibetter.www.adskitedigi.adskitedigi.model.User;
+import com.ibetter.www.adskitedigi.adskitedigi.model.Validations;
 import com.ibetter.www.adskitedigi.adskitedigi.settings.signage_manager_settings.enter_prise_mode.EnterPriceSettings;
 
 /**
@@ -40,6 +47,10 @@ public class LoginActivity extends Activity implements LoginInterface
     private boolean is_from_login=false;
     private static final  int SYSTEM_ALERT_WINDOW_PERMISSION=200;
 
+    private EditText orgEmailET;
+
+    private ProgressDialog busyDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -51,6 +62,7 @@ public class LoginActivity extends Activity implements LoginInterface
 
         View layout = getLayoutInflater().inflate(R.layout.login_layout,null);
         setContentView(layout);
+        orgEmailET = findViewById(R.id.register_layout_org_email_et);
 
         loginViewModel=new LoginViewModel(LoginActivity.this,layout);
 
@@ -95,8 +107,8 @@ public class LoginActivity extends Activity implements LoginInterface
             alertDialog.setPositiveButton(getString(R.string.app_default_alert_positive_button_confirm_text), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-
-                    saveDetails();
+                    confirmDetails();
+                   // saveDetails();
                     dialogInterface.dismiss();
                 }
             });
@@ -120,6 +132,11 @@ public class LoginActivity extends Activity implements LoginInterface
     //validate fields
     public boolean validateRequireLoginFields()
     {
+        if(!Validations.validateEmail(this,orgEmailET.getText().toString()))
+        {
+            orgEmailET.setError(getString(R.string.login_action_org_email_et_error_msg));
+            return false;
+        }
 
         if (!loginViewModel.isValidMobileNumber())
         {
@@ -154,7 +171,8 @@ public class LoginActivity extends Activity implements LoginInterface
     public void saveDetails() {
 
         if( new User().setUserDetails(loginViewModel.getContext(),loginViewModel.getUserMobileNumber(), Constants.NEAR_BY_MODE,
-        loginViewModel.getLoginLayoutDisplayNameEditText().getText().toString(),loginViewModel.getLoginLayoutDisplayLocationDescriptionEditText().getText().toString()))
+        loginViewModel.getLoginLayoutDisplayNameEditText().getText().toString(),loginViewModel.getLoginLayoutDisplayLocationDescriptionEditText().getText().toString(),
+                orgEmailET.getText().toString()))
         {
             success();
 
@@ -369,6 +387,89 @@ public class LoginActivity extends Activity implements LoginInterface
                 startActivityForResult(new Intent(LoginActivity.this, SearchLocation.class),PICK_LOCATION_REQUEST_CODE);
             }
         });
+    }
+
+    private void confirmDetails()
+    {
+        IntentFilter intentFilter = new IntentFilter(ConfirmDetailsReceiver.ACTION);
+        intentFilter.addCategory(Intent.CATEGORY_DEFAULT);
+
+        registerReceiver(new ConfirmDetailsReceiver(),intentFilter);
+
+        //start service
+        SendOTPService.startServiceCall(this,ConfirmDetailsReceiver.ACTION,loginViewModel.getUserMobileNumber(),
+                orgEmailET.getText().toString());
+
+        displayBusyDialog("Sending OTP to verify your details, please wait");
+
+    }
+
+    private class ConfirmDetailsReceiver extends BroadcastReceiver
+    {
+        public final static String ACTION = "com.ibetter.www.adskitedigi.adskitedigi.login.LoginActivity.ConfirmDetailsReceiver";
+        public void onReceive(Context context, Intent intent)
+        {
+            unregisterReceiver(this);
+            dismissBusyDialog();
+            if(intent.getBooleanExtra("flag",false))
+            {
+                displayEnterOTPDialog(intent.getStringExtra("status"),
+                        intent.getStringExtra("otp"));
+            }else
+            {
+                Toast.makeText(context,intent.getStringExtra("status"),Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void displayBusyDialog(String msg)
+    {
+        busyDialog = new ProgressDialog(this);
+        busyDialog.setMessage(msg);
+        busyDialog.setCanceledOnTouchOutside(false);
+        busyDialog.show();
+    }
+
+    private void dismissBusyDialog()
+    {
+        if(busyDialog!=null && busyDialog.isShowing())
+        {
+            busyDialog.dismiss();
+        }
+    }
+
+    private void displayEnterOTPDialog(String status,final String otp)
+    {
+        AlertDialog.Builder otpDialog = new AlertDialog.Builder(this);
+        final View layout = LayoutInflater.from(this).inflate(R.layout.verify_otp,null);
+        otpDialog.setTitle("Enter OTP");
+        otpDialog.setView(layout);
+        TextView statusTextView = (TextView)layout.findViewById(R.id.status);
+        statusTextView.setText(status);
+        otpDialog.setCancelable(false);
+        otpDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+               EditText otpET = (EditText)layout.findViewById(R.id.otp);
+               String enteredOTP = otpET.getText().toString();
+               if(enteredOTP!=null && enteredOTP.equalsIgnoreCase(otp))
+               {
+                   dialogInterface.dismiss();
+                   //success
+                   saveDetails();
+               }else
+               {
+                   otpET.setError("Invalid OTP");
+               }
+            }
+        });
+        otpDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        otpDialog.create().show();
     }
 
 

@@ -72,13 +72,15 @@ public class User
     }
 
     /*set user Mobile number*/
-    public static boolean setUserDetails(Context context,String userMobileNumber,int mode,String displayName,String locationInfo)
+    public static boolean setUserDetails(Context context,String userMobileNumber,int mode,String displayName,String locationInfo,
+                                         String email)
     {
         SharedPreferences.Editor userDetailsSPEditor = new SharedPreferenceModel().getUserDetailsSharedPreference(context).edit();
         userDetailsSPEditor.putString(context.getString(R.string.user_mobile_number),userMobileNumber);
         userDetailsSPEditor.putInt(context.getString(R.string.playing_media_mode),mode);
         userDetailsSPEditor.putString(context.getString(R.string.user_display_name),displayName);
         userDetailsSPEditor.putString(context.getString(R.string.user_display_location_desc),locationInfo);
+        userDetailsSPEditor.putString(context.getString(R.string.user_display_org_email),email);
 
         return userDetailsSPEditor.commit();
 
@@ -106,6 +108,20 @@ public class User
         {
             return null;
         }
+    }
+
+
+    public static boolean setCanUpdateBGLocation(Context context, boolean flag)
+    {
+        SharedPreferences.Editor userDetailsSPEditor = new SharedPreferenceModel().getUserDetailsSharedPreference(context).edit();
+        userDetailsSPEditor.putBoolean(context.getString(R.string.can_update_location_bg_sp),flag);
+        return userDetailsSPEditor.commit();
+
+    }
+
+    public static boolean getCanUpdateBGLocation(Context context)
+    {
+       return new SharedPreferenceModel().getUserDetailsSharedPreference(context).getBoolean(context.getString(R.string.can_update_location_bg_sp),false);
     }
 
     public static boolean initNewDevice(Context context)
@@ -189,8 +205,15 @@ public class User
 
     }
 
+    public static String getUserEmailAddress(Context context)
+    {
+
+        return  new SharedPreferenceModel().getUserDetailsSharedPreference(context).getString(context.getString(R.string.user_display_org_email),null);
+
+    }
+
     /*get user Mobile number*/
-    public  String getUserDisplayName(Context context)
+    public static String getUserDisplayName(Context context)
     {
 
         return  new SharedPreferenceModel().getUserDetailsSharedPreference(context).getString(context.getString(R.string.user_display_name),null);
