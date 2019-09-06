@@ -2,6 +2,7 @@ package com.ibetter.www.adskitedigi.adskitedigi.settings.signage_manager_setting
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
@@ -14,6 +15,7 @@ import com.ibetter.www.adskitedigi.adskitedigi.database.CampaignRulesDBModel;
 import com.ibetter.www.adskitedigi.adskitedigi.database.DataBaseHelper;
 import com.ibetter.www.adskitedigi.adskitedigi.display_local_media_folder.DisplayLocalFolderAds;
 import com.ibetter.www.adskitedigi.adskitedigi.display_local_media_folder.receiver.ActionReceiver;
+import com.ibetter.www.adskitedigi.adskitedigi.fcm.SoftIOTFCMService;
 import com.ibetter.www.adskitedigi.adskitedigi.green_content.gc_model.CARCampaigns;
 import com.ibetter.www.adskitedigi.adskitedigi.metrics.ProcessRule;
 import com.ibetter.www.adskitedigi.adskitedigi.model.Constants;
@@ -42,6 +44,7 @@ public class HandleRulesCommands {
 
     public void handleCamRulesCommands(JSONObject jsonObject)throws JSONException
     {
+        Log.i("handle rule","inside process"+jsonObject.toString());
         String action = jsonObject.getString("action");
         if(action.equalsIgnoreCase(context.getString(R.string.get_campaign_rules_request)))
         {
@@ -60,10 +63,8 @@ public class HandleRulesCommands {
 
         }else if(action.equalsIgnoreCase(context.getString(R.string.get_rule_names_request)))
         {
-            Log.d("Handle rule","Inside handle rule request---");
             getCampRuleNamesReq(jsonObject.getString(context.getString(R.string.save_ftp_command_response_to_json_key)));
         }
-
     }
 
     private void getCampRulesReq(String saveResponseTo)throws JSONException
@@ -279,13 +280,20 @@ public class HandleRulesCommands {
     private void handleRule(String rule)
     {
 
+        Log.i("handle rule",rule+"");
          if(rule!=null) {
 
-             ProcessRule.startService(context,rule,new DateTimeModel().getDate(new SimpleDateFormat(Constants.LOCAL_SAVE_DATE_TIME_FORMAT),Calendar.getInstance().getTimeInMillis()),
-                     0);
+             Intent serviceIntent = new Intent(context, SoftIOTFCMService.class);
+             serviceIntent.putExtra("rule", rule);
+             serviceIntent.putExtra("push_time", new DateTimeModel().getDate(new SimpleDateFormat(Constants.SERVER_DATE_TIME_FORMAT), Calendar.getInstance().getTimeInMillis()));
+             serviceIntent.putExtra("delay_time", 0);
+
+             context.startService(serviceIntent);
 
 
-             ArrayList<File> campaignsFileArray = new ArrayList<>();
+         }
+
+          /*   ArrayList<File> campaignsFileArray = new ArrayList<>();
 
              Cursor ruleInfoCursor = new CampaignRulesDBModel(context).getRuleCampaignInfo(rule);
             if(ruleInfoCursor!=null && ruleInfoCursor.moveToFirst())
@@ -309,8 +317,8 @@ public class HandleRulesCommands {
                     extras.putSerializable("campaignFiles", campaignsFileArray);
                     DisplayLocalFolderAds.actionReceiver.send(ActionReceiver.HANDLE_CAMPAIGN_RULE_ACTION_CODE, extras);
                 }
-            }
-        }
+            }*/
+
     }
 
 
