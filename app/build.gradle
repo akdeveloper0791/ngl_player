@@ -15,9 +15,9 @@ android
 
                         targetSdkVersion 28
 
-                        versionCode 153
+                        versionCode 154
 
-                        versionName "1.4.3"
+                        versionName "1.4.4"
 
                         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
