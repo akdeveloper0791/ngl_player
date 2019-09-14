@@ -22,6 +22,8 @@ public class ActionModel
 
     public static final  boolean ACTION_FLAG=false;
 
+    public static  final String DEFAULT_OUT_PUT_DISPLAY=new JSONArray().put(new DeviceModel().getMacAddress()).toString();
+
     /*save and get Action Template Id received from the SM app*/
     public  boolean saveActionTempId(Context context,int templateId)
     {
@@ -127,6 +129,8 @@ public class ActionModel
             jsonObject.put(context.getString(R.string.interactive_inactivity_timer_flag), getActionInactivityTimesStatus(context));
             jsonObject.put(context.getString(R.string.interactive_inactivity_timer), getActionInactivityTime(context));
 
+            jsonObject.put(context.getString(R.string.output_displays_key), new JSONArray(getActionInactivityOutPutDisplays(context)));
+
             return jsonObject.toString();
 
         } catch (Exception e)
@@ -224,6 +228,7 @@ public class ActionModel
                 {
                     JSONObject finalobject = new JSONObject();
                     finalobject.put("customers",jsonArray);
+                    finalobject.put("output_displays",new JSONArray(getActionInactivityOutPutDisplays(context)));
 
                    // Log.i("ActionsDataJson","resourcesString  jsonArray:"+finalobject.toString());
 
@@ -410,6 +415,10 @@ public class ActionModel
                 saveActionInactivityTime(context,jsonObject.getInt(context.getString(R.string.interactive_inactivity_timer)));
             }
 
+            if(jsonObject.has(context.getString(R.string.output_displays_key)))
+            {
+                saveActionInactiveOutPutDisplay(context,jsonObject.getJSONArray(context.getString(R.string.output_displays_key)).toString());
+            }
             if(jsonObject.has(context.getString(R.string.action_template_id)))
             {
                 int templateId=jsonObject.getInt(context.getString(R.string.action_template_id));
@@ -617,6 +626,19 @@ public class ActionModel
         return userDetailsSPEditor.commit();
     }
 
+    /*save interactive inactivity time  from the SM app*/
+    public  boolean saveActionInactiveOutPutDisplay(Context context,String displays)
+    {
+        SharedPreferences.Editor userDetailsSPEditor = new SharedPreferenceModel().getUserDetailsSharedPreference(context).edit();
+        userDetailsSPEditor.putString(context.getString(R.string.output_displays_key),displays);
+        return userDetailsSPEditor.commit();
+    }
+
+    //get Action Form URL from  User Interactive Action form
+    public  String getActionInactivityOutPutDisplays(Context context)
+    {
+        return  new SharedPreferenceModel().getUserDetailsSharedPreference(context).getString(context.getString(R.string.output_displays_key),DEFAULT_OUT_PUT_DISPLAY);
+    }
 
     //get Action Form URL from  User Interactive Action form
     public  boolean getActionInactivityTimesStatus(Context context)

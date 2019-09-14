@@ -753,28 +753,14 @@ public class DisplayLocalFolderAdsModel
 
     }
 
-    //delete the customer info record from the local DB
-    public void  deleteCustomerInfo(String localId,Context context)
-    {
-        try {
-            if(new ActionsDBHelper(context).deleteCustomerInfo(localId))
-            {
-                displayActionScrollingText();
-            }
-
-        }catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
 
     //update customer interactive action scrolling text in layout
-    public void updateCustomerActionText()
+    public void updateCustomerActionText(String actionText)
     {
 
         try
         {
-            displayActionScrollingText();
+            displayActionScrollingText(actionText);
 
         }catch (Exception e)
         {
@@ -785,69 +771,69 @@ public class DisplayLocalFolderAdsModel
 
 
     //display  interactive actions layout latest scrolling text info
-    public void displayActionScrollingText()
+    public void displayActionScrollingText(String actionText)
     {
+
         try {
-            if(new ActionModel().getDisplayActionScrollingTextState(context))
-            {
-                int tempId = new ActionModel().getActionTemplateId(context);
-                Cursor cursor = new ActionsDBHelper(context).getCustomerActionText(tempId);
 
-                StringBuilder stringBuilder = new StringBuilder();
+                if (new ActionModel().getDisplayActionScrollingTextState(context)) {
+                    int tempId = new ActionModel().getActionTemplateId(context);
+                    Cursor cursor = new ActionsDBHelper(context).getCustomerActionText(tempId);
 
-                if (cursor != null && cursor.moveToFirst())
-                {
-                    do {
-                        String actionText = cursor.getString(cursor.getColumnIndex(ActionsDBHelper.CUSTOMER_ACTION_TEXT));
-                        if (actionText != null && actionText.length() > 1)
-                        {
-                            if (stringBuilder != null&& stringBuilder.length()>0)
-                            {
-                                stringBuilder.append("\t\t\t\t\t\t");
-                                stringBuilder.append(actionText);
+                    StringBuilder stringBuilder = new StringBuilder();
 
-                            } else
-                            {
-                                stringBuilder.append(actionText);
+                    if (cursor != null && cursor.moveToFirst()) {
+                        do {
+                             actionText = cursor.getString(cursor.getColumnIndex(ActionsDBHelper.CUSTOMER_ACTION_TEXT));
+                            if (actionText != null && actionText.length() > 1) {
+                                if (stringBuilder != null && stringBuilder.length() > 0) {
+                                    stringBuilder.append("\t\t\t\t\t\t");
+                                    stringBuilder.append(actionText);
+
+                                } else {
+                                    stringBuilder.append(actionText);
+                                }
                             }
-                        }
-                    } while (cursor.moveToNext());
+                        } while (cursor.moveToNext());
 
-                    if (stringBuilder != null&& stringBuilder.length()>0)
-                    {
-                        if (actionTextTV.getVisibility() != View.VISIBLE)
-                        {
-                            actionTextTV.setVisibility(View.VISIBLE);
-                            actionTextTV.setSelected(true);
-                        }
+                        if (stringBuilder != null && stringBuilder.length() > 0) {
+                            if (actionTextTV.getVisibility() != View.VISIBLE) {
+                                actionTextTV.setVisibility(View.VISIBLE);
+                                actionTextTV.setSelected(true);
+                            }
 
-                        if(actionText!=null)
-                        {
-                            if(stringBuilder.toString()!=null && !(stringBuilder.toString()).equalsIgnoreCase(actionText))
-                            {
+                            if (actionText != null) {
+                                if (stringBuilder.toString() != null && !(stringBuilder.toString()).equalsIgnoreCase(actionText)) {
+                                    actionTextTV.setText(stringBuilder.toString());
+                                    actionText = actionTextTV.getText().toString();
+                                }
+
+                            } else {
                                 actionTextTV.setText(stringBuilder.toString());
-                                actionText=actionTextTV.getText().toString();
+                                actionText = actionTextTV.getText().toString();
                             }
 
+                        } else {
+                            actionTextTV.setVisibility(View.GONE);
+                        }
+
+                    } else {
+
+                        if(actionText!=null) {
+                            if (actionTextTV.getVisibility() != View.VISIBLE) {
+                                actionTextTV.setVisibility(View.VISIBLE);
+                                actionTextTV.setSelected(true);
+                            }
+                            actionTextTV.setText(actionText);
                         }else
                         {
-                            actionTextTV.setText(stringBuilder.toString());
-                            actionText=actionTextTV.getText().toString();
+                            actionTextTV.setVisibility(View.GONE);
                         }
-
-                    }else
-                    {
-                        actionTextTV.setVisibility(View.GONE);
                     }
-
-                }else
-                {
+                } else {
                     actionTextTV.setVisibility(View.GONE);
                 }
-            }else
-            {
-                actionTextTV.setVisibility(View.GONE);
-            }
+
 
         }catch (Exception e)
         {
@@ -926,7 +912,7 @@ public class DisplayLocalFolderAdsModel
     {
         try
         {
-            displayActionScrollingText();
+            displayActionScrollingText(null);
         }
         catch (Exception e)
         {

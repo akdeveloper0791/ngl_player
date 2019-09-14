@@ -900,4 +900,8 @@
     <string name="customer_care_number">+919900819475</string>
     <string name="cc_email">contact@adskite.com</string>
 
+
+
+    <string name="output_displays_key">output_displays_key</string>
+
 </resources>

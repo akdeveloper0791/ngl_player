@@ -2045,13 +2045,16 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
                             //noting need to do in this case
 
                         } else if (actionString.equalsIgnoreCase(getString(R.string.display_customer_interactive_action_text))) {
-                            displayLocalFolderAdsModel.displayActionScrollingText();
+                            displayLocalFolderAdsModel.displayActionScrollingText( null);
                         }
 
                         //update action record Action Scrolling text
                         else if (actionString.equalsIgnoreCase(getString(R.string.customer_interactive_update_actions_text_request))) //update action record Action Scrolling text
                         {
-                            displayLocalFolderAdsModel.updateCustomerActionText();
+                            JSONObject jsonObject=new JSONObject(intent.getStringExtra(getString(R.string.action_extra_info)));
+
+                            Log.i("JSONObject",""+jsonObject.getString("action_text"));
+                            displayLocalFolderAdsModel.updateCustomerActionText(jsonObject.getString("action_text"));
                         } else if (actionString.equalsIgnoreCase(getString(R.string.customer_interactive_actions_close_request)))//close/delete action record from the table in  D
                         {
                             displayLocalFolderAdsModel.updateCustomerActionStatus();
