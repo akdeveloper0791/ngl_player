@@ -26,9 +26,18 @@ public class EnterPriceSettings extends Fragment implements CompoundButton.OnChe
     private ToggleButton settingsSwitch;
     private Context context;
 
-    public final static String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.INTERNET,
-            Manifest.permission.ACCESS_WIFI_STATE, Manifest.permission.READ_PHONE_STATE, Manifest.permission.WAKE_LOCK,
-            Manifest.permission.CHANGE_WIFI_STATE, Manifest.permission.CAMERA};
+    public final static String[] permissions = new String[]{
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.INTERNET,
+            Manifest.permission.ACCESS_WIFI_STATE,
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.WAKE_LOCK,
+            Manifest.permission.CHANGE_WIFI_STATE,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_WIFI_STATE,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.FOREGROUND_SERVICE,
+            Manifest.permission.CAMERA};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstance)

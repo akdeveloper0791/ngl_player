@@ -106,6 +106,7 @@ public class EnterPriseSettingsService extends Service {
         SignageServe.signageServeObject.saveRunningServicesInfo(EnterPriseSettingsService.class.getName(),
                 EnterPriseSettingsService.this);
 
+        displayFrontNotification("Initializing",null);
 
 
     }
@@ -238,8 +239,7 @@ public class EnterPriseSettingsService extends Service {
         UserManager um = userManagerFactory.createUserManager();
         try
         {
-            um.save(user);//Save the user to the user list on the filesystem
-
+          um.save(user);//Save the user to the user list on the filesystem
 
           serverFactory.setUserManager(um);
 
@@ -311,7 +311,7 @@ public class EnterPriseSettingsService extends Service {
 
         }catch (Exception e)
         {
-
+                e.printStackTrace();
         }
     }
     private void stopFTPServer()
@@ -378,11 +378,11 @@ public class EnterPriseSettingsService extends Service {
 
         }catch (Exception E)
         {
+            E.printStackTrace();
            // new DisplayDebugLogs(context).execute(E.getMessage());
         }
 
     }
-
 
 
     private void ftpSetUpError(String errorMsg)
@@ -897,7 +897,6 @@ public class EnterPriseSettingsService extends Service {
         sendBroadcast(intent);
     }
 
-
     //register stop service receiver
     private void registerMonitorConnectivityChangesChanges()
     {
@@ -905,11 +904,8 @@ public class EnterPriseSettingsService extends Service {
         IntentFilter intentFilter=new IntentFilter( );
         intentFilter.addAction(android.net.ConnectivityManager.CONNECTIVITY_ACTION);
         intentFilter.addAction("android.net.wifi.WIFI_STATE_CHANGED");
-
         intentFilter.addCategory(Intent.CATEGORY_DEFAULT);
-
         intentFilter.setPriority(2147483646);
-
 
         monitorConnectivityChangesChanges=new MonitorConnectivityChangesChanges(new WeakReference(EnterPriseSettingsService.this),ipAddr);
         registerReceiver(monitorConnectivityChangesChanges, intentFilter);
@@ -935,35 +931,35 @@ public class EnterPriseSettingsService extends Service {
         }
 
     }
+
     private void handleDisplayUpdateInfo(JSONObject jsonObject)
     {
         if(User.getDisplayLicenceStatus(context)==Constants.DISPLAY_SUCCESS_STATUS)
 
         {
-            //
             Log.i("ftp display is", "active" + "");
-
         }
         else
-            {
+        {
             try {
 
                 long currentTime = jsonObject.getLong(context.getString(R.string.current_time_json_key));
 
-                if (new User().getDisplayCreatedTime(context) != 0) {
+                if (new User().getDisplayCreatedTime(context) != 0)
+                {
                     long licenceTime = new User().getDisplayCreatedTime(context) + User.getTrialPeriodTime(context);
                     Log.i("ftp licenceTime time", licenceTime + "");
                     Log.i("ftp created time", new User().getDisplayCreatedTime(context) + "");
 
                     Log.i("ftp curent time", currentTime + "");
-                    if (currentTime >= licenceTime) {
+                    if (currentTime >= licenceTime)
+                    {
                         Log.i("ftp info", "inside expired");
-
                         licenceExpired();
-
-                    } else {
+                    }
+                    else
+                    {
                         Log.i("ftp info", "inside device is not expired expired");
-
                     }
                 } else {
                     Log.i("ftp info", "register time uise zero");
