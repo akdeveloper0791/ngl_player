@@ -14,10 +14,8 @@ import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.Log;
 
-import com.ibetter.www.adskitedigi.adskitedigi.R;
 import com.ibetter.www.adskitedigi.adskitedigi.database.CampaignsDBModel;
 import com.ibetter.www.adskitedigi.adskitedigi.database.DataBaseHelper;
-import com.ibetter.www.adskitedigi.adskitedigi.display_local_media_folder.DisplayLocalFolderAds;
 import com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.DeleteUnknownCampaigns;
 import com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.download_services.FetchBasicCampInfoService;
 import com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.model.GCModel;
@@ -27,7 +25,6 @@ import com.ibetter.www.adskitedigi.adskitedigi.model.Constants;
 import com.ibetter.www.adskitedigi.adskitedigi.model.RSSModel;
 import com.ibetter.www.adskitedigi.adskitedigi.model.TickerTextModel;
 import com.ibetter.www.adskitedigi.adskitedigi.model.User;
-import com.ibetter.www.adskitedigi.adskitedigi.settings.text_settings.ScrollTextSettingsModel;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -459,7 +456,7 @@ public class AutoCampDownloadListService extends IntentService
    {
      SQLiteDatabase mDb = DataBaseHelper.initializeDataBase(context.getApplicationContext()).getDb();
 
-    try {
+     try {
 
         mDb.beginTransaction();
 
