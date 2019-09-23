@@ -803,7 +803,7 @@ public class DisplayLocalFolderAdsModel
                             }
 
                             if (actionText != null) {
-                                if (stringBuilder.toString() != null && !(stringBuilder.toString()).equalsIgnoreCase(actionText)) {
+                                if (stringBuilder.toString() != null ) {
                                     actionTextTV.setText(stringBuilder.toString());
                                     actionText = actionTextTV.getText().toString();
                                 }

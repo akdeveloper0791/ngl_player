@@ -300,6 +300,7 @@ public class DeviceModel {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put(context.getString(R.string.json_key_mac), macAddress);
             jsonObject.put(context.getString(R.string.json_key_is_encoded), true);
+            jsonObject.put(context.getString(R.string.json_key_device_name), new User().getUserDisplayName(context));
 
             MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
 

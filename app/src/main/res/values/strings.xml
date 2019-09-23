@@ -759,7 +759,7 @@
     <string name="note_for_qr_code_scan">Note: Please scan this QR  code to add Player </string>
     <string name="json_key_is_encoded">is_encoded</string>
     <string name="json_key_mac">mac</string>
-
+    <string name="json_key_device_name">device_name</string>
     <!-- enterprise notification channel -->
     <string name="enterprise_notify_ch_name">enterprise_notification</string>
     <string name="enterprise_notify_ch_des">Enterprise settings status notification</string>

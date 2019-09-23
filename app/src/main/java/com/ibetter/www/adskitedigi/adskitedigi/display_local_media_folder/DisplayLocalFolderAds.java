@@ -3511,7 +3511,6 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
 
     private void startRenderRSSFeed()
     {
-        //start render feeds threads
         rssFeedsTimer = new Timer();
         RenderRSSFeeds renderRSSFeeds = new RenderRSSFeeds(this,this,new Handler());
         Thread thread = new Thread(renderRSSFeeds);
