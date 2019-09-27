@@ -19,7 +19,7 @@ import com.ibetter.www.adskitedigi.adskitedigi.player_statistics.PlayerStatistic
 import com.ibetter.www.adskitedigi.adskitedigi.settings.advance_settings.ScreenOrientationModel;
 
 public class PlayerStatisticsSettings extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
-    public static final long DEFAULT_PLAYER_COLLECTION_DURATION = 30;
+    public static final long DEFAULT_PLAYER_COLLECTION_DURATION = 15;
     public static final boolean DEFAULT_PLAYER_STATISTICS_COLLECTION_STATUS = true;
 
     private final long MINIMUM_DURATION = 5;

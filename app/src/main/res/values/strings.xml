@@ -266,7 +266,7 @@
     <!-- [+] display  media layout strings -->
     <string name="display_media_default_text">Welcome to Adskite Digi \n please wait.........</string>
     <string name="display_ads_layout_progress_dialog_default_percent">0.0</string>
-    <string name="display_ads_layout_scrolling_text"> Thank you for choosing SIGNAGESERV Digital Signage Solution. For Support  Please Contact  Ph: 9900819475 /E-mail contact@adskite.com/Visit www.signageserv.com </string>
+    <string name="display_ads_layout_scrolling_text"> Thank you for choosing SIGNAGESERV Digital Signage Solution. For Support  Please Contact  Ph: 9900819475 /E-mail contact@adskite.com/Visit www.signageserv.ai </string>
     <string name="display_ads_no_internet_connection_info_msg">No internet connection,Unable to connect with server,would you like to skip this schedule</string>
     <string name="display_ads_internal_server_error_info_msg">Internal server error,Unable to connect with server,would you like to skip this schedule</string>
     <string name="display_ads_restarting_player_dialog_info_msg">Do you want continue to  play from resume </string>
