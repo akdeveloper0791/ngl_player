@@ -77,7 +77,7 @@ public class SendOTPService extends IntentService {
         }
     }
 
-    private void sendOTPRequest(String mobileNumber,String email)
+    private void sendOTPRequest(final String mobileNumber, final String email)
     {
         RequestBody requestBody = new MultipartBody.Builder().
                 setType(MultipartBody.FORM)
@@ -105,12 +105,12 @@ public class SendOTPService extends IntentService {
         public void onResponse(Call call, Response response) throws IOException {
             String responseString = response.body().string().trim();
             Log.d("SendOTP","response in SendOTP api is - "+responseString.trim());
-            handleResponse(responseString);
+            handleResponse(responseString,mobileNumber,email);
         }
       });
     }
 
-    private void handleResponse(String response)
+    private void handleResponse(String response,String mobileNumber,String email)
     {
 
         try {
@@ -127,7 +127,7 @@ public class SendOTPService extends IntentService {
 
             }else
             {
-                sb.append("OTP has been sent to mobile number");
+                sb.append("OTP has been sent to mobile number "+mobileNumber);
                 sb.append("\n");
             }
 
@@ -140,7 +140,7 @@ public class SendOTPService extends IntentService {
                 sb.append("\n");
             }else
             {
-                sb.append("OTP has been sent to email address.");
+                sb.append("OTP has been sent to email address "+email);
                 sb.append("\n");
             }
 

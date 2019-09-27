@@ -447,6 +447,7 @@ public class LoginActivity extends Activity implements LoginInterface
         TextView statusTextView = (TextView)layout.findViewById(R.id.status);
         statusTextView.setText(status);
         otpDialog.setCancelable(false);
+        loginViewModel.getUserMobileNumber();
         otpDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
