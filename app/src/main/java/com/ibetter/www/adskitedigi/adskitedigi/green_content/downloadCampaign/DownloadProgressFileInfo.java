@@ -7,6 +7,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 
+import com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.auto_download_campaign.DownloadMediaInfo;
 import com.ibetter.www.adskitedigi.adskitedigi.model.NotificationModelConstants;
 
 import java.io.File;
@@ -23,11 +24,11 @@ import static com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCamp
 
 public class DownloadProgressFileInfo {
     public   String currentDownloadingResourceFileName;
-    private String campaignName;
+    private String campaignName,mediaDownloadPath;
     private Context context;
     public long size=0;
     public long downloadedBytes = 0;
-    public int totalFiles=0;
+    public int totalFiles=0,storeLocation=2;
     public long progressListenerDownloadedBytes;
 
 
@@ -43,6 +44,11 @@ public class DownloadProgressFileInfo {
 
     public static final long MIN_PROGRESS_LISTENER_DOWNLOAD_BYTES = 512*1024; //512 kb ,, half a mb
 
+    public boolean isResourceExists()
+    {
+        return false;
+       // return new File(DOWNLOAD_CAMPAIGNS_PATH,currentDownloadingResourceFileName).exists();
+    }
     public void setCurrentDownloadingResourceFileName(String currentDownloadingResourceFileName) throws FileNotFoundException
     {
         this.currentDownloadingResourceFileName = currentDownloadingResourceFileName;
@@ -266,6 +272,21 @@ public class DownloadProgressFileInfo {
         }
     }
 
+    public void setDownloadMediaInfo(DownloadMediaInfo mediaInfo)
+    {
+        this.storeLocation = mediaInfo.getStoreLocation();
+        this.mediaDownloadPath = mediaInfo.getPath();
 
+    }
+
+    public String getMediaDownloadPath()
+    {
+        return mediaDownloadPath;
+    }
+
+    public int getStoreLocation()
+    {
+        return storeLocation;
+    }
 
 }

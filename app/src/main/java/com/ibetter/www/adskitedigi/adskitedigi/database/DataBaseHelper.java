@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import static com.ibetter.www.adskitedigi.adskitedigi.database.CampaignMediaTable.CAMPAIGN_MEDIA_TABLE_DELETE_TRIGGER;
+import static com.ibetter.www.adskitedigi.adskitedigi.database.CampaignMediaTable.CREATE_CAMPAIGN_MEDIA_TABLE_QUERY;
 import static com.ibetter.www.adskitedigi.adskitedigi.database.CampaignRulesDBModel.CAMPAIGN_RULES_TABLE;
 import static com.ibetter.www.adskitedigi.adskitedigi.database.CampaignRulesDBModel.CREATE_RULE_CAMPAIGNS_TABLE;
 import static com.ibetter.www.adskitedigi.adskitedigi.database.CampaignRulesDBModel.DELETE_RULE_CAMPAIGNS_TRIGGER;
@@ -35,7 +37,7 @@ import static com.ibetter.www.adskitedigi.adskitedigi.metrics.HandleDelayRulesDB
 public class DataBaseHelper extends SQLiteOpenHelper {
 
     public static boolean isDBUpdated = false;
-    private static final int DATABASE_VERSION =27;//15
+    private static final int DATABASE_VERSION =29;//15
 
     //private static SQLiteDatabase mDb;
     private static final String TAG = "AdsKite Digi";
@@ -106,6 +108,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_HANDLE_DELAY_RULE_TABLE);
         db.execSQL(CREATE_RSS_FEED_TABLE);
         db.execSQL(CREATE_TICKER_TEXT_TABLE);
+        db.execSQL(CREATE_CAMPAIGN_MEDIA_TABLE_QUERY);
+        db.execSQL(CAMPAIGN_MEDIA_TABLE_DELETE_TRIGGER);
     }
 
     @Override
@@ -248,8 +252,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 case 27:
                     writableDb.execSQL(CREATE_TICKER_TEXT_TABLE);
                     break;
+                case 28:
+                    writableDb.execSQL(CREATE_CAMPAIGN_MEDIA_TABLE_QUERY);
 
+                    break;
 
+                case 29:
+                    writableDb.execSQL(CAMPAIGN_MEDIA_TABLE_DELETE_TRIGGER);
+                    break;
             }
         }
 

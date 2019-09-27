@@ -2,13 +2,12 @@ package com.ibetter.www.adskitedigi.adskitedigi.green_content.drop_box;
 
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.http.OkHttp3Requestor;
-import com.dropbox.core.v2.DbxAppClientV2;
 import com.dropbox.core.v2.DbxClientV2;
 
 public class DropboxClientFactory
 {
 
-    private static String ACCESS_TOKEN="mkW1hX251tAAAAAAAAAACOXQshEs4LR0mEAzAo8u8zZ7LXpPwZwpCAAZxpaLqIi4";
+    private static String ACCESS_TOKEN="mkW1hX251tAAAAAAAAAKqotuA30m87ABpztlm30mdFQPfXdsVDeQvUczDFwo9SiB";
     private static DbxClientV2 sDbxClient;
 
     public static void init() {

@@ -4,9 +4,9 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.ibetter.www.adskitedigi.adskitedigi.R;
+import com.ibetter.www.adskitedigi.adskitedigi.database.CampaignMediaTable;
 import com.ibetter.www.adskitedigi.adskitedigi.display_local_media_folder.DisplayLocalFolderAds;
 import com.ibetter.www.adskitedigi.adskitedigi.display_local_media_folder.receiver.ActionReceiver;
 import com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.model.GCModel;
@@ -37,7 +37,7 @@ public class DeleteUnknownCampaigns extends IntentService {
         ArrayList<Long> campaignLocalId = new ArrayList<>();
         for(GCModel campaign:unknownCampaigns)
         {
-            removeCampaignResources(campaign.getCampaignName(),campaign.getInfo());
+            removeCampaignResources(campaign.getCampaignName(),campaign.getInfo(),campaign.getServerId());
             campaignLocalId.add(campaign.getCampaignLocalId());
         }
 
@@ -45,7 +45,7 @@ public class DeleteUnknownCampaigns extends IntentService {
     }
 
 
-    private void removeCampaignResources(String campaignName,String info)
+    private void removeCampaignResources(String campaignName,String info,long serverId)
     {
         ArrayList<String> dataList=new ArrayList<>();
 
@@ -92,13 +92,14 @@ public class DeleteUnknownCampaigns extends IntentService {
 
                     for(String fileString:dataList)
                     {
-                        //  Log.d("PreviewCampaign","deleted campaign file:"+fileString);
-                        File resourceFile=new File(CampaignModel.getAdsKiteNearByDirectory(context)+File.separator+fileString);
+                        if(CampaignMediaTable.canDeleteMedia(context,serverId,fileString)) {
+                            //  Log.d("PreviewCampaign","deleted campaign file:"+fileString);
+                            File resourceFile = new File(CampaignModel.getAdsKiteNearByDirectory(context) + File.separator + fileString);
 
-                        if(resourceFile.exists())
-                        {
+                            if (resourceFile.exists()) {
 
-                            resourceFile.delete();
+                                resourceFile.delete();
+                            }
                         }
                     }
                 }

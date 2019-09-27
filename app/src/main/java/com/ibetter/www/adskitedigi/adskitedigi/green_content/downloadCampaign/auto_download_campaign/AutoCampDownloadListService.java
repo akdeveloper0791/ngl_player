@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.Log;
 
+import com.ibetter.www.adskitedigi.adskitedigi.database.CampaignMediaTable;
 import com.ibetter.www.adskitedigi.adskitedigi.database.CampaignsDBModel;
 import com.ibetter.www.adskitedigi.adskitedigi.database.DataBaseHelper;
 import com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.DeleteUnknownCampaigns;
@@ -27,6 +28,7 @@ import com.ibetter.www.adskitedigi.adskitedigi.model.TickerTextModel;
 import com.ibetter.www.adskitedigi.adskitedigi.model.User;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -64,6 +66,7 @@ public class AutoCampDownloadListService extends IntentService
     private ArrayMap<Long,ScheduleCampaignModel> schedules = new ArrayMap<>();
     private HashMap<Long, RSSModel> serverRSSFeeds = new HashMap<>();
     private HashMap<Long, TickerTextModel> serverTickers = new HashMap<>();
+    private HashMap<Long,ArrayList<String>> campaignMedias = new HashMap<>();
 
 
     @Override
@@ -226,6 +229,8 @@ public class AutoCampDownloadListService extends IntentService
 
                                 serverCampaigns.put(serverId, gcModel);
 
+                                prepareCampaignMedias(serverId,campObject.getString("info"));
+
                             }
                         }
 
@@ -266,6 +271,8 @@ public class AutoCampDownloadListService extends IntentService
                     {
                         noCampaignsFound();
                     }
+
+                    processMediaCampaignsData();
 
                 }else
                 {
@@ -351,6 +358,8 @@ public class AutoCampDownloadListService extends IntentService
     public void onDestroy()
     {
         unRegisterStopServiceReceiver();
+
+        Log.d("DownloadCampaign","prepare campaign media total medias size"+campaignMedias.size());
         super.onDestroy();
     }
 
@@ -696,6 +705,7 @@ private synchronized void bulkCampaignsUpdate(ArrayList<GCModel> updateData)
                     gcModel.setCampaignName(garbageCampaigns.getString(garbageCampaigns.getColumnIndex(CampaignsDBModel.CAMPAIGNS_TABLE_CAMPAIGN_NAME)));
                     gcModel.setInfo(garbageCampaigns.getString(garbageCampaigns.getColumnIndex(CampaignsDBModel.CAMPAIGN_TABLE_CAMPAIGN_INFO)));
                     gcModel.setCampaignLocalId(garbageCampaigns.getLong(garbageCampaigns.getColumnIndex(CampaignsDBModel.LOCAL_ID)));
+                    gcModel.setServerId(garbageCampaigns.getLong(garbageCampaigns.getColumnIndex(CampaignsDBModel.CAMPAIGNS_TABLE_SERVER_ID)));
                     deletedCampaigns.add(gcModel);
 
                     if (deletedCampaigns.size() >= 100) {
@@ -756,6 +766,8 @@ private synchronized void bulkCampaignsUpdate(ArrayList<GCModel> updateData)
 
         //send success response
         sendSuccessResponse();
+
+        processMediaCampaignsData();
     }
 
     //process rss feeds data
@@ -1071,5 +1083,115 @@ private synchronized void bulkCampaignsUpdate(ArrayList<GCModel> updateData)
         }
     }
 
+    private void prepareCampaignMedias(long serverId,String infoText) {
 
+        Log.d("DownloadCampaign","info text is "+infoText);
+
+        if (infoText != null) {
+            //prepare upload files from json
+            try {
+                JSONObject infoObj = new JSONObject(infoText);
+                String type = infoObj.getString("type");
+                ArrayList<String> medias = new ArrayList<>();
+
+                if (type.equalsIgnoreCase("multi_region")) {
+                    processMultiRegFilesToUpload(infoObj.getJSONArray("regions"),medias);
+                } else {
+                    addForRegion(infoObj, "Single",medias);
+                }
+
+                //check for bg audio file
+                if (infoObj.has("bg_audio")) {
+                    medias.add(infoObj.getString("bg_audio"));
+
+                }
+
+                campaignMedias.put(serverId,medias);
+                Log.d("DownloadCampaign","prepare campaign media total medias"+campaignMedias);
+
+                Log.d("DownloadCampaign","prepare campaign media total medias size"+campaignMedias.size());
+                //start Upload campaignFile
+                //initUpload(infoText);
+            } catch (JSONException e) {
+                Log.d("DownloadCampaign","prepare campaign media error "+e.getMessage());
+              e.printStackTrace();
+
+            }
+        }
+    }
+
+    //process multi region files
+    private void processMultiRegFilesToUpload(JSONArray regions,ArrayList medias) throws JSONException {
+        for (int i = 0; i < regions.length(); i++) {
+            addForRegion(regions.getJSONObject(i), "multi",medias);
+        }
+    }
+
+    private void addForRegion(JSONObject region, String type,ArrayList medias) throws JSONException {
+        if (!region.getString("type").equalsIgnoreCase("text") && !region.getString("type").equalsIgnoreCase("Url")
+                && !region.getString("type").equalsIgnoreCase("default")) {
+            if (type.equalsIgnoreCase("Single")) {
+                if(region.has("is_content_path") && region.getBoolean("is_content_path"))
+                {
+                    medias.add(region.getString("media_name"));
+
+                }else
+                {
+                    medias.add(region.getString("resource"));
+
+                }
+
+            } else {
+                medias.add(region.getString("media_name"));
+            }
+
+        }
+    }
+
+    private void processMediaCampaignsData(){
+        CampaignMediaTable.clearTable(context);
+
+        //check and insert  bulk data
+        SQLiteDatabase mDb = DataBaseHelper.initializeDataBase(context.getApplicationContext()).getDb();
+
+        try {
+
+            mDb.beginTransaction();
+
+            String insertQuery = "INSERT INTO " + CampaignMediaTable.CAMPAIGN_MEDIA_TABLE + "(" +
+                    CampaignMediaTable.CAMPAIGN_MEDIA_TABLE_CAMP_ID + ","
+                    + CampaignMediaTable.CAMPAIGN_MEDIA_TABLE_MEDIA_NAME +") VALUES(?,?)";
+
+
+            SQLiteStatement insert = mDb.compileStatement(insertQuery);
+
+            Iterator it = campaignMedias.entrySet().iterator();
+            while (it.hasNext())
+            {
+                Map.Entry pair = (Map.Entry)it.next();
+                long campaignServerId = (long)pair.getKey();
+                ArrayList<String> medias = (ArrayList)pair.getValue();
+                for(String mediaName:medias)
+                {
+                    insert.bindLong(1,campaignServerId);
+                    insert.bindString(2,mediaName);
+                    insert.execute();
+                }
+
+            }
+
+
+        }
+        catch (Exception e)
+        {
+
+            Log.w("XML:",e );
+        }
+        finally
+        {
+            mDb.setTransactionSuccessful();
+            mDb.endTransaction();
+            campaignMedias.clear();
+        }
+    }
 }

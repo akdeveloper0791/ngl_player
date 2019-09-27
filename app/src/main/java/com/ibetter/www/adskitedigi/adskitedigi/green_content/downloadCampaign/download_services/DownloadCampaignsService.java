@@ -29,6 +29,7 @@ import com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.Ge
 import com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.LocalFolderBuilder;
 import com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.auto_download_campaign.AutoDownloadCampaignModel;
 import com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.auto_download_campaign.AutoDownloadCampaignTriggerService;
+import com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.auto_download_campaign.DownloadMediaInfo;
 import com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.model.GCModel;
 import com.ibetter.www.adskitedigi.adskitedigi.green_content.drop_box.DropboxClientFactory;
 import com.ibetter.www.adskitedigi.adskitedigi.green_content.gc_notify.GCNotification;
@@ -67,7 +68,7 @@ public class DownloadCampaignsService extends Service implements DownloadCampaig
     private Context context;
     private LinkedHashMap<String, GCModel> pendingCampaigns = new LinkedHashMap<>();
     private String inProgressCampaign;
-    private ArrayList<String> downloadingFiles = new ArrayList<>();
+    private ArrayList<DownloadMediaInfo> downloadingFiles = new ArrayList<>();
 
     public static DownloadCampaignResultReceiver downloadCampaignResultReceiver;
     private NotificationRx notificationRx;
@@ -268,16 +269,16 @@ public class DownloadCampaignsService extends Service implements DownloadCampaig
 
                 //check for bg audio file
                 if (infoObj.has("bg_audio")) {
-                    downloadingFiles.add(infoObj.getString("bg_audio"));
+                    downloadingFiles.add(new DownloadMediaInfo(pendingCampaigns.get(inProgressCampaign).getStoreLocation(),
+                            pendingCampaigns.get(inProgressCampaign).getSavePath()+infoObj.getString("bg_audio")));
+                    //downloadingFiles.add(infoObj.getString("bg_audio"));
                 }
 
                 //add thumb file
                 String thumbFileName = getString(R.string.do_not_display_media)+"-"+getString(R.string.media_thumbnail)+"-"+inProgressCampaign+ getString(R.string.media_thumbnail_extention);
 
-                downloadingFiles.add(thumbFileName);
-
-
-
+                downloadingFiles.add(new DownloadMediaInfo(pendingCampaigns.get(inProgressCampaign).getStoreLocation(),
+                        pendingCampaigns.get(inProgressCampaign).getSavePath()+thumbFileName));
 
                 initDownload();
 
@@ -319,11 +320,30 @@ public class DownloadCampaignsService extends Service implements DownloadCampaig
         if (!region.getString("type").equalsIgnoreCase("text") && !region.getString("type").equalsIgnoreCase("Url")
                 && !region.getString("type").equalsIgnoreCase("default")) {
             if (type.equalsIgnoreCase("Single")) {
-                downloadingFiles.add(region.getString("resource"));
+                if(region.has("is_content_path") && region.getBoolean("is_content_path"))
+                {
+                    downloadingFiles.add(new DownloadMediaInfo(region.getInt("content_store_location"),
+                            region.getString("content_path")));
+                }else
+                {
+                    String media = region.getString("resource");
+                    if (!media.equalsIgnoreCase("default"))
+                        downloadingFiles.add(new DownloadMediaInfo(pendingCampaigns.get(inProgressCampaign).getStoreLocation(),
+                                pendingCampaigns.get(inProgressCampaign).getSavePath()+media));
+
+                }
+
             } else {
-                String media = region.getString("media_name");
-                if (!media.equalsIgnoreCase("default"))
-                    downloadingFiles.add(region.getString("media_name"));
+                if(region.has("is_content_path") && region.getBoolean("is_content_path"))
+                {
+                    downloadingFiles.add(new DownloadMediaInfo(region.getInt("content_store_location"),
+                            region.getString("content_path")));
+                }else {
+                    String media = region.getString("media_name");
+                    if (!media.equalsIgnoreCase("default"))
+                        downloadingFiles.add(new DownloadMediaInfo(pendingCampaigns.get(inProgressCampaign).getStoreLocation(),
+                                pendingCampaigns.get(inProgressCampaign).getSavePath()+media));
+                }
             }
 
         }
@@ -402,21 +422,30 @@ public class DownloadCampaignsService extends Service implements DownloadCampaig
         }
     }
 
-    private void downLoadResourceFile(String downloadingFile) {
+    private void downLoadResourceFile(DownloadMediaInfo downloadingFile) {
         //init current uploading file info
         downloadProgressFileInfo = new DownloadProgressFileInfo();
 
        try {
 
-           downloadProgressFileInfo.setCurrentDownloadingResourceFileName(downloadingFile);
+           downloadProgressFileInfo.setCurrentDownloadingResourceFileName(downloadingFile.getMediaName());
            downloadProgressFileInfo.setContext(context);
            downloadProgressFileInfo.setTotalFiles(downloadingFiles.size());
            downloadProgressFileInfo.setCurrentDownloadingResourceFilePosition(currentUploadingResourceFilePosition+1);
            downloadProgressFileInfo.setCampaignName(inProgressCampaign);
+           downloadProgressFileInfo.setDownloadMediaInfo(downloadingFile);
 
            UpdateUploadResourceProgressNotification();
 
-           directDownloadResource();
+           if(downloadProgressFileInfo.isResourceExists())
+           {
+               //downloading success
+               downloadCampaignResultReceiver.send(DBX_RESOURCE_FILE_DOWNLOAD_SUCCESS,null);
+           }else
+           {
+               directDownloadResource();
+           }
+
 
        }catch (FileNotFoundException ex)
        {
@@ -488,13 +517,13 @@ public class DownloadCampaignsService extends Service implements DownloadCampaig
     private void directDownloadResource() {
 
 
-        if(pendingCampaigns.get(inProgressCampaign).getStoreLocation()==1)
+        if(downloadProgressFileInfo.getStoreLocation()==1)
         {
 
             Thread downloadThread = new DownloadLocalServerCampaignResourceFile(inProgressCampaign);
             downloadThread.start();
 
-        }else  if(pendingCampaigns.get(inProgressCampaign).getStoreLocation()==2)
+        }else  if(downloadProgressFileInfo.getStoreLocation()==2)
         {
 
             initProgressListener();
@@ -555,7 +584,8 @@ public class DownloadCampaignsService extends Service implements DownloadCampaig
             try {
 
                 {
-                     downloadedInfo = DropboxClientFactory.getClient().files().downloadBuilder(pendingCampaigns.get(inProgressCampaign).getSavePath()+resourceFileName)
+                    Log.d("DownloadCampaign","Current downloading path "+downloadProgressFileInfo.getMediaDownloadPath());
+                     downloadedInfo = DropboxClientFactory.getClient().files().downloadBuilder(downloadProgressFileInfo.getMediaDownloadPath())
                             .range(downloadProgressFileInfo.downloadedBytes,CURRENT_DOWNLOAD_CHUNK_SIZE)
                             .start();
 
@@ -880,13 +910,14 @@ public class DownloadCampaignsService extends Service implements DownloadCampaig
 
         serviceStatus=IN_PROGRESS;
 
-        downloadingFiles.add(inProgressCampaign+".txt");
+        downloadingFiles.add(new DownloadMediaInfo(pendingCampaigns.get(inProgressCampaign).getStoreLocation(),
+                pendingCampaigns.get(inProgressCampaign).getSavePath()+inProgressCampaign+".txt"));
 
         if(downloadingFiles.size()>0)
         {
-            for (String fileName:downloadingFiles)
+            for (DownloadMediaInfo mediaInfo:downloadingFiles)
             {
-                File file=new File(DOWNLOAD_CAMPAIGNS_PATH +"/"+fileName);
+                File file=new File(DOWNLOAD_CAMPAIGNS_PATH +"/"+mediaInfo.getMediaName());
                 if(file.exists())
                 {
                     file.delete();
@@ -1084,16 +1115,17 @@ public class DownloadCampaignsService extends Service implements DownloadCampaig
 
 
             if(inProgressCampaign!=null) {
-                downloadingFiles.add(inProgressCampaign + ".txt");
+                downloadingFiles.add(new DownloadMediaInfo(pendingCampaigns.get(inProgressCampaign).getStoreLocation(),
+                        pendingCampaigns.get(inProgressCampaign).getSavePath()+inProgressCampaign + ".txt"));
 
             }
 
             if (downloadingFiles.size() > 0) {
-                for (String fileName : downloadingFiles) {
-                    File file = new File(DOWNLOAD_CAMPAIGNS_PATH + "/" + fileName);
+                for (DownloadMediaInfo mediaInfo : downloadingFiles) {
+                    File file = new File(DOWNLOAD_CAMPAIGNS_PATH + "/" + mediaInfo.getMediaName());
                     if (file.exists()) {
                         file.delete();
-                        Log.i("file", fileName + "file is deleted");
+                        Log.i("file", mediaInfo.getMediaName() + "file is deleted");
                     }
                 }
             }
@@ -1221,7 +1253,7 @@ public class DownloadCampaignsService extends Service implements DownloadCampaig
                 //re initializing progress uploaded bytes
                 downloadProgressFileInfo.setProgressListenerDownloadedBytes(0);
 
-                LocalFolderBuilder localFolderBuilder=new LocalFolderBuilder(pendingCampaigns.get(inProgressCampaign).getSavePath()+resourceFileName,context);
+                LocalFolderBuilder localFolderBuilder=new LocalFolderBuilder(downloadProgressFileInfo.getMediaDownloadPath(),context);
 
                 localFolderBuilder.range(downloadProgressFileInfo.downloadedBytes,downloadProgressFileInfo.downloadedBytes+CURRENT_DOWNLOAD_CHUNK_SIZE);
 
