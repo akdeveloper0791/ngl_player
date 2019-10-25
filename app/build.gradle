@@ -6,7 +6,7 @@ android
         {
             compileSdkVersion 28
 
-                        defaultConfig
+                    defaultConfig
                     {
 
                         applicationId "com.ibetter.www.adskitedigi.adskitedigi"
@@ -15,9 +15,9 @@ android
 
                         targetSdkVersion 28
 
-                        versionCode 158
+                        versionCode 161
 
-                        versionName "1.4.8"
+                        versionName "1.5.1"
 
                         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 

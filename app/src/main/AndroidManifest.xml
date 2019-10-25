@@ -293,7 +293,8 @@
 
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" /> <!-- display ads -->
+            android:value="@integer/google_play_services_version" />
+        <!-- display ads -->
         <activity android:name=".login.MacAddressQrCode" />
         <activity
             android:name=".settings.signage_manager_settings.DisplayDialogForLicenceApprovalActivity"
