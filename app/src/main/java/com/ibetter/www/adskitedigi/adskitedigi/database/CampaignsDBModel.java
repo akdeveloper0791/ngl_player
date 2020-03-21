@@ -3,6 +3,7 @@ package com.ibetter.www.adskitedigi.adskitedigi.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 
 import com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.model.ScheduleCampaignModel;
 
@@ -191,9 +192,6 @@ public class CampaignsDBModel
 
         return DataBaseHelper.initializeDataBase(context).getRecord(sqlQuery);
 
-
-
-
     }
 
     public static  boolean deleteServerCampaigns(Context context)
@@ -333,7 +331,6 @@ public class CampaignsDBModel
 
 
             return DataBaseHelper.initializeDataBase(context).getRecord(sqlQuery);
-
         }
         else
         {
@@ -350,8 +347,44 @@ public class CampaignsDBModel
         return DataBaseHelper.initializeDataBase(context).updateDBRecord( CAMPAIGNS_TABLE,cv,CAMPAIGNS_TABLE_CAMPAIGN_NAME+"='"+campaignName+"'");
     }
 
-    public static boolean isCampaignNameExist(Context context, String campaignName) {
+    public static boolean isCampaignSkip(Context context, String campaignName)
+    {
+        String condition = "SELECT "+CAMPAIGNS_TABLE_IS_SKIP+" FROM " + CAMPAIGNS_TABLE + " WHERE " + CAMPAIGNS_TABLE_CAMPAIGN_NAME + "='" + campaignName + "'";
+        Cursor cursor = DataBaseHelper.initializeDataBase(context).getRecord(condition);
+
+        if (cursor != null && cursor.moveToFirst())
+        {
+            Log.i("isskip ", campaignName+" "+cursor.getInt(cursor.getColumnIndex(CAMPAIGNS_TABLE_IS_SKIP)));
+
+            if(cursor.getInt(cursor.getColumnIndex(CAMPAIGNS_TABLE_IS_SKIP))==1)
+            {
+                return true;
+            }
+            else
+            {
+               return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public static boolean isCampaignNameExist(Context context, String campaignName)
+    {
         String condition = "SELECT "+LOCAL_ID+" FROM " + CAMPAIGNS_TABLE + " WHERE " + CAMPAIGNS_TABLE_CAMPAIGN_NAME + "='" + campaignName + "'";
+        Cursor cursor = DataBaseHelper.initializeDataBase(context).getRecord(condition);
+
+        if (cursor != null && cursor.getCount() > 0)
+        { return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean isCampaignExist(Context context, String campaignName) {
+        String condition = "SELECT "+LOCAL_ID+" FROM " + CAMPAIGNS_TABLE + " WHERE " + CAMPAIGNS_TABLE_CAMPAIGN_NAME + "='" + campaignName + "' AND "+CAMPAIGN_TABLE_IS_CAMPAIGN_DOWNLOADED+" = 1";
         Cursor cursor = DataBaseHelper.initializeDataBase(context).getRecord(condition);
 
         if (cursor != null && cursor.getCount() > 0) {
@@ -381,8 +414,6 @@ public class CampaignsDBModel
 
         if (localIds != null)
         {
-
-
             long status = DataBaseHelper.initializeDataBase(context).deleteRecordFromDBTable(CAMPAIGNS_TABLE, whereCondition);
 
             if (status > 0)
@@ -395,8 +426,8 @@ public class CampaignsDBModel
 
             return false;
         }
-
     }
+
 
     public static Cursor getCampaignsByLocalIds(String localIds, Context context) {
 
@@ -412,20 +443,21 @@ public class CampaignsDBModel
 
             return null;
         }
-
-
     }
+
 
     public static boolean updateCampaignNextSchedule(Context context,long scheduleId,String nextSchedule)
     {
         try
         {
+
             String whereCondition = LOCAL_ID+"=?";
             String[] args = new String[]{String.valueOf(scheduleId)};
             ContentValues cv = new ContentValues(1);
             cv.put(SCHEDULE_TABLE_NEXT_SCHEDULE_AT,nextSchedule);
             long updated = DataBaseHelper.initializeDataBase(context).updateDBRecord(SCHEDULE_CAMPAIGNS_TABLE,cv,whereCondition,args);
             return (updated>=1);
+
         }catch (Exception e)
         {
             return false;
@@ -450,13 +482,9 @@ public class CampaignsDBModel
     //get saved rss feeds
     public static  Cursor getSavedFeeds(String serverIdList,Context context)
     {
-
         String sqlQuery =String.format("SELECT "+RSS_FEED_CAMPAIGN_SERVER_ID+" FROM "+RSS_FEEDS_TABLE+" WHERE " +RSS_FEED_CAMPAIGN_SERVER_ID+" IN ("+serverIdList+ ");");
         return DataBaseHelper.initializeDataBase(context).getRecord(sqlQuery);
-
     }
-
-
 
     public static Cursor getRSSFeeds(Context context)
     {
@@ -483,7 +511,6 @@ public class CampaignsDBModel
         }
         else
         {
-
             return false;
         }
 
@@ -529,4 +556,51 @@ public class CampaignsDBModel
 
 
 
+    public static long updateCampaignByName(ContentValues cv, Context context,String name) {
+        return DataBaseHelper.initializeDataBase(context).updateDBRecord( CAMPAIGNS_TABLE,cv,CAMPAIGNS_TABLE_CAMPAIGN_NAME+"='"+name+"'");
+    }
+
+    public static long updateCampaignIsSkip(Context context,boolean isSkip) {
+
+
+        int skipValue=isSkip?1:0;
+
+        ContentValues cv=new ContentValues();
+        cv.put(CAMPAIGNS_TABLE_IS_SKIP,skipValue);
+
+        return DataBaseHelper.initializeDataBase(context).updateDBRecord( CAMPAIGNS_TABLE,cv,null);
+
+    }
+
+    public static boolean updateIsDownload(Context context,int isDownload,long campaignLocalId){
+        try
+        {
+            String whereCondition = LOCAL_ID+"=?";
+            String[] args = new String[]{String.valueOf(campaignLocalId)};
+            ContentValues cv = new ContentValues(isDownload);
+            cv.put(CAMPAIGN_TABLE_IS_CAMPAIGN_DOWNLOADED,isDownload);
+            long updated = DataBaseHelper.initializeDataBase(context).updateDBRecord(CAMPAIGNS_TABLE,cv,whereCondition,args);
+            return (updated>=1);
+        }catch (Exception e)
+        {
+            return false;
+        }
+    }
+
+    public static boolean updateSkip(Context context,String campaignName,int isSkip)
+    {
+        try
+        {
+            String whereCondition = CAMPAIGNS_TABLE_CAMPAIGN_NAME+"=?";
+            String[] args = new String[]{campaignName};
+            ContentValues cv = new ContentValues(1);
+            cv.put(CAMPAIGNS_TABLE_IS_SKIP,isSkip);
+            long updated = DataBaseHelper.initializeDataBase(context).updateDBRecord(CAMPAIGNS_TABLE,cv,whereCondition,args);
+            return (updated>=1);
+        }catch (Exception e)
+        {
+            return false;
+        }
+
+    }
 }

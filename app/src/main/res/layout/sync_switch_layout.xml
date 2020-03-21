@@ -4,15 +4,6 @@
     android:layout_height="wrap_content">
 
     <Switch
-        android:id="@+id/switch_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textOn="ON"
-        android:textOff="OFF"
-        android:textStyle="bold"
-        android:text="Skip All" />
-
-    <Switch
         android:id="@+id/sync_switch_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,5 +11,14 @@
         android:textOff="OFF"
         android:textStyle="bold"
         android:text="Sync" />
+
+    <Switch
+        android:id="@+id/switch_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textOn="ON"
+        android:textOff="OFF"
+        android:textStyle="bold"
+        android:text="Skip All" />
 
 </LinearLayout>

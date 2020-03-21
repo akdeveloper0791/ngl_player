@@ -51,7 +51,6 @@ public class SignageManagerAccessSettings extends android.app.Fragment {
         context = getActivity();
 
 
-
         View  view = inflater.inflate(R.layout.signage_manager_access_settings_layout,null);
         switchButton = view.findViewById(R.id.toggle_button);
         signageMgrInfoLayout=view.findViewById(R.id.service_id_info_layout);

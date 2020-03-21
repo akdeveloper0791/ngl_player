@@ -8,6 +8,7 @@ public class SetBootTimeForMediaSettingsConstants {
     public  static final boolean DEFAULT_TIME_SYNC_STATUS = false;
     public  static final boolean DEFAULT_AUTO_RESTART_ON_REBOOT = true;
     public  static final boolean DEFAULT_PLAY_CAMPAIGN_ON_REBOOT_ONCE = false;
+
     //get play offer audio settings
     public boolean getTimeSyncSettings(Context context)
     {

@@ -36,6 +36,11 @@ public class ProgressUpdateReceiver extends BroadcastReceiver {
                     activity.updateDownloadProgressInfo(intent.getStringExtra("name"), intent.getIntExtra("progress", 0),intent.getIntExtra("position",0),intent.getIntExtra("total_files",0),intent.getStringExtra("resource_name"));
 
                     break;
+
+                case GCModel.DOWNLOAD_SUCCESS:
+                    activity.downloadProgressSuccess(intent.getStringExtra("name"));
+                    break;
+
                 case GCModel.REMOVE_PROGRESS:
                     activity.removeDownloadProgressInfo(intent.getStringExtra("name"));
 

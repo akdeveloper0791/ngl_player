@@ -58,7 +58,7 @@
     <!-- [-] global names -->
 
     <!-- [+] app_details -->
-    <string name="app_name"> Digital Signage Player</string>
+    <string name="app_name">NGL Player</string>
     <string name="adskite_digi_directory">SignageServ</string>
     <!-- [-] app_details -->
 
@@ -108,6 +108,7 @@
     <string name="overlaying_image_setting_info">overlaying_image_setting_info</string>
     <string name="is_overlaying_image_on">is_overlaying_image_on</string>
     <string name="user_display_created_time">user_display_created_time</string>
+    <string name="is_hot_spot_enable_always">is_hot_spot_enable_always</string>
 
     <string name="image_capture_duration">image_capture_duration</string>
     <string name="is_metrics_on">is_metrics_on</string>
@@ -116,6 +117,8 @@
     <string name="auto_campaign_download_duration">auto_campaign_download_duration</string>
 
     <string name="reports_sp">reports_sp</string>
+
+    <string name="skip_all_sp">skip_all_sp</string>
 
     <string name="last_campaign_reports_upload_time">last_campaign_reports_upload_time</string>
 
@@ -161,7 +164,7 @@
     <!-- [-] error messages -->
 
     <!-- [+] login layout strings -->
-    <string name="register_layout_header_text">Register to SignageServ</string>
+    <string name="register_layout_header_text">Register to NGL Player</string>
     <string name="register_layout_org_email_edit_text_hint">Enter Email Address</string>
     <string name="register_layout_mobile_number_edit_text_hint">Enter Mobile Number</string>
     <string name="register_layout_register_button_text">Register</string>
@@ -266,7 +269,7 @@
     <!-- [+] display  media layout strings -->
     <string name="display_media_default_text">Welcome to Adskite Digi \n please wait.........</string>
     <string name="display_ads_layout_progress_dialog_default_percent">0.0</string>
-    <string name="display_ads_layout_scrolling_text"> Thank you for choosing SIGNAGESERV Digital Signage Solution. For Support  Please Contact  Ph: 9900819475 /E-mail contact@adskite.com/Visit www.signageserv.ai </string>
+    <string name="display_ads_layout_scrolling_text"> Thank you for choosing Digital Signage Solution. For Support  Please Contact  Ph: 9900819475 /E-mail contact@adskite.com/Visit www.nextgenlearning.in </string>
     <string name="display_ads_no_internet_connection_info_msg">No internet connection,Unable to connect with server,would you like to skip this schedule</string>
     <string name="display_ads_internal_server_error_info_msg">Internal server error,Unable to connect with server,would you like to skip this schedule</string>
     <string name="display_ads_restarting_player_dialog_info_msg">Do you want continue to  play from resume </string>
@@ -401,7 +404,7 @@
     <string-array name="settings">
         <item>Device Profile Settings</item>
         <item>CMS Settings</item>
-        <item>Show SS Player QR Code</item>
+        <item>Show NGL Player QR Code</item>
         <item>Set Default Banner</item>
         <item>Set Overlay Logo</item>
         <item>Content Auto Sync Settings</item>
@@ -415,7 +418,7 @@
         <item>New Content Arrival Action Settings</item>
         <item>Interactive Action Settings</item>
         <item>URL Settings</item>
-        <item>Signage Manager Access Settings</item>
+        <item>NGL Player Remote Access Settings</item>
 
     </string-array>
 
@@ -478,8 +481,8 @@
     <string name="hide_file_name">hide_file_name</string>
     <string name="signage_mgr_service_id_validations_err">Please Enter Service Id</string>
 
-    <string name="signage_mgr_access_back_press_dialog_info_msg">You Should Enter Signage Manger Service ID, Shall You Turn OFF The Access?   </string>
-    <string name="signage_mgr_access_settings_text">Signage Manager Access Settings</string>
+    <string name="signage_mgr_access_back_press_dialog_info_msg">You Should Enter NGL Player Remote Service ID, Shall You Turn OFF The Access?   </string>
+    <string name="signage_mgr_access_settings_text">NGL Player Remote Access Settings</string>
     <string name="signage_mgr_access_settings_service_id_hint">Enter Account Service Id</string>
     <string name="signage_mgr_access_service_id_text">Service Id :</string>
     <string name="signage_mgr_access__update_alert">Update Service ID</string>
@@ -487,7 +490,7 @@
     <string name="signage_mgr_access_toast_connected">Connected to %s</string>
     <string name="signage_mgr_access_toast_disconnected">Disconnected from %s</string>
     <string name="signage_mgr_access_name_prefix">SS-</string>
-    <string name="signage_mgr_access_settings_enterprise_text">Signage Manager Access Settings \n (Enterprise)</string>
+    <string name="signage_mgr_access_settings_enterprise_text">NGL Player Remote Access Settings \n (Enterprise)</string>
     <!-- [+] shared preference strings for  customer actions-->
     <string name="action_template_id">action_template_id</string>
     <string name="interactive_action_form_url">interactive_action_form_url</string>
@@ -637,6 +640,7 @@
     <string name="set_auto_restart_on_reboot">Set Auto Restart on Reboot</string>
     <string name="set_play_campaign_on_reboot_only_once">Set Play Campaign on ReBoot Only Once</string>
     <string name="other_app_launcher_settings_text">Set Other App Launch Setting</string>
+    <string name="always_enable_hot_spot">Always Enable Hot Spot</string>
 
     <!--List of all the Requests for Customer Interactive Actions   -->
     <string name="customer_interactive_actions_list_request">customer_interactive_actions_list_request</string>
@@ -669,6 +673,7 @@
     <!-- multi region media info properties -->
     <string name="has_video_with_sound_multi_reg_prop">hasVideoWithSound</string>
     <string name="has_video">hasVideo</string>
+    <string name="set_timer">set_timer</string>
 
     <string name="payload_separator">:</string>
 
@@ -755,7 +760,7 @@
 
     <string name="landscape">Landscape</string>
     <string name="portrait">Portrait</string>
-    <string name="mac_address_title">SS Player QR Code</string>
+    <string name="mac_address_title">NGL Player QR Code</string>
     <string name="note_for_qr_code_scan">Note: Please scan this QR  code to add Player </string>
     <string name="json_key_is_encoded">is_encoded</string>
     <string name="json_key_mac">mac</string>
@@ -860,7 +865,7 @@
         <item>Green Content</item>
         <item>Video Conferencing</item>
         <item>Play Campaigns</item>
-        <item>DSP Settings</item>
+        <item>NGL Player Settings</item>
     </string-array>
 
     <string-array name="user_guide_icons_array">
@@ -896,12 +901,14 @@
     <string name="user_display_status">user_display_status</string>
     <string name="device_expiry_date_sp">device_expiry_date_sp</string>
     <string name="device_expiry_checked_at_sp">device_expiry_checked_at_sp</string>
-
     <string name="customer_care_number">+919900819475</string>
     <string name="cc_email">contact@adskite.com</string>
 
-
-
     <string name="output_displays_key">output_displays_key</string>
+
+    <!-- ascii -->
+    <string name="space_ascii">%20</string>
+    <string name="new_line_special_character">%0A</string>
+    <string name="google_map_key">AIzaSyBhIIcRJ0J0C5P46eqIBw2D3Fk7drNq_6A</string>
 
 </resources>

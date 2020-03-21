@@ -169,7 +169,24 @@ public class HandleKeyCommands extends AccessibilityService
 
             case KeyEvent.KEYCODE_HOME:
                 //relaunch ss
-                homeKeyPressed();
+                //homeKeyPressed();
+               //play pause
+                if(!isPlayPauseClicked)
+                {
+                    isPlayPauseClicked = true;
+                    if(!DisplayAdsBase.isPauseMediaFlag)
+                    {
+                        DisplayAdsBase.isPauseMediaFlag=true;
+                    }else
+                    {
+                        DisplayAdsBase.isPauseMediaFlag=false;
+                    }
+                    processPlayAndPauseCommands();
+
+                }else
+                {
+                    isPlayPauseClicked = false;
+                }
                 return true;
 
             case KeyEvent.KEYCODE_MENU:

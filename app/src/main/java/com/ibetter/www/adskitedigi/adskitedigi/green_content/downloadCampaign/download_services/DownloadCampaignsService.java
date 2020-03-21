@@ -54,6 +54,7 @@ import static com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCamp
 import static com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.DownloadCampaignResultReceiver.DBX_RESOURCE_FILE_DOWNLOAD_SUCCESS;
 import static com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.auto_download_campaign.AutoDownloadCampaignReceiver.DOWNLOAD_CAMPAIGN_INFO_API_RESPONSE;
 import static com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.model.GCModel.DOWNLOAD_ERROR;
+import static com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.model.GCModel.DOWNLOAD_SUCCESS;
 import static com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.model.GCModel.GET_DOWNLOADING_FILES;
 import static com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.model.GCModel.INIT_DOWNLOAD;
 import static com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.model.GCModel.REMOVE_ALL_PROGRESS;
@@ -110,6 +111,7 @@ public class DownloadCampaignsService extends Service implements DownloadCampaig
         registerNotificationRX();
 
         checkAndStartForegroundNotification();
+
 
         downloadCampaignUploadProgressNotification = new GCNotification().initCampaignResourceUploadProgress(context,
                 "Downloading Campaign","Downloading campaign resource","");
@@ -391,7 +393,11 @@ public class DownloadCampaignsService extends Service implements DownloadCampaig
 
         if(isAutoSyc)
         {
-            AutoDownloadCampaignTriggerService.autoDownloadCampaignReceiver.send(DOWNLOAD_CAMPAIGN_INFO_API_RESPONSE,null);
+            if(AutoDownloadCampaignTriggerService.autoDownloadCampaignReceiver!=null)
+            {
+                AutoDownloadCampaignTriggerService.autoDownloadCampaignReceiver.send(DOWNLOAD_CAMPAIGN_INFO_API_RESPONSE,null);
+            }
+
         }
         else
         {
@@ -497,21 +503,23 @@ public class DownloadCampaignsService extends Service implements DownloadCampaig
     //update campaign download status
     private boolean createCampaignInfoFile()
     {
+        if(pendingCampaigns!=null&&pendingCampaigns.get(inProgressCampaign)!=null) {
+            // Uri infoUri = new GalleryMediaModel(context).getTextToFile(pendingCampaigns.get(inProgressCampaign).getInfo(), inProgressCampaign, context);
+            boolean infoUri = CampaignsDBModel.setCampaignDownloadedTrue(context, pendingCampaigns.get(inProgressCampaign).getServerId());
+            Log.d("DownloadCampaign", "Inside download campaign service info uri " + infoUri);
+            if (infoUri == false) {
 
+                //handle eerror
+                handleCampaignDownloadingError("Unable to set download status");
 
+            }
 
-       // Uri infoUri = new GalleryMediaModel(context).getTextToFile(pendingCampaigns.get(inProgressCampaign).getInfo(), inProgressCampaign, context);
-        boolean infoUri = CampaignsDBModel.setCampaignDownloadedTrue(context,pendingCampaigns.get(inProgressCampaign).getServerId());
-        Log.d("DownloadCampaign","Inside download campaign service info uri "+infoUri);
-        if (infoUri==false)
+            return infoUri;
+        }else
         {
-
-            //handle eerror
-            handleCampaignDownloadingError("Unable to set download status");
-
+            finishService();
+            return false;
         }
-
-        return infoUri;
     }
 
     private void directDownloadResource() {
@@ -722,10 +730,9 @@ public class DownloadCampaignsService extends Service implements DownloadCampaig
 
     private void onDownloadComplete(String campaignName)
     {
-
-       removeDownloadProgressNotification();
+        sendDownloadSuccess(campaignName);
+        removeDownloadProgressNotification();
         sendRemoveProgress();
-
     }
 
 
@@ -1055,6 +1062,24 @@ public class DownloadCampaignsService extends Service implements DownloadCampaig
             intent.putExtra("action",DOWNLOAD_ERROR);
             intent.putExtra("name", campaignName);
             intent.putExtra("error", error);
+            sendBroadcast(intent);
+        }catch (Exception E)
+        {
+            E.printStackTrace();
+        }
+    }
+
+    private  void sendDownloadSuccess(String campaignName)
+    {
+        //name
+        try {
+
+
+            Intent intent = new Intent(UPDATE_PROGRESS_RX);
+            intent.addCategory(Intent.CATEGORY_DEFAULT);
+            intent.putExtra("action",DOWNLOAD_SUCCESS);
+
+            intent.putExtra("name", campaignName);
             sendBroadcast(intent);
         }catch (Exception E)
         {

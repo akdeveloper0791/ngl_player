@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.os.Bundle;
+import android.os.ResultReceiver;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.ArrayMap;
@@ -68,6 +69,7 @@ public class AutoCampDownloadListService extends IntentService
     private HashMap<Long, TickerTextModel> serverTickers = new HashMap<>();
     private HashMap<Long,ArrayList<String>> campaignMedias = new HashMap<>();
 
+    private ResultReceiver receiver;
 
     @Override
     public void onHandleIntent(@Nullable Intent intent)
@@ -75,6 +77,10 @@ public class AutoCampDownloadListService extends IntentService
         isStopped=false;
 
         context=AutoCampDownloadListService.this;
+        if(intent.hasExtra("receiver")){
+            receiver = intent.getParcelableExtra("receiver");
+        }
+
         registerStopServiceReceiver();
         getCampaignList();
     }
@@ -337,8 +343,12 @@ public class AutoCampDownloadListService extends IntentService
         if(!isStopped) {
             Bundle bundle = new Bundle();
             bundle.putBoolean("flag", true);
+            if(receiver!=null){
+                receiver.send(DOWNLOAD_LIST_CAMPAIGN_SUCCESS, bundle);
+            }else if(AutoDownloadCampaignTriggerService.autoDownloadCampaignReceiver!=null){
+                AutoDownloadCampaignTriggerService.autoDownloadCampaignReceiver.send(DOWNLOAD_LIST_CAMPAIGN_SUCCESS, bundle);
+            }
 
-            AutoDownloadCampaignTriggerService.autoDownloadCampaignReceiver.send(DOWNLOAD_LIST_CAMPAIGN_SUCCESS, bundle);
         }
     }
 
@@ -350,7 +360,12 @@ public class AutoCampDownloadListService extends IntentService
             bundle.putBoolean("flag", flag);
             bundle.putString("status", status);
             bundle.putInt("statusCode", statusCode);
-            AutoDownloadCampaignTriggerService.autoDownloadCampaignReceiver.send(DOWNLOAD_LIST_API_ERROR, bundle);
+            if(receiver!=null){
+               receiver.send(DOWNLOAD_LIST_API_ERROR, bundle);
+            }else if(AutoDownloadCampaignTriggerService.autoDownloadCampaignReceiver!=null){
+                AutoDownloadCampaignTriggerService.autoDownloadCampaignReceiver.send(DOWNLOAD_LIST_API_ERROR, bundle);
+            }
+
         }
     }
 

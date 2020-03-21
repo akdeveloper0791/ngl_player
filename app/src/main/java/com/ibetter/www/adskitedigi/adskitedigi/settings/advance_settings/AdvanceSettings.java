@@ -1,10 +1,17 @@
 package com.ibetter.www.adskitedigi.adskitedigi.settings.advance_settings;
+
+import android.Manifest;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,21 +23,36 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.ibetter.www.adskitedigi.adskitedigi.R;
 import com.ibetter.www.adskitedigi.adskitedigi.settings.time_sync_settings.SetBootTimeForMediaSettingsConstants;
+
+import static com.ibetter.www.adskitedigi.adskitedigi.model.Constants.IS_ENABLE_HOT_SPOT_ALWAYS_SETTINGS_DEFAULT;
 
 public class AdvanceSettings extends Activity implements CompoundButton.OnCheckedChangeListener {
 
     private Context context;
     private SharedPreferences settingsSP;
     private SharedPreferences.Editor editor;
-    private Switch timeSyncSW,autoRestartSW,playCampaignRebootOnceSW,otherAppLauncherSW;
+    private Switch timeSyncSW,autoRestartSW,playCampaignRebootOnceSW,otherAppLauncherSW, enableHotSpotSpinner;
     private Spinner screenOrientationSpinner;
     private Button chooseAppBtn;
     private TextView appNameTV;
     private static final int GET_APP_ACTION_INTENT=1001;
 
     public  static final boolean DEFAULT_OTHER_APP_LAUNCHER_STATUS = false;
+
+    private final static int LOCATION_PERMISSION_REQUEST = 1;
+    private final static int REQUEST_CHECK_SETTINGS = 2;
 
     public void onCreate(Bundle savedInstanceState)
     {
@@ -59,6 +81,8 @@ public class AdvanceSettings extends Activity implements CompoundButton.OnChecke
         setOtherAppLauncher();
 
         setAccessibilitySetting();
+
+        setEnableHotSpotSettings();
 
     }
 
@@ -147,6 +171,22 @@ public class AdvanceSettings extends Activity implements CompoundButton.OnChecke
                 otherAppLaunchSwitchChange(isOn);
 
                 break;
+
+            case R.id.enable_hotspot_switch:
+                if(isOn){
+                    if(ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                            ContextCompat.checkSelfPermission(context,Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+                    {
+                        checkForLocationSettingsAndSaveHotSpot();
+                    }else
+                    {
+                        ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION},LOCATION_PERMISSION_REQUEST);
+                    }
+                }else{
+                    saveEnableHotSpotSettings(isOn);
+                }
+
+                break;
         }
 
     }
@@ -158,6 +198,17 @@ public class AdvanceSettings extends Activity implements CompoundButton.OnChecke
         editor.commit();
 
         // Toast.makeText(context,"Saved Successfully",Toast.LENGTH_SHORT).show();
+
+    }
+
+
+    private void saveEnableHotSpotSettings(boolean isOn) {
+
+        editor.putBoolean(getString(R.string.is_hot_spot_enable_always), isOn);
+
+        editor.commit();
+
+         Toast.makeText(context,"Saved Successfully",Toast.LENGTH_SHORT).show();
 
     }
 
@@ -316,8 +367,80 @@ public class AdvanceSettings extends Activity implements CompoundButton.OnChecke
                 {
                     Toast.makeText(context, "No Application is Selected to Launch", Toast.LENGTH_SHORT).show();
                 }
+                break;
+            case REQUEST_CHECK_SETTINGS:
+                if(resultCode == RESULT_OK) {
+                    saveEnableHotSpotSettings(true);
+                }
+                break;
         }
     }
 
+    private void setEnableHotSpotSettings()
+    {
+        enableHotSpotSpinner = findViewById(R.id.enable_hotspot_switch);
+        enableHotSpotSpinner.setOnCheckedChangeListener(this);
+        enableHotSpotSpinner.setChecked(settingsSP.getBoolean(getString(R.string.is_hot_spot_enable_always), IS_ENABLE_HOT_SPOT_ALWAYS_SETTINGS_DEFAULT));
+    }
+
+
+    public void onRequestPermissionsResult(int requestCode,String[] permissions,int[] grantResult)
+    {
+        if(grantResult[0]==PackageManager.PERMISSION_GRANTED)
+        {
+            checkForLocationSettingsAndSaveHotSpot();
+
+        }else
+        {
+            Toast.makeText(context,"Please approve permission",Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void checkForLocationSettingsAndSaveHotSpot(){
+        final LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setInterval(10000);
+        locationRequest.setFastestInterval(10000);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(locationRequest);
+
+
+        SettingsClient client = LocationServices.getSettingsClient(this);
+        Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
+
+        task.addOnSuccessListener(this, new OnSuccessListener<LocationSettingsResponse>() {
+            @Override
+            public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                // All location settings are satisfied. The client can initialize
+                // location requests here.
+                saveEnableHotSpotSettings(true);
+
+            }
+        });
+
+        task.addOnFailureListener(this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                if (e instanceof ResolvableApiException) {
+                    // Location settings are not satisfied, but this can be fixed
+                    // by showing the user a dialog.
+                    try {
+                        // Show the dialog by calling startResolutionForResult(),
+                        // and check the result in onActivityResult().
+                        ResolvableApiException resolvable = (ResolvableApiException) e;
+                        resolvable.startResolutionForResult(AdvanceSettings.this,
+                                REQUEST_CHECK_SETTINGS);
+                    } catch (IntentSender.SendIntentException sendEx) {
+                        // Ignore the error.
+                    }
+                }else
+                {
+                    Toast.makeText(context,"Unable to enable location"+e.getMessage(),Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            }
+        });
+    }
 
 }

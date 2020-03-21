@@ -1,5 +1,5 @@
 package com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign;
-import android.app.ActionBar;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -7,17 +7,23 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,152 +44,156 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ibetter.www.adskitedigi.adskitedigi.R;
+import com.ibetter.www.adskitedigi.adskitedigi.database.CampaignsDBModel;
 import com.ibetter.www.adskitedigi.adskitedigi.download_media.DownloadMediaHelper;
 import com.ibetter.www.adskitedigi.adskitedigi.green_content.GCLoginActivity;
 import com.ibetter.www.adskitedigi.adskitedigi.green_content.GCProfileActivity;
 import com.ibetter.www.adskitedigi.adskitedigi.green_content.campaign_preview.PreviewIndvCampaign;
+import com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.auto_download_campaign.AutoCampDownloadListService;
 import com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.auto_download_campaign.AutoDownloadCampaignModel;
+import com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.auto_download_campaign.AutoDownloadCampaignTriggerService;
 import com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.download_services.DownloadCampaignsService;
-import com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.model.GCModel;
 import com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.download_services.FetchBasicCampInfoService;
+import com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.model.GCModel;
 import com.ibetter.www.adskitedigi.adskitedigi.green_content.gc_notify.GCNotification;
-import com.ibetter.www.adskitedigi.adskitedigi.model.MediaModel;
 import com.ibetter.www.adskitedigi.adskitedigi.model.NetworkModel;
+import com.ibetter.www.adskitedigi.adskitedigi.model.SharedPreferenceModel;
 import com.ibetter.www.adskitedigi.adskitedigi.model.User;
 import com.ibetter.www.adskitedigi.adskitedigi.settings.advance_settings.ScreenOrientationModel;
 import com.liulishuo.magicprogresswidget.MagicProgressCircle;
 import com.wang.avi.AVLoadingIndicatorView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.File;
-import java.io.FileOutputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import static com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.auto_download_campaign.AutoDownloadCampaignReceiver.DOWNLOAD_LIST_API_ERROR;
+import static com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.auto_download_campaign.AutoDownloadCampaignReceiver.DOWNLOAD_LIST_CAMPAIGN_SUCCESS;
 import static com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.model.GCModel.DOWNLOAD_ERROR;
 import static com.ibetter.www.adskitedigi.adskitedigi.green_content.gc_notify.GCNotification.ACTION_RETRY;
 import static com.ibetter.www.adskitedigi.adskitedigi.green_content.gc_notify.GCNotification.ACTION_SKIP;
+import static com.ibetter.www.adskitedigi.adskitedigi.settings.auto_campaign_sync_settings.AutoCampaignDownloadSettings.DEFAULT_AUTO_DOWNLOAD__STATUS;
 
-public class DownloadCampaigns extends Activity
-{
+public class DownloadCampaigns extends AppCompatActivity {
     private Context context;
     private RecyclerView recyclerView;
-    public static final int GC_LOGIN_ACTION=2001;
-    public static final int GC_PROFILE_ACTION=2002;
-    private ArrayList<GCModel> campList=new ArrayList<>();
-    private HashMap<String,GCModel> campHashMap=new HashMap<>();
+    public static final int GC_LOGIN_ACTION = 2001;
+    public static final int GC_PROFILE_ACTION = 2002;
+    private ArrayList<GCModel> campList = new ArrayList<>();
+    private HashMap<String, GCModel> campHashMap = new HashMap<>();
     private CampaignsAdapter campaignsAdapter;
 
     private CampaignResultReceiver campaignResultReceiver;
     private ProgressUpdateReceiver progressUpdateReceiver;
-    private SkipCampaignsReceiver skipCampaignsReceiver;
 
-    private ArrayList<String> deletingFiles=new ArrayList<>();
+    private ArrayList<String> deletingFiles = new ArrayList<>();
 
-    private ArrayList<String> skipCampsList=new ArrayList<>();
+    private ArrayList<String> skipCampsList = new ArrayList<>();
     private ProgressDialog busyDialog;
     private RelativeLayout searchLayout;
-    private boolean isFilterActive=false;
+    private boolean isFilterActive = false;
+    private SparseBooleanArray skippedMediasState = new SparseBooleanArray();
 
     @Override
-    public void onCreate( Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setRequestedOrientation(ScreenOrientationModel.getSelectedScreenOrientation(this));
 
-        context=DownloadCampaigns.this;
+        context = DownloadCampaigns.this;
+        setContentView(R.layout.download_campaigns);
 
         setActionBar();
 
-        setContentView(R.layout.download_campaigns);
+        recyclerView = findViewById(R.id.campaigns_lv);
 
-        recyclerView=findViewById(R.id.campaigns_lv);
+        searchLayout = findViewById(R.id.search_layout);
 
-        searchLayout=findViewById(R.id.search_layout);
+        initializeAdaptor();
 
-         //download basic campaign info from GC server
-         downloadBasicCampaignsList();
+        //download basic campaign info from GC server
+        downloadBasicCampaignsList();
 
-         registerProgressRx();
+        registerProgressRx();
 
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
 
         inflater.inflate(R.menu.download_campaign_menu, menu);
 
         MenuItem item = menu.findItem(R.id.skip_all);
-        item.setActionView(R.layout.switch_layout);
+        item.setActionView(R.layout.sync_switch_layout);
         final Switch mySwitch = item.getActionView().findViewById(R.id.switch_btn);
+
+        mySwitch.setChecked(isSkipAllSP());
         mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(!DownloadCampaignsService.isServiceOn)
-                {
-                    skipAllCampaignsService(isChecked);
-                }else
-                {
+                if (!DownloadCampaignsService.isServiceOn) {
+
+                    CampaignsDBModel.updateCampaignIsSkip(context, isChecked);
+                    new PrepareAndDisplayCampaigns().execute();
+                    setISkipALLSP(isChecked);
+
+                } else {
                     mySwitch.setChecked(!isChecked);
-                    Toast.makeText(context, "Dear user, Please wait campaigns are downloading....", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Dear user, Please wait campaigns are downloading, or this will override the skip settings", Toast.LENGTH_SHORT).show();
                 }
+
             }
         });
 
-        if(isFilterActive)
-        {
+        if (isFilterActive) {
             menu.findItem(R.id.filter).setIcon(R.drawable.ic_active_filter);
             item.setVisible(false);
-        }
-        else
-        {
+        } else {
             menu.findItem(R.id.filter).setIcon(R.drawable.ic_filter);
             item.setVisible(true);
         }
+
+        setAndHandleSyncSettings(menu);
         return true;
     }
 
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         // Take appropriate action for each action item click
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
                 return true;
 
             case R.id.profile:
 
-                if(new User().isGCUserLogin(context))
-                {
-                    startActivityForResult(new Intent(context,GCProfileActivity.class),GC_PROFILE_ACTION);
-                }else
-                {
+                if (new User().isGCUserLogin(context)) {
+                    startActivityForResult(new Intent(context, GCProfileActivity.class), GC_PROFILE_ACTION);
+                } else {
                     loginActivity();
                 }
                 return true;
 
             case R.id.filter:
-                if(searchLayout.getVisibility()==View.VISIBLE)
-                {
+                if (searchLayout.getVisibility() == View.VISIBLE) {
                     campaignsDataRefresh();
-                    isFilterActive=false;
+                    isFilterActive = false;
                     searchLayout.setVisibility(View.GONE);
-                }else
-                {
-                    isFilterActive=true;
+                } else {
+                    isFilterActive = true;
                     recyclerView.setVisibility(View.GONE);
                     searchLayout.setVisibility(View.VISIBLE);
                     campaignsFilter();
                 }
                 invalidateOptionsMenu();
-                 return true;
+                return true;
 
             case R.id.search:
 
@@ -195,35 +205,40 @@ public class DownloadCampaigns extends Activity
         }
     }
 
-    private void downloadBasicCampaignsList()
-    {
-        if(new User().isGCUserLogin(context))
-        {
-            if(new NetworkModel().isInternet(context))
-            {
-                campaignResultReceiver = new CampaignResultReceiver(new Handler());
-                Intent startIntent = new Intent(context, FetchBasicCampInfoService.class);
-                startIntent.putExtra("receiver", campaignResultReceiver);
-                startService(startIntent);
-            }
-            else
-            {
-                Toast.makeText(context,getString(R.string.no_internet),Toast.LENGTH_SHORT).show();
-                finish();
+    private void downloadBasicCampaignsList() {
+        SharedPreferences settingsSp = getSharedPreferences(getString(R.string.settings_sp), MODE_PRIVATE);
+
+        if (new User().isGCUserLogin(context)) {
+            if (settingsSp.getBoolean(getString(R.string.is_auto_download_campaign), DEFAULT_AUTO_DOWNLOAD__STATUS)) {
+                if (new NetworkModel().isInternet(context)) {
+                    downloadFromServer();
+                } else {
+                    //display local
+                    new PrepareAndDisplayCampaigns().execute();
+                }
+            } else {
+                //display local
+                new PrepareAndDisplayCampaigns().execute();
             }
 
-        }else
-        {
+        } else {
             Toast.makeText(context, "Dear user, Please login...", Toast.LENGTH_SHORT).show();
             loginActivity();
         }
 
     }
 
-    private void loginActivity()
-    {
-        Intent intent=new Intent(context,GCLoginActivity.class);
-        startActivityForResult(intent,GC_LOGIN_ACTION);
+    private void downloadFromServer(){
+        enableProgressBar();
+        campaignResultReceiver = new CampaignResultReceiver(new Handler());
+        Intent startIntent = new Intent(context, AutoCampDownloadListService.class);
+        startIntent.putExtra("receiver", campaignResultReceiver);
+        startService(startIntent);
+    }
+
+    private void loginActivity() {
+        Intent intent = new Intent(context, GCLoginActivity.class);
+        startActivityForResult(intent, GC_LOGIN_ACTION);
     }
 
     @Override
@@ -235,12 +250,9 @@ public class DownloadCampaigns extends Activity
 
             case GC_LOGIN_ACTION:
 
-                if (resultCode == RESULT_OK && null != data)
-                {
-                    if(data.getBooleanExtra("flag",false))
-                    {
-                        if(campaignsAdapter!=null)
-                        {
+                if (resultCode == RESULT_OK && null != data) {
+                    if (data.getBooleanExtra("flag", false)) {
+                        if (campaignsAdapter != null) {
                             campList.clear();
                             campHashMap.clear();
                             enableProgressBar();
@@ -249,72 +261,67 @@ public class DownloadCampaigns extends Activity
 
                         downloadBasicCampaignsList();
 
-                    }else
-                    {
-                        Toast.makeText(context,"Unable to Login, Please try again later.",Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, "Unable to Login, Please try again later.", Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 }
                 break;
+
             case GC_PROFILE_ACTION:
 
-                if (resultCode == RESULT_OK && null != data)
-                {
-                    if(data.getBooleanExtra("is_log_out",false))
-                    {
+                if (resultCode == RESULT_OK && null != data) {
+                    if (data.getBooleanExtra("is_log_out", false)) {
                         loginActivity();
                     }
                 }
                 break;
-            }
+        }
 
-     }
-
+    }
 
 
     //set ActionBar
-    private void setActionBar()
-    {
-        ActionBar actionBar = getActionBar();
+    private void setActionBar() {
+       /* */
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+
+       ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(getString(R.string.gc_download_campaigns_page_title));
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
-    private void enableNoCampaignsFound()
-    {
+    private void enableNoCampaignsFound() {
         recyclerView.setVisibility(View.GONE);
-        TextView noCampaigns=findViewById(R.id.no_camp_tv);
+        TextView noCampaigns = findViewById(R.id.no_camp_tv);
         noCampaigns.setVisibility(View.VISIBLE);
     }
 
-    private void disableNoCampaignsFound()
-    {
+    private void disableNoCampaignsFound() {
         recyclerView.setVisibility(View.VISIBLE);
-        TextView noCampaigns=findViewById(R.id.no_camp_tv);
+        TextView noCampaigns = findViewById(R.id.no_camp_tv);
         noCampaigns.setVisibility(View.GONE);
 
     }
 
 
-    private void enableProgressBar()
-    {
-        LinearLayout progressLayout=findViewById(R.id.progress_layout);
+    private void enableProgressBar() {
+        recyclerView.setVisibility(View.GONE);
+        LinearLayout progressLayout = findViewById(R.id.progress_layout);
         progressLayout.setVisibility(View.VISIBLE);
     }
 
-    private void disableProgressBar()
-    {
-        LinearLayout progressLayout=findViewById(R.id.progress_layout);
+    private void disableProgressBar() {
+        LinearLayout progressLayout = findViewById(R.id.progress_layout);
         progressLayout.setVisibility(View.GONE);
     }
 
 
-
-
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
        /* if(DownloadFullCampaignService.isServiceActive)
         {
             stopCampaignService();
@@ -324,48 +331,45 @@ public class DownloadCampaigns extends Activity
         super.onDestroy();
     }
 
-    private class CampaignResultReceiver extends ResultReceiver
-    {
-        public CampaignResultReceiver(Handler handler)
-        {
+    private class CampaignResultReceiver extends ResultReceiver {
+        public CampaignResultReceiver(Handler handler) {
             super(handler);
         }
 
         @Override
-        protected void onReceiveResult(int resultCode, Bundle resultData)
-        {
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
 
-            Log.i("onReceiveResult","onReceiveResult");
+            Log.i("onReceiveResult", "onReceiveResult");
             disableProgressBar();
 
-            switch (resultCode)
-            {
+            switch (resultCode) {
                 case FetchBasicCampInfoService.GC_FETCH_CAMPAIGNS_ACTION:
 
-                    if(resultData!=null)
-                    {
-                        if(resultData.getBoolean("flag"))
-                        {
-                            campList=(ArrayList<GCModel>)resultData.getSerializable("campaign_list");
+                    if (resultData != null) {
+                        if (resultData.getBoolean("flag")) {
+                            campList = (ArrayList<GCModel>) resultData.getSerializable("campaign_list");
 
-                            for (GCModel model:campList)
-                            {
-                            campHashMap.put(model.getCampaignName(),model);
+                            for (GCModel model : campList) {
+                                campHashMap.put(model.getCampaignName(), model);
                             }
 
-                           campaignsDataRefresh();
+                            campaignsDataRefresh();
 
 
-                        }else
-                        {
+                        } else {
                             enableNoCampaignsFound();
                             Toast.makeText(context, resultData.getString("status"), Toast.LENGTH_SHORT).show();
 
                         }
-                    }else
-                    {
+                    } else {
                         Toast.makeText(context, "Unable to get the Campaigns info, Please Try Again Later", Toast.LENGTH_SHORT).show();
                     }
+                    break;
+                case DOWNLOAD_LIST_CAMPAIGN_SUCCESS:
+                    new PrepareAndDisplayCampaigns().execute();
+                    break;
+                case DOWNLOAD_LIST_API_ERROR:
+                    Toast.makeText(context, resultData.getString("status", "error"), Toast.LENGTH_SHORT).show();
                     break;
 
             }
@@ -375,53 +379,47 @@ public class DownloadCampaigns extends Activity
     }
 
 
-    private void campaignsDataRefresh()
-    {
+    private void campaignsDataRefresh() {
         try {
             if (campList != null && campList.size() > 0) {
                 disableNoCampaignsFound();
-                initializeAdaptor();
-
+                campaignsAdapter.notifyDataSetChanged();
                 requestForCurrentDownloadingFiles();
                 // campaignsAdapter.notifyDataSetChanged();
 
             } else {
                 enableNoCampaignsFound();
             }
-        }catch (Exception E)
-        {
+        } catch (Exception E) {
             E.printStackTrace();
         }
     }
 
-    private void initializeAdaptor()
-    {
-        campaignsAdapter=new CampaignsAdapter(campList);
+    private void initializeAdaptor() {
+        campaignsAdapter = new CampaignsAdapter(campList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context, GridLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(campaignsAdapter);
     }
 
-    private class CampaignsAdapter extends RecyclerView.Adapter
-    {
+    private class CampaignsAdapter extends RecyclerView.Adapter {
         private ArrayList<GCModel> campaignsList;
-        public CampaignsAdapter(ArrayList<GCModel> campaignsList)
-        {
+
+
+        public CampaignsAdapter(ArrayList<GCModel> campaignsList) {
             this.campaignsList = campaignsList;
         }
 
         @Override
-        public int getItemCount()
-        {
+        public int getItemCount() {
             return campaignsList.size();
         }
 
-        public class MyViewHolder extends RecyclerView.ViewHolder
-        {
-            public TextView campNameTV,createdByTV,createdAtTV,errorInfoTv,progressInfoTv,downLoadingFilesInfoTV;
-            public ImageButton downloadBtn,deleteButton,previewButton;
-            public Button retryBtn,skipBtn;
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            public TextView campNameTV, createdByTV, createdAtTV, errorInfoTv, progressInfoTv, downLoadingFilesInfoTV;
+            public ImageButton downloadBtn, deleteButton, previewButton;
+            public Button retryBtn, skipBtn;
             public AVLoadingIndicatorView downloadAVLoading;
             public MagicProgressCircle progressCircle;
             public RelativeLayout errorInfoLayout;
@@ -429,27 +427,66 @@ public class DownloadCampaigns extends Activity
             public Switch skipButton;
             public ImageView thumbView;
 
-            public MyViewHolder(View view)
-            {
+            public MyViewHolder(View view) {
                 super(view);
                 campNameTV = view.findViewById(R.id.campaign_name);
                 createdByTV = view.findViewById(R.id.created_by);
-                createdAtTV=view.findViewById(R.id.created_at);
+                createdAtTV = view.findViewById(R.id.created_at);
                 downloadBtn = view.findViewById(R.id.download_btn);
                 downloadAVLoading = view.findViewById(R.id.download_dialog_avl);
                 progressCircle = view.findViewById(R.id.download_dialog_pg_dialog_magic_circles);
                 skipBtn = view.findViewById(R.id.skip_btn);
                 retryBtn = view.findViewById(R.id.retry_btn);
-                errorInfoTv=view.findViewById(R.id.error_msg);
-                errorInfoLayout=view.findViewById(R.id.error_info_layout);
-                progressInfoTv=view.findViewById(R.id.progress_info);
-                progressInfoLayout=view.findViewById(R.id.progress_infoo_layout);
-                downLoadingFilesInfoTV=view.findViewById(R.id.downloading_info_tv);
-                deleteButton=view.findViewById(R.id.delete_btn);
-                previewButton=view.findViewById(R.id.preview_btn);
-                skipButton=view.findViewById(R.id.skip_button);
+                errorInfoTv = view.findViewById(R.id.error_msg);
+                errorInfoLayout = view.findViewById(R.id.error_info_layout);
+                progressInfoTv = view.findViewById(R.id.progress_info);
+                progressInfoLayout = view.findViewById(R.id.progress_infoo_layout);
+                downLoadingFilesInfoTV = view.findViewById(R.id.downloading_info_tv);
+                deleteButton = view.findViewById(R.id.delete_btn);
+                previewButton = view.findViewById(R.id.preview_btn);
+                skipButton = view.findViewById(R.id.skip_button);
 
-                thumbView=view.findViewById(R.id.thumb_iv);
+                thumbView = view.findViewById(R.id.thumb_iv);
+
+                skipButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean isSkip) {
+                        try {
+
+
+                            int position = getAdapterPosition();
+                            //Toast.makeText(context,"toggled out side - "+position+isSkip,Toast.LENGTH_SHORT).show();
+                            GCModel gcModel = (GCModel) getItem(position);
+                            if (isSkip) {
+
+                                if (!skippedMediasState.get(position, false)) {
+                                    skippedMediasState.put(position, true);
+                                    gcModel.setIsSkip(1);
+                                    handleSkipSetting(gcModel.getCampaignName(), isSkip, position);
+                                    if(gcModel.getServerId()>=1)
+                                    {
+                                        checkAndIssueSyncOverrideWarn();
+                                    }
+
+                                }
+                            } else {
+                                if (skippedMediasState.get(position, false)) {
+                                    skippedMediasState.put(position, false);
+                                    gcModel.setIsSkip(0);
+                                    handleSkipSetting(gcModel.getCampaignName(), isSkip, position);
+                                    if(gcModel.getServerId()>=1)
+                                    {
+                                        checkAndIssueSyncOverrideWarn();
+                                    }
+                                }
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
             }
         }
 
@@ -458,8 +495,7 @@ public class DownloadCampaigns extends Activity
             return position;
         }
 
-        public Object getItem(int position)
-        {
+        public Object getItem(int position) {
             return campaignsList.get(position);
         }
 
@@ -469,15 +505,13 @@ public class DownloadCampaigns extends Activity
         }
 
         @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-        {
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             final View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.download_camp_supportview, parent, false);
 
-           // final MyViewHolder result = new MyViewHolder(itemView);
+            // final MyViewHolder result = new MyViewHolder(itemView);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
                     v.setSelected(true);
                     notifyDataSetChanged();
                 }
@@ -486,57 +520,58 @@ public class DownloadCampaigns extends Activity
             return new MyViewHolder(itemView);
         }
 
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position)
-        {
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
             try {
 
                 final MyViewHolder myViewHolder = ((MyViewHolder) holder);
-                final GCModel gcModel=(GCModel)getItem(position);
-                final String campaignName=gcModel.getCampaignName();
-                myViewHolder.campNameTV.setText(campaignName);
-                String createdAt=gcModel.getCreatedAt();
-                myViewHolder.createdAtTV.setText("Created At:"+createdAt);
+                final Switch skipButton = myViewHolder.skipButton;
 
-                final File campaignFile=new File(new DownloadMediaHelper().getAdsKiteNearByDirectory(context)+"/"+gcModel.getCampaignName()+".txt");
-                if(campaignFile.exists())
-                {
+                final GCModel gcModel = (GCModel) getItem(position);
+                final String campaignName = gcModel.getCampaignName();
+                myViewHolder.campNameTV.setText(campaignName);
+                String createdAt = gcModel.getCreatedAt();
+                myViewHolder.createdAtTV.setText("Created At:" + createdAt);
+
+                //final File campaignFile=new File(new DownloadMediaHelper().getAdsKiteNearByDirectory(context)+"/"+gcModel.getCampaignName()+".txt");
+                if (gcModel.getIsDownloaded()) {
                     myViewHolder.downloadBtn.setBackgroundResource(R.drawable.green_button_background);
                     //need to get is skip
-                    myViewHolder.skipButton.setChecked(isSkipCampaign(campaignFile));
+                    skippedMediasState.put(position, gcModel.getIsSkip() == 1 ? true : false);
 
-                }
-                else
-                {
+                } else {
                     myViewHolder.downloadBtn.setBackgroundResource(R.drawable.download_button_style);
-                    myViewHolder.skipButton.setChecked(false);
+                    skippedMediasState.put(position, false);
                 }
 
-                String thumbFileName = getString(R.string.do_not_display_media)+"-"+getString(R.string.media_thumbnail)+"-"+gcModel.getCampaignName()+ getString(R.string.media_thumbnail_extention);
 
-                String thumbFilePath=new DownloadMediaHelper().getAdsKiteNearByDirectory(context)+"/"+thumbFileName;
+                skipButton.setChecked(skippedMediasState.get(position));
 
-                File thumbFile=new File(thumbFilePath);
 
-                if(thumbFile.exists())
-                {
+                String thumbFileName = getString(R.string.do_not_display_media) + "-" + getString(R.string.media_thumbnail) + "-" + gcModel.getCampaignName() + getString(R.string.media_thumbnail_extention);
+
+                String thumbFilePath = new DownloadMediaHelper().getAdsKiteNearByDirectory(context) + "/" + thumbFileName;
+
+                File thumbFile = new File(thumbFilePath);
+
+                if (thumbFile.exists()) {
                     myViewHolder.thumbView.setImageURI(Uri.fromFile(thumbFile));
-                }else
-                {
+                } else {
                     myViewHolder.thumbView.setImageDrawable(context.getResources().getDrawable(R.drawable.default_campaign));
                 }
+                if (gcModel.getServerId() > 0) {
+                    //check and download campaign full info from the server
+                    myViewHolder.downloadBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            downloadDBxCampaign(gcModel);
+                        }
+                    });
+                } else {
+                    myViewHolder.downloadBtn.setVisibility(View.INVISIBLE);
+                }
 
-                //check and download campaign full info from the server
-                myViewHolder.downloadBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v)
-                    {
-                        downloadDBxCampaign(gcModel);
-                    }
-                });
-
-                GCModel.ProgressInfo progressInfo=gcModel.getProgressInfo();
-                if(progressInfo==null)
-                {
+                GCModel.ProgressInfo progressInfo = gcModel.getProgressInfo();
+                if (progressInfo == null) {
 
                     myViewHolder.downloadAVLoading.setVisibility(View.GONE);
                     myViewHolder.errorInfoLayout.setVisibility(View.GONE);
@@ -544,27 +579,24 @@ public class DownloadCampaigns extends Activity
                     myViewHolder.downLoadingFilesInfoTV.setVisibility(View.GONE);
                     myViewHolder.downloadBtn.setVisibility(View.VISIBLE);
 
-                    if(campaignFile.exists()) {
+                    if (gcModel.getIsDownloaded()) {
                         myViewHolder.previewButton.setVisibility(View.VISIBLE);
                         myViewHolder.deleteButton.setVisibility(View.VISIBLE);
                         myViewHolder.skipButton.setVisibility(View.VISIBLE);
-                    }else
-                    {
+                    } else {
                         myViewHolder.previewButton.setVisibility(View.GONE);
                         myViewHolder.deleteButton.setVisibility(View.GONE);
                         myViewHolder.skipButton.setVisibility(View.GONE);
                     }
 
-                }else
-                {
+                } else {
                     myViewHolder.downloadBtn.setVisibility(View.GONE);
                     myViewHolder.previewButton.setVisibility(View.GONE);
                     myViewHolder.deleteButton.setVisibility(View.GONE);
                     myViewHolder.skipButton.setVisibility(View.GONE);
-                    String status=progressInfo.getStatus();
+                    String status = progressInfo.getStatus();
 
-                    switch (status)
-                    {
+                    switch (status) {
                         case GCModel.INIT_DOWNLOAD:
                             myViewHolder.downloadAVLoading.setVisibility(View.VISIBLE);
                             myViewHolder.progressInfoLayout.setVisibility(View.GONE);
@@ -578,11 +610,11 @@ public class DownloadCampaigns extends Activity
                             myViewHolder.downLoadingFilesInfoTV.setVisibility(View.VISIBLE);
                             myViewHolder.errorInfoLayout.setVisibility(View.GONE);
 
-                            myViewHolder.progressInfoTv.setText(String.valueOf(progressInfo.getProgress()+"%"));
-                            Log.i("DOWNLOAD_PROGRESS",(progressInfo.getProgress()* 1.0f)+":::"+progressInfo.getProgress());
-                            myViewHolder.progressCircle.setSmoothPercent((progressInfo.getProgress()* 1.0f)/100,1500);
+                            myViewHolder.progressInfoTv.setText(String.valueOf(progressInfo.getProgress() + "%"));
+                            Log.i("DOWNLOAD_PROGRESS", (progressInfo.getProgress() * 1.0f) + ":::" + progressInfo.getProgress());
+                            myViewHolder.progressCircle.setSmoothPercent((progressInfo.getProgress() * 1.0f) / 100, 1500);
                             myViewHolder.progressInfoTv.setVisibility(View.VISIBLE);
-                            myViewHolder.downLoadingFilesInfoTV.setText("Downloading Campaign ("+progressInfo.getPosition()+"/"+progressInfo.getTotalFiles()+")");
+                            myViewHolder.downLoadingFilesInfoTV.setText("Downloading Campaign (" + progressInfo.getPosition() + "/" + progressInfo.getTotalFiles() + ")");
                             break;
 
                         case DOWNLOAD_ERROR:
@@ -612,6 +644,8 @@ public class DownloadCampaigns extends Activity
                         sendBroadcast(retryIntent);
                     }
                 });
+
+
                 myViewHolder.skipBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -626,7 +660,7 @@ public class DownloadCampaigns extends Activity
                     @Override
                     public void onClick(View view) {
 
-                        deleteCampaignDialog(gcModel.getInfo(),gcModel.getCampaignName());
+                        deleteCampaignDialog(gcModel);
                     }
                 });
 
@@ -634,21 +668,10 @@ public class DownloadCampaigns extends Activity
                     @Override
                     public void onClick(View view) {
 
-                        Intent intent=new Intent(context,PreviewIndvCampaign.class);
-                        intent.putExtra("info",gcModel.getInfo());
-                        startActivity(intent);                    }
-                });
-
-
-                myViewHolder.skipButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean isSkip) {
-                     try {
-                            handleSkipSetting(gcModel.getCampaignName(), isSkip,position);
-                        }catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
+                        Log.d("DownloadCampaigns","on preview-"+gcModel.getInfo());
+                        Intent intent = new Intent(context, PreviewIndvCampaign.class);
+                        intent.putExtra("info", gcModel.getInfo());
+                        startActivity(intent);
                     }
                 });
 
@@ -672,25 +695,32 @@ public class DownloadCampaigns extends Activity
                 });
 
 
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
         }
     }
-    public void deleteCampaignDialog(final String info,final String campaignName) {
-        if (info != null) {
+
+    public void deleteCampaignDialog(final GCModel gcModel) {
+        if (gcModel != null) {
             try {
 
-                final JSONObject jsonObject = new JSONObject(info);
                 AlertDialog.Builder msgDialog = new AlertDialog.Builder(context);
                 msgDialog.setMessage("Are you sure.\nYou want to delete Campaign ?");
                 msgDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        deleteCampaign(jsonObject,campaignName);
+                        ArrayList<GCModel> deletedCampaigns = new ArrayList<>();
+                        deletedCampaigns.add(gcModel);
+                        Intent intent = new Intent(context, DeleteUnknownCampaigns.class);
+                        intent.putExtra("unknown_campaigns", deletedCampaigns);
+                        startService(intent);
                         dialog.dismiss();
+
+                        gcModel.setIsDownloaded(0);
+                        campaignsAdapter.notifyDataSetChanged();
+                        CampaignsDBModel.updateIsDownload(context,0,gcModel.getCampaignLocalId());
                     }
                 });
 
@@ -702,66 +732,58 @@ public class DownloadCampaigns extends Activity
                 });
 
                 msgDialog.create().show();
-            } catch (JSONException E) {
-                E.printStackTrace();
             } catch (Exception E) {
                 E.printStackTrace();
             }
 
-        }else
-        {
-            Toast.makeText(context,"Unable to delete Campaign ",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "Unable to delete Campaign ", Toast.LENGTH_SHORT).show();
         }
 
     }
 
-    private synchronized void deleteCampaign(JSONObject infoObj,String campaignName)
-    {
-
-            //prepare upload files from json
-            try {
-
-                String type = infoObj.getString("type");
-                if (type.equalsIgnoreCase("multi_region")) {
-                    processMultiRegFilesToUpload(infoObj.getJSONArray("regions"));
-                } else {
-                    //single region
-                    addForRegion(infoObj, "Single");
-                }
-
-                //check for bg audio file
-                if (infoObj.has("bg_audio")) {
-                    deletingFiles.add(infoObj.getString("bg_audio"));
-                }
-
-                //add thumb file
-                String thumbFileName = getString(R.string.do_not_display_media)+"-"+getString(R.string.media_thumbnail)+"-"+campaignName+ getString(R.string.media_thumbnail_extention);
-
-                deletingFiles.add(thumbFileName);
-
-                deletingFiles.add(campaignName+".txt");
-
-                for (String fileName : deletingFiles) {
-
-                    File file=new File(new DownloadMediaHelper().getAdsKiteNearByDirectory(context)+"/"+fileName);
-                    if(file.exists())
-                    {
-                        file.delete();
-                        Log.d("file deleted", "campaign file is -- " + fileName);
-
-                    }
-                    }
-
-            } catch (JSONException e) {
-
-                Toast.makeText(context,"Unable to delete Campaign",Toast.LENGTH_SHORT).show();
-
-
+    private synchronized void deleteCampaign(JSONObject infoObj, String campaignName) {
+        //prepare upload files from json
+        try {
+            String type = infoObj.getString("type");
+            if (type.equalsIgnoreCase("multi_region")) {
+                processMultiRegFilesToUpload(infoObj.getJSONArray("regions"));
+            } else {
+                //single region
+                addForRegion(infoObj, "Single");
             }
-            finally {
-                deletingFiles.clear();
-                campaignsAdapter.notifyDataSetChanged();
+
+            //check for bg audio file
+            if (infoObj.has("bg_audio")) {
+                deletingFiles.add(infoObj.getString("bg_audio"));
             }
+
+            //add thumb file
+            String thumbFileName = getString(R.string.do_not_display_media) + "-" + getString(R.string.media_thumbnail) + "-" + campaignName + getString(R.string.media_thumbnail_extention);
+
+            deletingFiles.add(thumbFileName);
+
+            deletingFiles.add(campaignName + ".txt");
+
+            for (String fileName : deletingFiles) {
+
+                File file = new File(new DownloadMediaHelper().getAdsKiteNearByDirectory(context) + "/" + fileName);
+                if (file.exists()) {
+                    file.delete();
+                    Log.d("file deleted", "campaign file is -- " + fileName);
+
+                }
+            }
+
+        } catch (JSONException e) {
+
+            Toast.makeText(context, "Unable to delete Campaign", Toast.LENGTH_SHORT).show();
+
+
+        } finally {
+            deletingFiles.clear();
+            campaignsAdapter.notifyDataSetChanged();
+        }
 
     }
 
@@ -785,67 +807,55 @@ public class DownloadCampaigns extends Activity
 
         }
     }
-    private void downloadDBxCampaign(GCModel model)
-    {
-        if(new User().isGCUserLogin(context)) {
-            if (new NetworkModel().isInternet(context))
-            {
+
+    private void downloadDBxCampaign(GCModel model) {
+        if (new User().isGCUserLogin(context)) {
+            if (new NetworkModel().isInternet(context)) {
 
                 //stop alarm service
                 AutoDownloadCampaignModel.stopAutoCampaignDownloadService(context);
 
 
-                   if (DownloadCampaignsService.isServiceOn) {
-                       Bundle bundle = new Bundle();
-                       bundle.putSerializable("model", model);
-                       DownloadCampaignsService.downloadCampaignResultReceiver.send(DownloadCampaignResultReceiver.INIT_DOWNLOAD_CAMPAIGN, bundle);
-                   } else {
-                       Intent intent = new Intent(context, DownloadCampaignsService.class);
-                       intent.putExtra("model", model);
-                       ContextCompat.startForegroundService(context, intent);
-                   }
-
-
-
-
+                if (DownloadCampaignsService.isServiceOn) {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("model", model);
+                    DownloadCampaignsService.downloadCampaignResultReceiver.send(DownloadCampaignResultReceiver.INIT_DOWNLOAD_CAMPAIGN, bundle);
+                } else {
+                    Intent intent = new Intent(context, DownloadCampaignsService.class);
+                    intent.putExtra("model", model);
+                    ContextCompat.startForegroundService(context, intent);
+                }
+            } else {
+                Toast.makeText(context, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
             }
-            else
-            {
-                Toast.makeText(context,getString(R.string.no_internet),Toast.LENGTH_SHORT).show();
-            }
-        }else
-        {
+        } else {
             Toast.makeText(context, "Dear user, Please login...", Toast.LENGTH_SHORT).show();
             loginActivity();
         }
     }
 
-    private void registerProgressRx()
-    {
+    private void registerProgressRx() {
 
-        IntentFilter intentFilter=new IntentFilter(DownloadCampaignsService.UPDATE_PROGRESS_RX);
+        IntentFilter intentFilter = new IntentFilter(DownloadCampaignsService.UPDATE_PROGRESS_RX);
         intentFilter.addCategory(Intent.CATEGORY_DEFAULT);
-         progressUpdateReceiver=new ProgressUpdateReceiver(new WeakReference<Activity>(DownloadCampaigns.this));
-        registerReceiver(progressUpdateReceiver,intentFilter);
+        progressUpdateReceiver = new ProgressUpdateReceiver(new WeakReference<Activity>(DownloadCampaigns.this));
+        registerReceiver(progressUpdateReceiver, intentFilter);
     }
-    private void unRegisterProgressRx()
-    {
-        try
-        {
-            if(progressUpdateReceiver!=null)
-            {
+
+    private void unRegisterProgressRx() {
+        try {
+            if (progressUpdateReceiver != null) {
                 unregisterReceiver(progressUpdateReceiver);
             }
 
-        }catch (Exception E){
+        } catch (Exception E) {
 
-         }finally {
-            progressUpdateReceiver=null;
+        } finally {
+            progressUpdateReceiver = null;
         }
     }
 
-    public void initDownloadProgressInfo(String campaignName)
-    {
+    public void initDownloadProgressInfo(String campaignName) {
 
         try {
             if (campHashMap.containsKey(campaignName)) {
@@ -853,32 +863,27 @@ public class DownloadCampaigns extends Activity
 
                 gcModel.initProgressInfo();
 
-               campaignsAdapter.notifyDataSetChanged();
+                campaignsAdapter.notifyDataSetChanged();
 
 
             }
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
 
     }
 
-
-
-    public void updateDownloadProgressInfo(String campaignName,int progress,int position,int totalFiles,String resourceName)
-    {
+    public void updateDownloadProgressInfo(String campaignName, int progress, int position, int totalFiles, String resourceName) {
 
         try {
             if (campHashMap.containsKey(campaignName)) {
                 GCModel gcModel = campHashMap.get(campaignName);
-                gcModel.updateDownloadProgress(progress,position,totalFiles,resourceName);
+                gcModel.updateDownloadProgress(progress, position, totalFiles, resourceName);
 
                 campaignsAdapter.notifyDataSetChanged();
             }
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -886,27 +891,22 @@ public class DownloadCampaigns extends Activity
     }
 
 
-
-
-    public void updateDownloadProgressErrorInfo(String campaignName,String error)
-    {
+    public void updateDownloadProgressErrorInfo(String campaignName, String error) {
 
         try {
             if (campHashMap.containsKey(campaignName)) {
                 GCModel gcModel = campHashMap.get(campaignName);
 
                 gcModel.updateDownloadErrorProgressInfo(error);
-              campaignsAdapter.notifyDataSetChanged();
+                campaignsAdapter.notifyDataSetChanged();
 
             }
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void removeDownloadProgressInfo(String campaignName)
-    {
+    public void removeDownloadProgressInfo(String campaignName) {
 
         try {
             if (campHashMap.containsKey(campaignName)) {
@@ -917,20 +917,32 @@ public class DownloadCampaigns extends Activity
                 campaignsAdapter.notifyDataSetChanged();
 
             }
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
 
     }
 
-    public void removeDownloadAllProgressInfo()
-    {
+    public void downloadProgressSuccess(String campaignName) {
 
         try {
-            for( GCModel gcModel:campList)
-            {
+            if (campHashMap.containsKey(campaignName)) {
+                GCModel gcModel = campHashMap.get(campaignName);
+                gcModel.setIsDownloaded(1);
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public void removeDownloadAllProgressInfo() {
+
+        try {
+            for (GCModel gcModel : campList) {
 
                 gcModel.removeProgressInfo();
 
@@ -938,8 +950,7 @@ public class DownloadCampaigns extends Activity
 
             campaignsAdapter.notifyDataSetChanged();
 
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -947,102 +958,46 @@ public class DownloadCampaigns extends Activity
     }
 
 
-    private void requestForCurrentDownloadingFiles()
-    {
-       if(DownloadCampaignsService.isServiceOn) {
-           DownloadCampaignsService.downloadCampaignResultReceiver.send(DownloadCampaignResultReceiver.REQUEST_FOR_DOWNLOADING_CAMPAIGNS, null);
-       }
+    private void requestForCurrentDownloadingFiles() {
+        if (DownloadCampaignsService.isServiceOn) {
+            DownloadCampaignsService.downloadCampaignResultReceiver.send(DownloadCampaignResultReceiver.REQUEST_FOR_DOWNLOADING_CAMPAIGNS, null);
+        }
     }
 
-    public void getDownloadingPendingFiles(ArrayList<String> list,String status,String inProgressCampaignName,int progress,String errorMsg,int position,int totalFiles,String resourceName)
-    {
-        try
-        {
-            for (String campaignName:list)
-            {
-            if (campHashMap.containsKey(campaignName)) {
-                GCModel gcModel = campHashMap.get(campaignName);
+    public void getDownloadingPendingFiles(ArrayList<String> list, String status, String inProgressCampaignName, int progress, String errorMsg, int position, int totalFiles, String resourceName) {
+        try {
+            for (String campaignName : list) {
+                if (campHashMap.containsKey(campaignName)) {
+                    GCModel gcModel = campHashMap.get(campaignName);
 
-                gcModel.initProgressInfo();
-            }
+                    gcModel.initProgressInfo();
+                }
             }
 
             GCModel progressGcModel = campHashMap.get(inProgressCampaignName);
 
-            if(status.equalsIgnoreCase(DownloadCampaignsService.ERROR)) {
+            if (status.equalsIgnoreCase(DownloadCampaignsService.ERROR)) {
                 progressGcModel.updateDownloadErrorProgressInfo(errorMsg);
 
-            }else {
-                progressGcModel.updateDownloadProgress(progress,position,totalFiles,resourceName);
+            } else {
+                progressGcModel.updateDownloadProgress(progress, position, totalFiles, resourceName);
             }
             campaignsAdapter.notifyDataSetChanged();
 
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     //handle skip settings
-    private void handleSkipSetting(String campaignName,boolean isSkip,int position) throws Exception
-    {
-        File file=new File(new DownloadMediaHelper().getAdsKiteNearByDirectory(context)+"/"+campaignName+".txt");
-        if(file!=null && file.exists())
-        {
-            String resourcesString = new MediaModel().readTextFile(file.getPath());
-            JSONObject mediaJsonObject = new JSONObject(resourcesString);
-            mediaJsonObject.put(getString(R.string.is_skip_json_key),isSkip);
-
-            String data = mediaJsonObject.toString();
-
-            FileOutputStream out = new FileOutputStream(file, false);
-            byte[] contents = data.getBytes();
-            out.write(contents);
-            out.flush();
-            out.close();
-
-
-        }
-        else
-        {
-            Log.d("Handle media settings","No media file found - "+campaignName);
-        }
-    }
-
-    private boolean isSkipCampaign(File file)
-    {
-        try {
-            if(file.exists()) {
-                String resourcesString = new MediaModel().readTextFile(file.getPath());
-
-                if(resourcesString!=null) {
-                    JSONObject mediaJsonObject = new JSONObject(resourcesString);
-
-                    if (mediaJsonObject.has(getString(R.string.is_skip_json_key))) {
-                        return mediaJsonObject.getBoolean(getString(R.string.is_skip_json_key));
-                    } else {
-                        return false;
-                    }
-                }else
-                {
-                    return false;
-                }
-            }else
-            {
-                return false;
-            }
-
-        }catch (Exception e)
-        {
-            e.printStackTrace();
-            return false;
-        }
+    private void handleSkipSetting(String campaignName, boolean isSkip, int position) throws Exception {
+        CampaignsDBModel.updateSkip(context, campaignName, isSkip == true ? 1 : 0);
 
     }
+
 
     //display busy dialog
-    private void displayBusyDialog(String busyMsg)
-    {
+    private void displayBusyDialog(String busyMsg) {
         busyDialog = new ProgressDialog(context);
         busyDialog.setMessage(busyMsg);
         busyDialog.setCanceledOnTouchOutside(false);
@@ -1052,8 +1007,7 @@ public class DownloadCampaigns extends Activity
     }
 
     //dismiss busy dialog
-    private void dismissBusyDialog()
-    {
+    private void dismissBusyDialog() {
         try {
             if (busyDialog != null && busyDialog.isShowing()) {
                 busyDialog.dismiss();
@@ -1063,78 +1017,65 @@ public class DownloadCampaigns extends Activity
         }
     }
 
-    private void campaignsFilter()
-    {
-       Button searchBtn=findViewById(R.id.search_btn);
-       final EditText searchET=findViewById(R.id.search_et);
+    private void campaignsFilter() {
+        Button searchBtn = findViewById(R.id.search_btn);
+        final EditText searchET = findViewById(R.id.search_et);
         //searchBtn.setText("Apply");
         searchBtn.setText("Apply");
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
-                String searchString=searchET.getText().toString();
-                if(searchString!=null && searchString.length()>0)
-                {
-                    new FilteredCampaignsTask().execute(searchString,null,null);
-                }else 
-                {
+            public void onClick(View v) {
+                String searchString = searchET.getText().toString();
+                if (searchString != null && searchString.length() > 0) {
+                    new FilteredCampaignsTask().execute(searchString, null, null);
+                } else {
                     Toast.makeText(context, "Please enter text to filter campaigns", Toast.LENGTH_SHORT).show();
                 }
-                
+
             }
         });
-        
+
     }
 
-    private class FilteredCampaignsTask extends AsyncTask<String, Void, Void>
-    {
-       private String  filterString;
-       private ArrayList<GCModel> filterList=new ArrayList<>();
+    private class FilteredCampaignsTask extends AsyncTask<String, Void, Void> {
+        private String filterString;
+        private ArrayList<GCModel> filterList = new ArrayList<>();
+
         @Override
-        protected void onPreExecute()
-        {
+        protected void onPreExecute() {
             displayBusyDialog("Please wait...");
         }
 
         @Override
-        protected Void doInBackground(String...params)
-        {
-            filterString=params[0];
-            try
-            {
-                for(String campaignName:campHashMap.keySet())
-                {
-                    if((campaignName.toLowerCase()).contains(filterString))
-                    {
+        protected Void doInBackground(String... params) {
+            filterString = params[0];
+            try {
+                for (String campaignName : campHashMap.keySet()) {
+                    if ((campaignName.toLowerCase()).contains(filterString)) {
                         filterList.add(campHashMap.get(campaignName));
                     }
                 }
 
-            } catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
-                Log.i("SkipAllCampaignsTask","Exception:"+e.toString());
+                Log.i("SkipAllCampaignsTask", "Exception:" + e.toString());
             }
 
             return null;
         }
 
         @Override
-        protected void onPostExecute(Void result)
-        {
+        protected void onPostExecute(Void result) {
             dismissBusyDialog();
-            if (filterList != null && filterList.size() > 0)
-            {
+            if (filterList != null && filterList.size() > 0) {
                 disableNoCampaignsFound();
-                campaignsAdapter=new CampaignsAdapter(filterList);
+                campaignsAdapter = new CampaignsAdapter(filterList);
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context, GridLayoutManager.VERTICAL, false);
                 recyclerView.setLayoutManager(mLayoutManager);
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
                 recyclerView.setAdapter(campaignsAdapter);
                 requestForCurrentDownloadingFiles();
-            } else
-            {
+            } else {
                 enableNoCampaignsFound();
             }
 
@@ -1142,77 +1083,40 @@ public class DownloadCampaigns extends Activity
 
     }
 
-
-
-    private void skipAllCampaignsService(boolean skipFlag)
-    {
-        try
-        {
-                skipCampaignsReceiver = new SkipCampaignsReceiver(new Handler());
-                Intent startIntent = new Intent(context, SkipAllCampaignsService.class);
-                startIntent.putExtra("receiver", skipCampaignsReceiver);
-                startIntent.putExtra("skipFlag",skipFlag);
-
-                if(skipFlag)
-                {
-                    startIntent.putExtra("campaignList",campList);
-                }
-
-                startIntent.putExtra("skipCampsList",skipCampsList);
-                startService(startIntent);
-
-                displayBusyDialog("Please wait...");
-
-        }catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-    }
-
-    private class SkipCampaignsReceiver extends ResultReceiver
-    {
-        public SkipCampaignsReceiver(Handler handler)
-        {
+    private class SkipCampaignsReceiver extends ResultReceiver {
+        public SkipCampaignsReceiver(Handler handler) {
             super(handler);
         }
 
         @Override
-        protected void onReceiveResult(int resultCode, Bundle resultData)
-        {
-            switch (resultCode)
-            {
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            switch (resultCode) {
                 case SkipAllCampaignsService.SKIP_ALL_CAMPAIGNS_ACTION:
 
                     dismissBusyDialog();
-                    try
-                    {
-                    if(resultData!=null)
-                    {
-                        Log.i("onReceiveResult","SkipCampaignsReceiver:resultData"+resultData.toString());
-                        if(resultData.getBoolean("flag"))
-                        {
-                             boolean skipFlag=resultData.getBoolean("skipFlag",false);
-                                if(skipFlag)
-                                {
-                                    skipCampsList=(ArrayList<String>)resultData.getSerializable("skipCampsList");
-                                }else
-                                {
+                    try {
+                        if (resultData != null) {
+
+                            if (resultData.getBoolean("flag")) {
+                                boolean skipFlag = resultData.getBoolean("skipFlag", false);
+                                if (skipFlag) {
+                                    skipCampsList = (ArrayList<String>) resultData.getSerializable("skipCampsList");
+                                } else {
                                     skipCampsList.clear();
                                 }
-                            campaignsAdapter.notifyDataSetChanged();
 
-                        }else
-                        {
-                            Toast.makeText(context, resultData.getString("status"), Toast.LENGTH_SHORT).show();
+                                setISkipALLSP(skipFlag);
+
+                                campaignsAdapter.notifyDataSetChanged();
+
+                            } else {
+                                Toast.makeText(context, resultData.getString("status"), Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(context, "Unable to get do Skip operation, please try again later", Toast.LENGTH_SHORT).show();
                         }
-                    }else
-                    {
-                        Toast.makeText(context, "Unable to get do Skip operation, please try again later", Toast.LENGTH_SHORT).show();
-                    }
 
-                    }catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         e.printStackTrace();
                         Toast.makeText(context, "Unable to get do Skip operation, please try again later", Toast.LENGTH_SHORT).show();
                     }
@@ -1224,6 +1128,111 @@ public class DownloadCampaigns extends Activity
 
     }
 
+    private void setISkipALLSP(boolean isSkip) {
+
+        SharedPreferences sp = new SharedPreferenceModel().getDeviceSharedPreference(context);
+        SharedPreferences.Editor editor = sp.edit();
+
+        editor.putBoolean(getString(R.string.skip_all_sp), isSkip);
+        editor.commit();
 
 
+    }
+
+    private boolean isSkipAllSP() {
+
+        SharedPreferences sp = new SharedPreferenceModel().getDeviceSharedPreference(context);
+
+        return sp.getBoolean(getString(R.string.skip_all_sp), false);
+    }
+
+    private void setAndHandleSyncSettings(Menu menu) {
+        final SharedPreferences settingsSp = getSharedPreferences(getString(R.string.settings_sp), MODE_PRIVATE);
+        MenuItem item = menu.findItem(R.id.skip_all);
+
+        final Switch mySwitch = item.getActionView().findViewById(R.id.sync_switch_btn);
+
+        mySwitch.setChecked(settingsSp.getBoolean(getString(R.string.is_auto_download_campaign), DEFAULT_AUTO_DOWNLOAD__STATUS));
+        mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                updateSyncSettings(isChecked, settingsSp);
+            }
+        });
+    }
+
+    private void updateSyncSettings(boolean isON, SharedPreferences settingsSp) {
+
+
+        SharedPreferences.Editor editor = settingsSp.edit();
+
+        editor.putBoolean(getString(R.string.is_auto_download_campaign), isON);
+        if (editor.commit()) {
+            if (isON) {
+
+                if (User.isPlayerRegistered(context)) {
+                    downloadFromServer();
+                    startService(new Intent(context, AutoDownloadCampaignTriggerService.class));
+
+                } else {
+                    Toast.makeText(context, "Player not registered", Toast.LENGTH_SHORT).show();
+                }
+
+
+            } else {
+
+                AutoDownloadCampaignModel.stopAutoCampaignDownloadService(context);
+                Toast.makeText(context, "Switched off successfully", Toast.LENGTH_SHORT).show();
+
+            }
+        } else {
+            Toast.makeText(context, "Unable to save settings", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private class PrepareAndDisplayCampaigns extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        public void onPreExecute() {
+            super.onPreExecute();
+            clearListAndNotify();
+            enableProgressBar();
+        }
+
+        public Void doInBackground(Void... params) {
+
+            Cursor campaigns = CampaignsDBModel.getCampaigns(context);
+            if (campaigns != null && campaigns.moveToNext()) {
+                do {
+                    GCModel gcModel = new GCModel(campaigns);
+                    campList.add(gcModel);
+                    campHashMap.put(gcModel.getCampaignName(), gcModel);
+                } while (campaigns.moveToNext());
+            }
+
+            return null;
+        }
+
+        public void onPostExecute(Void result) {
+            disableProgressBar();
+            campaignsDataRefresh();
+        }
+    }
+
+    private void clearListAndNotify() {
+        campList.clear();
+        campHashMap.clear();
+        campaignsAdapter.notifyDataSetChanged();
+
+    }
+
+    private void checkAndIssueSyncOverrideWarn()
+    {
+        SharedPreferences settingsSp = getSharedPreferences(getString(R.string.settings_sp), MODE_PRIVATE);
+        if(settingsSp.getBoolean(getString(R.string.is_auto_download_campaign), DEFAULT_AUTO_DOWNLOAD__STATUS))
+        {
+            Toast.makeText(context, "Dear user, please switch off the sync , or this will override the skip setting", Toast.LENGTH_SHORT).show();
+        }
+
+    }
 }

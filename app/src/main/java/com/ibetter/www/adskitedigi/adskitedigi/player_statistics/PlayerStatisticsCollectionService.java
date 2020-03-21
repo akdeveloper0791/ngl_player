@@ -103,6 +103,7 @@ public class PlayerStatisticsCollectionService extends Service implements Player
             {
 
                 JSONArray jsonArray = new JSONArray();
+
                 do {
                     String campaignName = cursor.getString(cursor.getColumnIndex(CampaignReportsDBModel.CAMPAIGNS_REPORTS_TABLE_CAMPAIGN_NAME));
                     long duration = cursor.getLong(cursor.getColumnIndex(CampaignReportsDBModel.CAMPAIGNS_REPORTS_TABLE_TOTAL_DURATION));

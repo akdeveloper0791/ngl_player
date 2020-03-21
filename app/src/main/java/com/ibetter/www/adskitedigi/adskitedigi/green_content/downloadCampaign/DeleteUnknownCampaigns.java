@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.ibetter.www.adskitedigi.adskitedigi.R;
-import com.ibetter.www.adskitedigi.adskitedigi.database.CampaignMediaTable;
 import com.ibetter.www.adskitedigi.adskitedigi.display_local_media_folder.DisplayLocalFolderAds;
 import com.ibetter.www.adskitedigi.adskitedigi.display_local_media_folder.receiver.ActionReceiver;
 import com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.model.GCModel;
@@ -92,7 +91,8 @@ public class DeleteUnknownCampaigns extends IntentService {
 
                     for(String fileString:dataList)
                     {
-                        if(CampaignMediaTable.canDeleteMedia(context,serverId,fileString)) {
+                        //if(CampaignMediaTable.canDeleteMedia(context,serverId,fileString))
+                        {
                             //  Log.d("PreviewCampaign","deleted campaign file:"+fileString);
                             File resourceFile = new File(CampaignModel.getAdsKiteNearByDirectory(context) + File.separator + fileString);
 

@@ -1,24 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
    >
     <item
         android:id="@+id/skip_all"
         android:title="Skip All"
         android:visible="true"
-        android:showAsAction="always"
+        app:showAsAction="always"
         android:actionLayout="@layout/switch_layout"/>
+
+   <!-- <item
+        android:id="@+id/sync_setting"
+        android:title="Sync"
+        android:visible="true"
+        android:showAsAction="always"
+        android:actionLayout="@layout/sync_switch_layout"/> -->
 
     <item
         android:id="@+id/search"
         android:icon="@drawable/ic_search"
         android:title="Search"
         android:visible="false"
-        android:showAsAction="always"/>
+        app:showAsAction="always"/>
     <item
         android:id="@+id/filter"
         android:icon="@drawable/ic_filter"
         android:title="Filter"
-        android:showAsAction="always" />
+        app:showAsAction="always" />
 
 
     <item
@@ -26,5 +34,5 @@
         android:icon="@drawable/ic_app_profile"
         android:title="Profile"
         android:visible="false"
-        android:showAsAction="always" />
+        app:showAsAction="always" />
 </menu>

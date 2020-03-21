@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
@@ -57,11 +58,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
 import com.ibetter.www.adskitedigi.adskitedigi.DisplayAdsBase;
 import com.ibetter.www.adskitedigi.adskitedigi.R;
+import com.ibetter.www.adskitedigi.adskitedigi.SignageServe;
 import com.ibetter.www.adskitedigi.adskitedigi.accessibility.HandleKeyCommandsUpdateReceiver;
 import com.ibetter.www.adskitedigi.adskitedigi.bg_audio.BackGroundAudioHandler;
 import com.ibetter.www.adskitedigi.adskitedigi.database.CampaignReportsDBModel;
@@ -79,6 +90,7 @@ import com.ibetter.www.adskitedigi.adskitedigi.model.DeviceModel;
 import com.ibetter.www.adskitedigi.adskitedigi.model.NetworkModel;
 import com.ibetter.www.adskitedigi.adskitedigi.model.SharedPreferenceModel;
 import com.ibetter.www.adskitedigi.adskitedigi.model.User;
+import com.ibetter.www.adskitedigi.adskitedigi.model.Utility;
 import com.ibetter.www.adskitedigi.adskitedigi.model.Validations;
 import com.ibetter.www.adskitedigi.adskitedigi.multi_region.MultiRegionSupport;
 import com.ibetter.www.adskitedigi.adskitedigi.player_statistics.PlayerStatisticsCollectionModel;
@@ -133,7 +145,7 @@ import static com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCamp
 
 
 public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClickListener,
-       TextToSpeech.OnInitListener, MediaPlayer.OnPreparedListener,MediaPlayer.OnErrorListener, CameraDialog.CameraDialogParent, CameraViewInterface.Callback {
+       TextToSpeech.OnInitListener, MediaPlayer.OnPreparedListener,MediaPlayer.OnErrorListener, CameraDialog.CameraDialogParent, CameraViewInterface.Callback{
 
     private Context context;
     private DisplayLocalFolderAdsModel displayLocalFolderAdsModel;
@@ -142,7 +154,7 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
     private int stopPosition;
     public GestureDetector mDetector;
     private RelativeLayout addLocalScheduleLayout;
-    protected MediaInfo mediaInfo;
+    public MediaInfo mediaInfo;
     public static boolean isServiceRunning = false;
     private boolean isPriorityTaskPlaying = false;
 
@@ -162,6 +174,7 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
     private static final int SM_ANNOUNCEMENT = 1;
     protected static final int INTERACTIVE_FEED_BACK_FORM = 2;
     private static final int TTS_ACTION = 3;
+    private final static int REQUEST_CHECK_SETTINGS = 4;
 
     private static boolean isFromAnnouncement = false;
     private MediaPlayer mediaPlayer;
@@ -198,6 +211,12 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
 
     protected Timer rssFeedsTimer;
     protected Vector<Long> runningFeeds = new Vector<>(5);
+
+    private boolean isActivityRestarted = false;
+    //flag indicates whether the campaign playing is taken from application context or not
+    public boolean isResumePlaying = false;
+
+
 
     private UVCCameraHelper.OnMyDevConnectListener listener = new UVCCameraHelper.OnMyDevConnectListener()
     {
@@ -323,6 +342,7 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
         super.onCreate(savedInstanceState);
 
         isServiceRunning = true;
+        isActivityRestarted = true;
 
         context = DisplayLocalFolderAds.this;
 
@@ -341,7 +361,7 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
 
         registerUpdatesFromReceiver();
 
-        videoViewListener();
+        setVideoViewListeners(displayLocalFolderAdsModel.getDisplayVideoView());
 
         playAds(true);
 
@@ -351,7 +371,7 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
 
         userMetricsTask();
 
-
+      //  checkAndEnableHotSpot();
     }
 
     @Override
@@ -422,15 +442,6 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
         finish();
     }
 
-    //check and display add local schedule layout
-    private void displayAddLocalScheduleLayout() {
-
-        addLocalScheduleLayout.setVisibility(View.VISIBLE);
-
-        findViewById(R.id.add_local_schedules_button).setVisibility(View.GONE);
-        findViewById(R.id.add_schedule_tv).setVisibility(View.GONE);
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -480,30 +491,14 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
     }
 
 
-    //on completion video listener for videoview
-    private void videoViewListener() {
 
-        displayLocalFolderAdsModel.getDisplayVideoView().setOnErrorListener(new MediaPlayer.OnErrorListener() {
+
+    public void setVideoViewListeners(VideoView videoView)
+    {
+
+        videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
-
-
-                /*switch (what)
-                {
-
-                    case MediaPlayer.MEDIA_ERROR_UNKNOWN:
-                        Log.i("error", "inside video view listener media error unknown ");
-                        mediaErrorExtra(mp, extra);
-                        break;
-
-                    case MediaPlayer.MEDIA_ERROR_SERVER_DIED:
-                        Log.i("error", "inside video view listener media error server died");
-                        mediaErrorExtra(mp, extra);
-                        break;
-
-                }
-
-                return false;*/
 
                 Toast.makeText(context, "Error in playing video " + what, Toast.LENGTH_SHORT).show();
                 playNextAd();
@@ -513,7 +508,7 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
         });
 
 
-        displayLocalFolderAdsModel.getDisplayVideoView().setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
                 //check and pause any background audio
@@ -522,10 +517,9 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
             }
         });
 
-        displayLocalFolderAdsModel.getDisplayVideoView().setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
-
 
                 if (isServiceRunning) {
                     // Log.i("Videoview","inside on completion listener service running");
@@ -545,38 +539,18 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
 
             }
         });
-
     }
 
 
-    private void mediaErrorExtra(MediaPlayer mp, int extra) {
-        switch (extra) {
-            case MediaPlayer.MEDIA_ERROR_IO:
 
-                if (!mp.isPlaying()) {
-                    Integer currentposition = displayLocalFolderAdsModel.getDisplayVideoView().getCurrentPosition();
-                    if (currentposition != null) {
-                        Log.i("c" + "urrentpos", Integer.toString(currentposition));
-                    }
-
-                }
-                break;
-            case MediaPlayer.MEDIA_ERROR_MALFORMED:
-                Log.i("error extra", "media error malformed");
-                break;
-            case MediaPlayer.MEDIA_ERROR_UNSUPPORTED:
-                Log.i("error extra", "media error unsupported");
-                break;
-            case MediaPlayer.MEDIA_ERROR_TIMED_OUT:
-                Log.i("error extra", "media error timed out");
-                break;
-        }
-    }
 
     protected void displayAd(MediaInfo mediaInfo) {
         try {
             Log.i("mediaIn getMediaName()", mediaInfo.getMediaName());
-
+            //check whehter is there any previous stopped campaign or not if exist play that
+            if(checkAndResumePlayCampaign()) {
+                return;
+            }
             String mediaType = mediaInfo.getMediaType();
 
             if (mediaType != null) {
@@ -593,6 +567,10 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
             } else {
                 displayImageView(mediaInfo.getPathname());
             }
+
+            SignageServe.lasMediaPlayedPosition = prevPosition;
+            SignageServe.saveLastMediaPlayedToSP(mediaInfo, prevPosition);
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -965,13 +943,25 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
             new DisplayDebugLogs(context).execute("\nonResume:Exception"+e.toString());
         }
 
-
-
     }
 
     @Override
     public void onPause()
     {
+
+        if(mediaInfo != null && mediaInfo.getSingleVideoRegId() == Constants.SINGLE_VIDEO_REGION_VIDEO_VIEW_ID) {
+            VideoView currentVideoView = findViewById(Constants.SINGLE_VIDEO_REGION_VIDEO_VIEW_ID);
+            if(currentVideoView != null && currentVideoView.getVisibility() == View.VISIBLE) {
+                mediaInfo.setSingleVideoRegPausedAt(currentVideoView.getCurrentPosition());
+            }
+        }
+
+        SignageServe.lasMediaPlayedPosition = prevPosition;
+        SignageServe.saveLastMediaPlayedToSP(mediaInfo, prevPosition);
+
+
+
+
         removeActionReceiver();
 
         try {
@@ -1137,75 +1127,15 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
     public void onBackPressed() {
         VideoView videoView = displayLocalFolderAdsModel.getDisplayVideoView();
         videoView.pause();
-
         finish();
     }
 
 
-    private class PathFileObserver extends FileObserver {
-        static final String TAG = "FILEOBSERVER";
-        /**
-         * should be end with File.separator
-         */
-        String rootPath;
-        static final int mask = (FileObserver.CREATE |
-                FileObserver.DELETE |
-                FileObserver.DELETE_SELF |
-                FileObserver.MODIFY |
-                FileObserver.MOVED_FROM |
-                FileObserver.MOVED_TO |
-                FileObserver.MOVE_SELF);
-
-        public PathFileObserver(String root) {
-            super(root, mask);
-
-            if (!root.endsWith(File.separator)) {
-                root += File.separator;
-            }
-            rootPath = root;
-        }
-
-        public void onEvent(int event, String path) {
-
-            Log.d(TAG, "INDSIE EVENT"
-                    + path);
-
-            switch (event) {
-
-                case FileObserver.CREATE:
-                    Log.d(TAG, "CREATE:" + rootPath + path);
-                    break;
-                case FileObserver.DELETE:
-                    Log.d(TAG, "DELETE:" + rootPath + path);
-                    break;
-                case FileObserver.DELETE_SELF:
-                    Log.d(TAG, "DELETE_SELF:" + rootPath + path);
-                    break;
-                case FileObserver.MODIFY:
-                    Log.d(TAG, "MODIFY:" + rootPath + path);
-                    break;
-                case FileObserver.MOVED_FROM:
-                    Log.d(TAG, "MOVED_FROM:" + rootPath + path);
-                    break;
-                case FileObserver.MOVED_TO:
-                    Log.d(TAG, "MOVED_TO:" + path);
-                    break;
-                case FileObserver.MOVE_SELF:
-                    Log.d(TAG, "MOVE_SELF:" + path);
-                    break;
-                default:
-                    // just ignore
-                    break;
-            }
-        }
-
-        public void close() {
-            super.finalize();
-        }
-    }
-
+    @Override
     public void onDestroy()
     {
+
+
 
         isServiceRunning = false;
 
@@ -1999,7 +1929,7 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
     }
 
     //check and play image file
-    private void checkAndPlayVideoFileFromTextFile(JSONObject jsonObject) throws Exception {
+    public void checkAndPlayVideoFileFromTextFile(JSONObject jsonObject) throws Exception {
         //get resource file
         String imageName = jsonObject.getString(getString(R.string.media_resource_json_key));
         String dir = new User().getUserPlayingFolderModePath(displayLocalFolderAdsModel.getContext());
@@ -2155,6 +2085,12 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
 
             case TTS_ACTION:
                 isRelaunchAppOnStop = true;
+                break;
+
+            case REQUEST_CHECK_SETTINGS:
+                if(resultCode == RESULT_OK) {
+                    NetworkModel.changeWifiHotspotState(context,true);
+                }
                 break;
         }
     }
@@ -2429,7 +2365,16 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
                 }
             }
 
+            if((multiRegionProp!=null && multiRegionProp.containsKey(getString(R.string.set_timer)))) {
+                boolean isSetTimer = (boolean) multiRegionProp.get(getString(R.string.set_timer));
+                if(isSetTimer==false){
+                    return;
+                }
+            }
+
             webViewDisplayListeners(getMediaDuration(mediaInfo));
+
+
 
         }
     }
@@ -2450,7 +2395,7 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
     public void checkAndAutoScrollSettings(int webViewId, String url) {
 
         if (displayLocalFolderAdsModel != null && displayLocalFolderAdsModel.canScrollURL(url)) {
-            Log.d("AutoScroll","Inside webview auto scroll task settings can play true");
+
             SharedPreferences settingsSP = getSharedPreferences(getString(R.string.settings_sp), MODE_PRIVATE);
 
             if ( webViewId > 0 && settingsSP.getBoolean(getString(R.string.auto_scroll_web_view_sp), URLSettingsAct.DEFAULT_AUTO_SCROLL_SETTING))
@@ -3517,7 +3462,80 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
         thread.start();
     }
 
+    private void checkAndEnableHotSpot(){
+        if(Utility.canEnableHotSpot(context)){
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                checkForLocationSettingsAndSaveHotSpot();
+            }else{
+                NetworkModel.changeWifiHotspotState(context,true);
+            }
+        }
+    }
+
+    private void checkForLocationSettingsAndSaveHotSpot(){
+        final LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setInterval(10000);
+        locationRequest.setFastestInterval(10000);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(locationRequest);
 
 
+        SettingsClient client = LocationServices.getSettingsClient(this);
+        Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
+
+        task.addOnSuccessListener(this, new OnSuccessListener<LocationSettingsResponse>() {
+            @Override
+            public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                // All location settings are satisfied. The client can initialize
+                // location requests here.
+                NetworkModel.changeWifiHotspotState(context,true);
+
+            }
+        });
+
+        task.addOnFailureListener(this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                if (e instanceof ResolvableApiException) {
+                    // Location settings are not satisfied, but this can be fixed
+                    // by showing the user a dialog.
+                    try {
+                        // Show the dialog by calling startResolutionForResult(),
+                        // and check the result in onActivityResult().
+                        ResolvableApiException resolvable = (ResolvableApiException) e;
+                        resolvable.startResolutionForResult(DisplayLocalFolderAds.this,
+                                REQUEST_CHECK_SETTINGS);
+                    } catch (IntentSender.SendIntentException sendEx) {
+                        // Ignore the error.
+                    }
+                }else
+                {
+                    Toast.makeText(context,"Unable to enable location"+e.getMessage(),Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            }
+        });
+    }
+
+    //return is resume from last played position
+    private boolean checkAndResumePlayCampaign() {
+        if(isActivityRestarted) {
+            SignageServe.initLastMediaPlayed();
+            //make it false
+            isActivityRestarted = false;
+            //check for last played campaign if it is not zero set the previous position to last played position and
+            //call playNext add
+            if(SignageServe.lasMediaPlayedPosition >= 1 && processingFiles!=null  && processingFiles.size() >= SignageServe.lasMediaPlayedPosition) {
+                //call play add
+                prevPosition = (SignageServe.lasMediaPlayedPosition-1);
+                playAds(false);
+                isResumePlaying = true;
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

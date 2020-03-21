@@ -1,6 +1,24 @@
 package com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.model;
+import android.database.Cursor;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+
+import static com.ibetter.www.adskitedigi.adskitedigi.database.CampaignsDBModel.CAMPAIGNS_TABLE_CAMPAIGN_NAME;
+import static com.ibetter.www.adskitedigi.adskitedigi.database.CampaignsDBModel.CAMPAIGNS_TABLE_CAMP_SIZE;
+import static com.ibetter.www.adskitedigi.adskitedigi.database.CampaignsDBModel.CAMPAIGNS_TABLE_CAMP_TYPE;
+import static com.ibetter.www.adskitedigi.adskitedigi.database.CampaignsDBModel.CAMPAIGNS_TABLE_CREATED_DATE;
+import static com.ibetter.www.adskitedigi.adskitedigi.database.CampaignsDBModel.CAMPAIGNS_TABLE_IS_SKIP;
+import static com.ibetter.www.adskitedigi.adskitedigi.database.CampaignsDBModel.CAMPAIGNS_TABLE_SAVE_PATH;
+import static com.ibetter.www.adskitedigi.adskitedigi.database.CampaignsDBModel.CAMPAIGNS_TABLE_SERVER_ID;
+import static com.ibetter.www.adskitedigi.adskitedigi.database.CampaignsDBModel.CAMPAIGNS_TABLE_SOURCE;
+import static com.ibetter.www.adskitedigi.adskitedigi.database.CampaignsDBModel.CAMPAIGNS_TABLE_STOR_LOCATION;
+import static com.ibetter.www.adskitedigi.adskitedigi.database.CampaignsDBModel.CAMPAIGNS_TABLE_UPDATED_DATE;
+import static com.ibetter.www.adskitedigi.adskitedigi.database.CampaignsDBModel.CAMPAIGNS_TABLE_UPLOADED_BY;
+import static com.ibetter.www.adskitedigi.adskitedigi.database.CampaignsDBModel.CAMPAIGN_TABLE_CAMPAIGN_INFO;
+import static com.ibetter.www.adskitedigi.adskitedigi.database.CampaignsDBModel.CAMPAIGN_TABLE_IS_CAMPAIGN_DOWNLOADED;
+import static com.ibetter.www.adskitedigi.adskitedigi.database.CampaignsDBModel.CAMPAIGN_TABLE_SCHEDULE_TYPE;
+import static com.ibetter.www.adskitedigi.adskitedigi.database.CampaignsDBModel.LOCAL_ID;
 
 public class GCModel implements Serializable
 {
@@ -18,6 +36,33 @@ public class GCModel implements Serializable
     public static final  String REMOVE_PROGRESS="REMOVE_PROGRESS";
     public static final  String GET_DOWNLOADING_FILES="GET_DOWNLOADING_FILES";
     public static final  String REMOVE_ALL_PROGRESS="REMOVE_ALL_PROGRESS";
+    public static final String DOWNLOAD_SUCCESS="DOWNLOAD_SUCCESS";
+    private boolean isDownloaded;
+
+    public GCModel(){
+
+    }
+
+    public GCModel(Cursor cursor){
+
+        //gcModel.setCreatedAt(campObject.getString("created_date"));
+        setCreatedAt(cursor.getString(cursor.getColumnIndex(CAMPAIGNS_TABLE_CREATED_DATE)));
+        setUpdatedAt(cursor.getString(cursor.getColumnIndex(CAMPAIGNS_TABLE_UPDATED_DATE)));
+        setStoreLocation(cursor.getInt(cursor.getColumnIndex(CAMPAIGNS_TABLE_STOR_LOCATION)));
+        setInfo(cursor.getString(cursor.getColumnIndex(CAMPAIGN_TABLE_CAMPAIGN_INFO)));
+        setCampaignName(cursor.getString(cursor.getColumnIndex(CAMPAIGNS_TABLE_CAMPAIGN_NAME)));
+        setSavePath(cursor.getString(cursor.getColumnIndex(CAMPAIGNS_TABLE_SAVE_PATH)));
+        setServerId(cursor.getLong(cursor.getColumnIndex(CAMPAIGNS_TABLE_SERVER_ID)));
+        setCampaignSize(cursor.getLong(cursor.getColumnIndex(CAMPAIGNS_TABLE_CAMP_SIZE)));
+        setCampaignType(cursor.getInt(cursor.getColumnIndex(CAMPAIGNS_TABLE_CAMP_TYPE)));
+
+        setCampaignUploadedBy(cursor.getLong(cursor.getColumnIndex(CAMPAIGNS_TABLE_UPLOADED_BY)));
+        setSource(cursor.getInt(cursor.getColumnIndex(CAMPAIGNS_TABLE_SOURCE)));
+        setIsSkip(cursor.getInt(cursor.getColumnIndex(CAMPAIGNS_TABLE_IS_SKIP)));
+        setScheduleType(cursor.getInt(cursor.getColumnIndex(CAMPAIGN_TABLE_SCHEDULE_TYPE)));
+        setIsDownloaded(cursor.getInt(cursor.getColumnIndex(CAMPAIGN_TABLE_IS_CAMPAIGN_DOWNLOADED)));
+        setCampaignLocalId(cursor.getInt(cursor.getColumnIndex(LOCAL_ID)));
+    }
 
     public String getCampaignName() {
         return campaignName;
@@ -114,6 +159,7 @@ public class GCModel implements Serializable
         }
 
     }
+
 
     public long getServerId() {
         return serverId;
@@ -269,5 +315,13 @@ public class GCModel implements Serializable
     public int getCampaignPriority()
     {
         return campaignPriority;
+    }
+
+    public void setIsDownloaded(int isDownloaded){
+        this.isDownloaded = (isDownloaded==1?true:false);
+    }
+
+    public boolean getIsDownloaded(){
+        return isDownloaded;
     }
 }

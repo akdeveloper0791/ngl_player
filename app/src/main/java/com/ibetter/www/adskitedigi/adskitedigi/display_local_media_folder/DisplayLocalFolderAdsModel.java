@@ -18,6 +18,7 @@ import android.view.animation.AnimationUtils;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -111,6 +112,10 @@ public class DisplayLocalFolderAdsModel
         setScrollText(null);
 
         setOverlayImageToLayout();
+
+        MediaController mediaController = new MediaController(context);
+        mediaController.setAnchorView(displayVideoView);
+        displayVideoView.setMediaController(mediaController);
 
     }
 

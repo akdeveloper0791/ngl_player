@@ -2,12 +2,14 @@ package com.ibetter.www.adskitedigi.adskitedigi;
 
 import android.app.Service;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.multidex.MultiDexApplication;
 import android.support.v4.util.SimpleArrayMap;
 
 import com.google.android.gms.nearby.connection.Payload;
-
-import java.util.HashSet;
+import com.google.gson.Gson;
+import com.ibetter.www.adskitedigi.adskitedigi.display_local_media_folder.MediaInfo;
+import com.ibetter.www.adskitedigi.adskitedigi.model.Constants;
 
 /**
  * Created by vineethkumar0791 on 28/03/18.
@@ -36,8 +38,8 @@ public class SignageServe extends MultiDexApplication
 
     public static  Payload streamingPayload;
 
-    public static long eventTime=0;
-
+    public static int lasMediaPlayedPosition = 0;
+    public static MediaInfo lastMediaPlayed = null;
 
     @Override public void onCreate() {
         super.onCreate();
@@ -73,6 +75,31 @@ public class SignageServe extends MultiDexApplication
         if(runningServices!=null && runningServices.containsKey(serviceName))
         {
             runningServices.remove(serviceName).stopSelf();
+        }
+    }
+
+    public static void initLastMediaPlayed() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.settings_sp),Context.MODE_PRIVATE);
+        String mediaInfoJson = sharedPreferences.getString(Constants.LAST_MEDIA_PLAYED_SP_KEY,null);
+        if(mediaInfoJson != null){
+            try{
+                lastMediaPlayed = new Gson().fromJson(mediaInfoJson,MediaInfo.class);
+                lasMediaPlayedPosition = sharedPreferences.getInt(Constants.LAST_MEDIA_PLAYED_POSITION_SP_KEY,0);
+            }catch (Exception e) {
+
+            }
+        }
+    }
+
+    public static void saveLastMediaPlayedToSP(MediaInfo mediaInfo, int lasMediaPlayedPosition) {
+        lastMediaPlayed = mediaInfo;
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.settings_sp),Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        String mediaJson = new Gson().toJson(mediaInfo);
+        if(mediaInfo != null){
+            editor.putString(Constants.LAST_MEDIA_PLAYED_SP_KEY, mediaJson);
+            editor.putInt(Constants.LAST_MEDIA_PLAYED_POSITION_SP_KEY,lasMediaPlayedPosition);
+            editor.apply();
         }
     }
 

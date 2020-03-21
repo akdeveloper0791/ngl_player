@@ -46,8 +46,6 @@ public class RegisterIOTDevice extends IntentService
     }
 
 
-
-
     @Override
     protected void onHandleIntent(Intent intent) {
 
@@ -58,8 +56,6 @@ public class RegisterIOTDevice extends IntentService
             {
                 receiver = intent.getParcelableExtra("receiver");
             }
-
-
 
             JSONObject jsonObject=new JSONObject();
             jsonObject.put("name",new DeviceModel().getDeviceModelName(context));

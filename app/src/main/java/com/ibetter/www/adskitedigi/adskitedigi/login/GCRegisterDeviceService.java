@@ -112,6 +112,7 @@ public class GCRegisterDeviceService extends IntentService {
                     JSONObject registerDataJSON = new JSONObject(registerData);
                     registerDataJSON.put("player_lat", deviceLocation.latitude);
                     registerDataJSON.put("player_lng", deviceLocation.longitude);
+                    Log.d("Register","Inside register service , register data "+registerDataJSON.toString());
                     registerData = registerDataJSON.toString();
                 }catch (JSONException ex)
                 {

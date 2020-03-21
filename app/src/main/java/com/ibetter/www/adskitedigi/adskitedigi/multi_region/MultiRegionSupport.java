@@ -24,6 +24,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +39,7 @@ import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
 import com.github.barteksc.pdfviewer.listener.OnRenderListener;
 import com.github.barteksc.pdfviewer.util.FitPolicy;
 import com.ibetter.www.adskitedigi.adskitedigi.R;
+import com.ibetter.www.adskitedigi.adskitedigi.SignageServe;
 import com.ibetter.www.adskitedigi.adskitedigi.display_local_media_folder.DisplayLocalFolderAds;
 import com.ibetter.www.adskitedigi.adskitedigi.display_local_media_folder.ReadExcelFile;
 import com.ibetter.www.adskitedigi.adskitedigi.model.Constants;
@@ -51,6 +53,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -79,7 +82,8 @@ public class MultiRegionSupport
 
     public synchronized HashMap<String,Object> processMultiRegionJSON(JSONArray regions)
     {
-       HashMap<String,Object> multiRegProperties = new HashMap<>(2);
+       HashMap<String,Object> multiRegProperties = new HashMap<>(4);
+        ArrayList<JSONObject> videoRegions = new ArrayList<>();
 
         for(int i=0;i<regions.length();i++)
         {
@@ -99,8 +103,9 @@ public class MultiRegionSupport
                  else if(type.equalsIgnoreCase(
                          activity.getString(R.string.app_default_video_name)))
                  {
-                     multiRegProperties =  addVideoRegion(info);
+                     videoRegions.add(info);
                      multiRegProperties.put(context.getString(R.string.has_video),true);
+
 
                  }else if(type.equalsIgnoreCase(
                          activity.getString(R.string.app_default_url_name)))
@@ -117,11 +122,26 @@ public class MultiRegionSupport
             }catch (JSONException e)
             {
                e.printStackTrace();
+            }catch (Exception e)
+            {
+                e.printStackTrace();
             }
+        }
+
+        try {
+            //check and add video regions
+            for (JSONObject info : videoRegions) {
+                multiRegProperties = addVideoRegion(info,(videoRegions.size() == 1));
+            }
+        }catch(Exception e)
+        {
+            e.printStackTrace();
         }
 
         return multiRegProperties;
     }
+
+
 
     //add image region
     private synchronized void addImageRegion(JSONObject info) throws JSONException
@@ -405,7 +425,7 @@ public class MultiRegionSupport
 
 
     //add video region
-    private HashMap<String,Object> addVideoRegion(final JSONObject info) throws JSONException
+    private HashMap<String,Object> addVideoRegion(final JSONObject info, final boolean isShowController) throws JSONException
     {
         HashMap<String,Object> multiRegProperties = new HashMap<>(1);
 
@@ -431,8 +451,25 @@ public class MultiRegionSupport
             parentLayout.addView(videoParentLayout);
 
             final VideoView videoView = new VideoView(context);
+            if(isShowController && activity instanceof DisplayLocalFolderAds)
+            {
+                MediaController mediaController = new MediaController(context);
+                mediaController.setAnchorView(videoView);
+                videoView.setMediaController(mediaController);
+                videoView.setId(Constants.SINGLE_VIDEO_REGION_VIDEO_VIEW_ID);
+
+                DisplayLocalFolderAds displayLocalFolderAds = (DisplayLocalFolderAds)activity;
+                displayLocalFolderAds.setVideoViewListeners(videoView);
+                if(displayLocalFolderAds.mediaInfo != null) {
+                    displayLocalFolderAds.mediaInfo.setSingleVideoRegId(Constants.SINGLE_VIDEO_REGION_VIDEO_VIEW_ID);
+                }
+
+                multiRegProperties.put(context.getString(R.string.set_timer),false);
+
+                Log.d("DisplayAds","Inside multi region support setting media controller");
+            }
              boolean isStretch = true;
-           boolean isRequestFocus = false;
+             boolean isRequestFocus = false;
 
             if(info.has(context.getString(R.string.multi_region_properties_json_key))) {
                final JSONObject properties = info.getJSONObject(context.getString(R.string.multi_region_properties_json_key));
@@ -443,13 +480,31 @@ public class MultiRegionSupport
                 }
                 isRequestFocus = true;
 
+
                 videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                     @Override
                     public void onPrepared(MediaPlayer mediaPlayer) {
 
                         try {
                             mediaPlayer.start();
-                            mediaPlayer.setLooping(true);
+
+                            if(activity != null && activity instanceof DisplayLocalFolderAds) {
+                                DisplayLocalFolderAds displayLocalFolderAds = (DisplayLocalFolderAds)activity;
+                                if(displayLocalFolderAds.isResumePlaying && SignageServe.lastMediaPlayed !=null
+                                && SignageServe.lastMediaPlayed.getSingleVideoRegPausedAt() > 0) {
+                                    //set is resume playing to false
+                                    displayLocalFolderAds.isResumePlaying = false;
+                                    //get last paused position
+                                    mediaPlayer.seekTo(SignageServe.lastMediaPlayed.getSingleVideoRegPausedAt());
+
+                                }
+                            }
+                            //mediaPlayer.se
+                            if(!isShowController)
+                            {
+                                mediaPlayer.setLooping(true);
+                            }
+
 
                             float volume = getVolumeStreamIndex(properties.getInt("volume"));
                             Log.d("AdskiteDigi","Inside video view properties "+volume);
@@ -462,6 +517,8 @@ public class MultiRegionSupport
                         }
                     }
                 });
+
+
 
 
             }
@@ -495,10 +552,6 @@ public class MultiRegionSupport
             {
                 videoView.start();
             }
-
-
-
-
 
         }
 

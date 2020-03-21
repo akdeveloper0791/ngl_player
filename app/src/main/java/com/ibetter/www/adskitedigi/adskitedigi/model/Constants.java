@@ -52,6 +52,21 @@ public class Constants
 
     public final static long LICENCE_AUTO_REFRESH_INTERVAL = 5*60*1000;//every five minutes
 
+    public final static boolean IS_ENABLE_HOT_SPOT_ALWAYS_SETTINGS_DEFAULT = false;
+
+    public final static int HOT_SPOT_ENABLE_SUCCESS_CODE = 200;
+
+    public final static int HOT_SPOT_ENABLE_FAILURE_UN_RECOVERABLE = 1;
+
+    public final static int REQUEST_LOCATION_CHECK_SETTINGS_GLOBAL = 99999;
+
+    public final static int HOT_SPOT_ENABLE_SUCCESS_UN_AVAILABLE = 2;
+
+    public final static int SINGLE_VIDEO_REGION_VIDEO_VIEW_ID = 11;
+
+    public final static String LAST_MEDIA_PLAYED_SP_KEY = "last_media_played_sp_key";
+    public final static String LAST_MEDIA_PLAYED_POSITION_SP_KEY = "LAST_MEDIA_PLAYED_POSITION_SP_KEY";
+
     //convert to long
     public static Long convertToLong(String value)
     {

@@ -77,6 +77,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+
+
         <activity android:name=".AppEntryClass">
 
             <intent-filter>
@@ -147,6 +149,7 @@
         <activity
             android:name=".settings.announcement_settings.AnnouncementSettings"
             android:theme="@style/DisplaySchedulesActionBarTheme" />
+
         <activity
             android:name=".settings.signage_manager_settings.SignageManagerAccessSettingsMain"
             android:theme="@style/SMAccessSettingsTheme" />
@@ -161,8 +164,10 @@
             android:theme="@style/Theme.AppCompat.Light" />
         <activity android:name=".settings.metrics_settings.MetricsSettingsActivity"
             android:theme="@style/Theme.AppCompat.Light"  />
+
         <activity android:name=".settings.auto_campaign_sync_settings.AutoCampaignDownloadSettings"
             android:theme="@style/Theme.AppCompat.Light"  />
+
         <activity android:name=".settings.player_statistics_settings.PlayerStatisticsSettings"
             android:theme="@style/Theme.AppCompat.Light"  />
 
@@ -265,6 +270,7 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver> <!-- receivers for monitoring internet changes -->
+
         <receiver android:name=".receiver.MonitorInternetChanges">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
@@ -333,7 +339,7 @@
         <activity
             android:name=".green_content.downloadCampaign.DownloadCampaigns"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/DisplaySchedulesActionBarTheme" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <service android:name=".green_content.downloadCampaign.download_services.FetchBasicCampInfoService" />
         <service android:name=".green_content.downloadCampaign.SkipAllCampaignsService" />
@@ -384,6 +390,7 @@
         <activity android:name=".location.SearchLocation" />
         <service android:name=".location.GetAddressFromLocation" />
         <service android:name=".location.SearchLocationBgService" />
+        <service android:name=".location.SearchUserLocationWithName" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

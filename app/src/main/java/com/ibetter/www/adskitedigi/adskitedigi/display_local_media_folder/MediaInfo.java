@@ -25,6 +25,9 @@ public class MediaInfo {
     private int scheduleType,campaignPriority,scheduleCampaignPriority;
     private long campaignStartTime,campaignEndTime,scheduleLocalId;
 
+    private long singleVideoRegId;
+    private int singleVideoRegPausedAt;
+
     public MediaInfo()
     {
         mediaResumedAt = Calendar.getInstance().getTimeInMillis();
@@ -287,4 +290,19 @@ public class MediaInfo {
         return associatedRule;
     }
 
+    public long getSingleVideoRegId() {
+        return singleVideoRegId;
+    }
+
+    public void setSingleVideoRegId(long singleVideoRegId) {
+        this.singleVideoRegId = singleVideoRegId;
+    }
+
+    public int getSingleVideoRegPausedAt() {
+        return singleVideoRegPausedAt;
+    }
+
+    public void setSingleVideoRegPausedAt(int singleVideoRegPausedAt) {
+        this.singleVideoRegPausedAt = singleVideoRegPausedAt;
+    }
 }

@@ -1,18 +1,16 @@
 package com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign;
 import android.app.IntentService;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.ResultReceiver;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import com.ibetter.www.adskitedigi.adskitedigi.R;
-import com.ibetter.www.adskitedigi.adskitedigi.download_media.DownloadMediaHelper;
+
+import com.ibetter.www.adskitedigi.adskitedigi.database.CampaignsDBModel;
 import com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.model.GCModel;
-import com.ibetter.www.adskitedigi.adskitedigi.model.MediaModel;
-import org.json.JSONObject;
-import java.io.File;
-import java.io.FileOutputStream;
+
 import java.util.ArrayList;
 
 public class SkipAllCampaignsService extends IntentService
@@ -40,6 +38,7 @@ public class SkipAllCampaignsService extends IntentService
         {
             campList=(ArrayList<GCModel>)intent.getSerializableExtra("campaignList");
         }
+
         skipCampsList=(ArrayList<String>)intent.getSerializableExtra("skipCampsList");
 
         skipAllCampaignsAction();
@@ -55,40 +54,34 @@ public class SkipAllCampaignsService extends IntentService
                 for(GCModel gcModel:campList)
                 {
                     String campaignName=gcModel.getCampaignName();
-                    File file=new File(new DownloadMediaHelper().getAdsKiteNearByDirectory(context)+"/"+campaignName+".txt");
-                    if(file!=null && file.exists())
+                    if(CampaignsDBModel.isCampaignExist(context,campaignName))
                     {
-                        if(skipCampsList!=null && !skipCampsList.contains(campaignName))
-                        {
-                            skipCampsList.add(campaignName);
-                        }
+                        ContentValues cv=new ContentValues();
+                        cv.put(CampaignsDBModel.CAMPAIGNS_TABLE_IS_SKIP,1);
+
+                        CampaignsDBModel.updateCampaignByName(cv,context, campaignName);
+
+                        skipCampsList.add(campaignName);
                     }
                     else
                     {
                         Log.i("SkipAllCampaignsTask","No media file found - "+campaignName);
                     }
+                    sendResponse(true,"All campaigns Un skipped ");
                 }
 
             }
-
-            if(skipCampsList!=null && skipCampsList.size()>0)
+            else if(skipCampsList!=null && skipCampsList.size()>0)
             {
                 for(String campaignName:skipCampsList)
                 {
-                    File file=new File(new DownloadMediaHelper().getAdsKiteNearByDirectory(context)+"/"+campaignName+".txt");
-                    if(file!=null && file.exists())
+                    if(CampaignsDBModel.isCampaignExist(context,campaignName))
                     {
-                        String resourcesString = new MediaModel().readTextFile(file.getPath());
-                        JSONObject mediaJsonObject = new JSONObject(resourcesString);
-                        mediaJsonObject.put(getString(R.string.is_skip_json_key),skipFlag);
+                        ContentValues cv=new ContentValues();
+                        cv.put(CampaignsDBModel.CAMPAIGNS_TABLE_IS_SKIP,0);
 
-                        String data = mediaJsonObject.toString();
+                        CampaignsDBModel.updateCampaignByName(cv,context, campaignName);
 
-                        FileOutputStream out = new FileOutputStream(file, false);
-                        byte[] contents = data.getBytes();
-                        out.write(contents);
-                        out.flush();
-                        out.close();
                     }
                     else
                     {
@@ -96,7 +89,7 @@ public class SkipAllCampaignsService extends IntentService
                     }
                 }
 
-                sendResponse(true,"All campaigns skipped ");
+                sendResponse(true,"All campaigns  skipped ");
 
             }else
             {
