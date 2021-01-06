@@ -49,10 +49,12 @@ public class GetCampaignInfoDbx extends Thread {
 
                 if(info!=null&&info.getSize()>0)
                 {
+                    Log.d("DownloadCampaign","Inside get campaign info campaign is dfound"+campaignName);
                     sendSuccessResponse();
                 }
                 else
                 {
+                    Log.d("DownloadCampaign","Inside get campaign info campaign not found"+campaignName);
                     sendFailedResponse(false,"File is not exist");
                 }
 
@@ -64,7 +66,8 @@ public class GetCampaignInfoDbx extends Thread {
         {
             if(mException!=null)
             {
-
+                mException.printStackTrace();
+                Log.d("DownloadCampaign","Inside get campaign info error for "+(savePath+campaignName+".txt")+", "+mException.getMessage());
                 sendFailedResponse(false,mException.getMessage());
             }
 

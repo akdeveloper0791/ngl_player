@@ -7,7 +7,7 @@ import com.dropbox.core.v2.DbxClientV2;
 public class DropboxClientFactory
 {
 
-    private static String ACCESS_TOKEN="mkW1hX251tAAAAAAAAAK8TvQzlCj0VwXFCAyHAWCI18CNSpPNDU4a1EUC6Xxt3R9";
+    private static String ACCESS_TOKEN="mkW1hX251tAAAAAAAAAMcHXdJ81Zjs1xvuyUBplsrJRGn6cpj8j5R9GKdQpf_NOm";
     private static DbxClientV2 sDbxClient;
 
     public static void init() {

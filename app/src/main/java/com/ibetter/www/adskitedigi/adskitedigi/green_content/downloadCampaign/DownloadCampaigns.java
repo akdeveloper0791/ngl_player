@@ -71,6 +71,7 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 import static com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.auto_download_campaign.AutoDownloadCampaignReceiver.DOWNLOAD_LIST_API_ERROR;
 import static com.ibetter.www.adskitedigi.adskitedigi.green_content.downloadCampaign.auto_download_campaign.AutoDownloadCampaignReceiver.DOWNLOAD_LIST_CAMPAIGN_SUCCESS;
@@ -1205,6 +1206,7 @@ public class DownloadCampaigns extends AppCompatActivity {
             if (campaigns != null && campaigns.moveToNext()) {
                 do {
                     GCModel gcModel = new GCModel(campaigns);
+                    Log.d("Campaings","Inside do inbg campaign name"+gcModel.getCampaignName());
                     campList.add(gcModel);
                     campHashMap.put(gcModel.getCampaignName(), gcModel);
                 } while (campaigns.moveToNext());

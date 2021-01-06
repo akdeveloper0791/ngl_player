@@ -51,7 +51,7 @@
     <string name="unable_to_save_settings"> Unable to save settings</string>
     <string name="success">Success</string>
     <string name="save_settings_success">Settings have been saved successfully</string>
-    <string name="app_default_contact_info"> Please Contact 9900819475/contact@adskite.com</string>
+    <string name="app_default_contact_info"> Please Contact 7349121976/emailtongl@gmail.com</string>
     <string name="no_internet">No Internet Found, Please Check.</string>
     <string name="app_default_update_success_mssg">Updated Successfully</string>
 
@@ -269,7 +269,7 @@
     <!-- [+] display  media layout strings -->
     <string name="display_media_default_text">Welcome to Adskite Digi \n please wait.........</string>
     <string name="display_ads_layout_progress_dialog_default_percent">0.0</string>
-    <string name="display_ads_layout_scrolling_text"> Thank you for choosing Digital Signage Solution. For Support  Please Contact  Ph: 9900819475 /E-mail contact@adskite.com/Visit www.nextgenlearning.in </string>
+    <string name="display_ads_layout_scrolling_text"> Thank you for choosing Digital Signage Solution. For Support  Please Contact  Ph: 7349121976 /E-mail emailtongl@gmail.com/Visit www.nextgenlearning.in </string>
     <string name="display_ads_no_internet_connection_info_msg">No internet connection,Unable to connect with server,would you like to skip this schedule</string>
     <string name="display_ads_internal_server_error_info_msg">Internal server error,Unable to connect with server,would you like to skip this schedule</string>
     <string name="display_ads_restarting_player_dialog_info_msg">Do you want continue to  play from resume </string>
@@ -773,11 +773,13 @@
     <!--default browser url's -->
     <string-array name="def_browser_url">
         <item>zoom.us</item>
+        <item>meet.google</item>
        <!-- <item>youtube.com</item>
         <item>youtu.be</item>-->
     </string-array>
 
     <string name="def_zoom_us">zoom.us</string>
+    <string name="def_google_meet_us">meet.google</string>
     <string name="app_youtube_url">youtu.be</string>
     <string name="youtube_url">youtube.com</string>
     <string name="def_hdmi_in_package">com.zidoo.rtk.hdmi</string>
@@ -863,15 +865,11 @@
     <!-- User Guide Channels -->
     <string-array name="user_guide_string_array">
         <item>Green Content</item>
-        <item>Video Conferencing</item>
-        <item>Play Campaigns</item>
         <item>NGL Player Settings</item>
     </string-array>
 
     <string-array name="user_guide_icons_array">
         <item>@drawable/ic_content_yellow</item>
-        <item>@drawable/ic_video_yellow</item>
-        <item>@drawable/ic_publish</item>
         <item>@drawable/ic_settings_yellow</item>
     </string-array>
 
@@ -901,8 +899,8 @@
     <string name="user_display_status">user_display_status</string>
     <string name="device_expiry_date_sp">device_expiry_date_sp</string>
     <string name="device_expiry_checked_at_sp">device_expiry_checked_at_sp</string>
-    <string name="customer_care_number">+919900819475</string>
-    <string name="cc_email">contact@adskite.com</string>
+    <string name="customer_care_number">+91810572981</string>
+    <string name="cc_email">emailtongl@gmail.com</string>
 
     <string name="output_displays_key">output_displays_key</string>
 

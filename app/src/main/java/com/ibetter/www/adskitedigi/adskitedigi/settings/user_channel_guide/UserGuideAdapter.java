@@ -82,18 +82,8 @@ public class UserGuideAdapter extends ArrayAdapter
                         //context.startActivity(new Intent(context, AudioSettings.class));
                         context.startActivity(new Intent(context, DownloadCampaigns.class));
                         break;
+
                     case 1:
-
-                        videoConferencing(context);
-                        break;
-
-                    case 2:
-
-                        DeviceModel.restartApp(context);
-                        activity.finish();
-                        break;
-
-                    case 3:
 
                         context.startActivity(new Intent(context, MainSettingsActivity.class));
                         break;

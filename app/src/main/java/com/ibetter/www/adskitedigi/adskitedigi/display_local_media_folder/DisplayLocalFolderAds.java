@@ -371,6 +371,7 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
 
         userMetricsTask();
 
+        Log.d("DisplaAds","Inside oncreate");
       //  checkAndEnableHotSpot();
     }
 
@@ -661,17 +662,17 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
         }
     }
 
-    //check whether to open url with default browser
-    private void checkAndPlayURL(String url) {
-        boolean isopenWithThirdPartyApp = false;
+    public boolean isOpenWithThirdPartyApp(String url) {
         String[] browserURLs = getResources().getStringArray(R.array.def_browser_url);
         for (String browserURL : browserURLs) {
-            if (url.contains(browserURL)) {
-                isopenWithThirdPartyApp = true;
-                break;
-            }
+            return (url.contains(browserURL));
         }
 
+        return false;
+    }
+    //check whether to open url with default browser
+    private void checkAndPlayURL(String url) {
+        boolean isopenWithThirdPartyApp = isOpenWithThirdPartyApp(url);
         if (isopenWithThirdPartyApp) {
             openWithThirdPartyApp(url);
         } else {
@@ -688,6 +689,8 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
             } else if (url.contains(getString(R.string.app_youtube_url)) || url.contains(
                     getString(R.string.youtube_url))) {
                 checkAndOpenYouTubeApp(url);
+            } else if (url.contains(getString(R.string.def_google_meet_us))) {
+                checkAndOpenGoogleMeet(url);
             } else {
                 //not supported url
                 playURL(url);
@@ -726,6 +729,20 @@ public class DisplayLocalFolderAds extends DisplayAdsBase implements View.OnClic
             //open with ss,, Invalid request
             openWithDefBrowser(zoomURL);
         }
+    }
+
+    private void checkAndOpenGoogleMeet(String googleMeet) throws ArrayIndexOutOfBoundsException {
+            //meeting join request,,open app
+            Intent yt_play = new Intent(Intent.ACTION_VIEW, Uri.parse(googleMeet));
+            Intent chooser = Intent.createChooser(yt_play, "Open With");
+
+            if (yt_play.resolveActivity(getPackageManager()) != null) {
+                startActivity(yt_play);
+            } else {
+                //No App found ,, open with ss
+                openWithDefBrowser(googleMeet);
+            }
+
     }
 
     //check and open youtube app

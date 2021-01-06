@@ -38,14 +38,19 @@ import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
 import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
 import com.github.barteksc.pdfviewer.listener.OnRenderListener;
 import com.github.barteksc.pdfviewer.util.FitPolicy;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerView;
 import com.ibetter.www.adskitedigi.adskitedigi.R;
 import com.ibetter.www.adskitedigi.adskitedigi.SignageServe;
 import com.ibetter.www.adskitedigi.adskitedigi.display_local_media_folder.DisplayLocalFolderAds;
 import com.ibetter.www.adskitedigi.adskitedigi.display_local_media_folder.ReadExcelFile;
+import com.ibetter.www.adskitedigi.adskitedigi.green_content.campaign_preview.PreviewIndvCampaign;
 import com.ibetter.www.adskitedigi.adskitedigi.model.Constants;
 import com.ibetter.www.adskitedigi.adskitedigi.model.DeviceModel;
 import com.ibetter.www.adskitedigi.adskitedigi.model.SharedPreferenceModel;
 import com.ibetter.www.adskitedigi.adskitedigi.model.User;
+import com.ibetter.www.adskitedigi.adskitedigi.model.Utility;
 import com.ibetter.www.adskitedigi.adskitedigi.model.Validations;
 
 import org.json.JSONArray;
@@ -110,7 +115,10 @@ public class MultiRegionSupport
                  }else if(type.equalsIgnoreCase(
                          activity.getString(R.string.app_default_url_name)))
                  {
-                     addURLRegion(info);
+                    boolean isOPendThirdPartyAPP = addURLRegion(info);
+                    if(isOPendThirdPartyAPP) {
+                        break;
+                    }
                  } else if(type.equalsIgnoreCase(activity.getString(R.string.app_default_file_name)))
                  {
                      addFileRegion(info);
@@ -451,19 +459,20 @@ public class MultiRegionSupport
             parentLayout.addView(videoParentLayout);
 
             final VideoView videoView = new VideoView(context);
-            if(isShowController && activity instanceof DisplayLocalFolderAds)
+            if(isShowController && (activity instanceof DisplayLocalFolderAds || activity instanceof PreviewIndvCampaign))
             {
                 MediaController mediaController = new MediaController(context);
                 mediaController.setAnchorView(videoView);
                 videoView.setMediaController(mediaController);
                 videoView.setId(Constants.SINGLE_VIDEO_REGION_VIDEO_VIEW_ID);
 
-                DisplayLocalFolderAds displayLocalFolderAds = (DisplayLocalFolderAds)activity;
-                displayLocalFolderAds.setVideoViewListeners(videoView);
-                if(displayLocalFolderAds.mediaInfo != null) {
-                    displayLocalFolderAds.mediaInfo.setSingleVideoRegId(Constants.SINGLE_VIDEO_REGION_VIDEO_VIEW_ID);
+                if(activity instanceof DisplayLocalFolderAds) {
+                    DisplayLocalFolderAds displayLocalFolderAds = (DisplayLocalFolderAds) activity;
+                    displayLocalFolderAds.setVideoViewListeners(videoView);
+                    if (displayLocalFolderAds.mediaInfo != null) {
+                        displayLocalFolderAds.mediaInfo.setSingleVideoRegId(Constants.SINGLE_VIDEO_REGION_VIDEO_VIEW_ID);
+                    }
                 }
-
                 multiRegProperties.put(context.getString(R.string.set_timer),false);
 
                 Log.d("DisplayAds","Inside multi region support setting media controller");
@@ -575,7 +584,7 @@ public class MultiRegionSupport
     };
 
     //add url region
-    private void addURLRegion(JSONObject info) throws JSONException
+    private boolean addURLRegion(JSONObject info) throws JSONException
     {
         String url = info.getString(context.getString(R.string.multi_region_media_name_json_key));
         boolean isopenWithThirdPartyApp = false;
@@ -592,13 +601,23 @@ public class MultiRegionSupport
             {
                 DisplayLocalFolderAds act = (DisplayLocalFolderAds)activity;
                 act.openWithThirdPartyApp(url);
+            }else if(activity instanceof PreviewIndvCampaign)
+            {
+                PreviewIndvCampaign act = (PreviewIndvCampaign)activity;
+                act.openWithThirdPartyApp(url);
             }
 
         }else {
             RelativeLayout.LayoutParams parentLayoutParams = new RelativeLayout.LayoutParams(calculateRequiredPixel(deviceInfo.get("width"), info.getInt(activity.getString(R.string.multi_region_width_json_key))),
                     calculateRequiredPixel(deviceInfo.get("height"), info.getInt(activity.getString(R.string.multi_region_height_json_key))));
 
-            final WebView web = new WebView(context);
+            ViewGroup web;
+            String youTubeId = Utility.isYouTubeUrl(url);
+            if (youTubeId == null) {
+                web = new WebView(context);
+            } else {
+                web = new YouTubePlayerView(context);
+            }
             web.setOnTouchListener(touchListener);
             web.setLayoutParams(parentLayoutParams);
 
@@ -609,15 +628,37 @@ public class MultiRegionSupport
             marginLayoutParams.topMargin = calculateRequiredPixel(deviceInfo.get("height"), info.getInt(activity.getString(R.string.multi_region_top_margin_json_key)));
             marginLayoutParams.bottomMargin = calculateRequiredPixel(deviceInfo.get("height"), info.getInt(activity.getString(R.string.multi_region_bottom_margin_json_key)));
             parentLayout.addView(web);
-            //initialize web view
-            // web settings
-            initWebView(web);
-
-            web.loadUrl(url);
+            if (web instanceof WebView) {
+                //initialize web view
+                // web settings
+                initWebView((WebView) web);
+                ((WebView) web).loadUrl(url);
+            } else {
+                initYoutubeView((YouTubePlayerView) web, youTubeId);
+            }
         }
+
+        return isopenWithThirdPartyApp;
     }
 
+    private void initYoutubeView(YouTubePlayerView web,final String youtubeId) {
+        web.initialize(Constants.GOOGLE_DEVELOPER_KEY, new YouTubePlayer.OnInitializedListener() {
+            @Override
+            public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean wasRestored) {
+                Log.d("Play","Inside youtube onInitializationSuccess");
+                if (!wasRestored) {
+                    youTubePlayer.loadVideo(youtubeId);
+                    youTubePlayer.setFullscreen(true);
+                    youTubePlayer.play();
+                }
+            }
 
+            @Override
+            public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
+                Log.d("Play","Inside youtube onInitializationFailure");
+            }
+        });
+    }
 
     private void initWebView(WebView web)
     {
@@ -642,6 +683,7 @@ public class MultiRegionSupport
         webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
         webSettings.setRenderPriority(WebSettings.RenderPriority.HIGH);
         webSettings.setPluginState(WebSettings.PluginState.ON);
+        //webSettings.setMediaPlaybackRequiresUserGesture(false);
 
         //allow third pary cookies
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

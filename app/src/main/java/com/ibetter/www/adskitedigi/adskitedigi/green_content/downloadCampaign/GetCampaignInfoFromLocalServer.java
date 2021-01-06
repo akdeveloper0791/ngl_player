@@ -83,6 +83,7 @@ public class GetCampaignInfoFromLocalServer extends Thread {
           }else {
               isError=true;
               sendFailedResponse(false,"Campaign not exist");
+              Log.d("DownloadCampaign","Inside get campaign info from local");
           }
 
 

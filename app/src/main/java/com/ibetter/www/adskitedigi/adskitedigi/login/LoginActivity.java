@@ -391,7 +391,7 @@ public class LoginActivity extends Activity implements LoginInterface
 
     private void confirmDetails()
     {
-        IntentFilter intentFilter = new IntentFilter(ConfirmDetailsReceiver.ACTION);
+        /*IntentFilter intentFilter = new IntentFilter(ConfirmDetailsReceiver.ACTION);
         intentFilter.addCategory(Intent.CATEGORY_DEFAULT);
 
         registerReceiver(new ConfirmDetailsReceiver(),intentFilter);
@@ -401,7 +401,9 @@ public class LoginActivity extends Activity implements LoginInterface
                 orgEmailET.getText().toString());
 
         displayBusyDialog("Sending OTP to verify your details, please wait");
-
+*/
+        //success
+        saveDetails();
     }
 
     private class ConfirmDetailsReceiver extends BroadcastReceiver

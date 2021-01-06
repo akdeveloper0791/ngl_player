@@ -39,6 +39,8 @@ public class GCModel implements Serializable
     public static final String DOWNLOAD_SUCCESS="DOWNLOAD_SUCCESS";
     private boolean isDownloaded;
 
+    private long playerCampaignId,groupCampaignId;
+
     public GCModel(){
 
     }
@@ -323,5 +325,21 @@ public class GCModel implements Serializable
 
     public boolean getIsDownloaded(){
         return isDownloaded;
+    }
+
+    public void setPlayerCampaignId(long playerCampaignId) {
+        this.playerCampaignId = playerCampaignId;
+    }
+
+    public void setGroupCampaignId(long groupCampaignId) {
+        this.groupCampaignId = groupCampaignId;
+    }
+
+    public long getPlayerCampaignId(){
+        return playerCampaignId;
+    }
+
+    public long getGroupCampaignId() {
+        return groupCampaignId;
     }
 }

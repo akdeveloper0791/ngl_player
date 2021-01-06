@@ -31,6 +31,8 @@ public class CampaignsDBModel
     public final static String CAMPAIGN_TABLE_IS_CAMPAIGN_DOWNLOADED="is_downloaded";
     public final static String CAMPAIGN_TABLE_SCHEDULE_TYPE="schedule_type";
     public final static String CAMPAIGN_TABLE_SCHEDULE_PRIORITY="campaign_priority";
+    public final static String CAMPAIGN_TABLE_PLAYER_CAMPAIGN_ID = "pc_id";
+    public final static String CAMPAIGN_TABLE_PLAYER_GROUP_ID = "dgc_id";
 
 
 
@@ -51,7 +53,9 @@ public class CampaignsDBModel
             +CAMPAIGN_TABLE_CAMPAIGN_INFO + " TEXT,"
             +CAMPAIGN_TABLE_IS_CAMPAIGN_DOWNLOADED+" INTEGER DEFAULT 0,"
             +CAMPAIGN_TABLE_SCHEDULE_TYPE+" INTEGER DEFAULT 10,"
-            +CAMPAIGN_TABLE_SCHEDULE_PRIORITY+" INTEGER DEFAULT 0 );";
+            +CAMPAIGN_TABLE_SCHEDULE_PRIORITY+" INTEGER DEFAULT 0,"
+            +CAMPAIGN_TABLE_PLAYER_CAMPAIGN_ID+" INTEGER DEFAULT 0,"
+            +CAMPAIGN_TABLE_PLAYER_GROUP_ID+" INTEGER DEFAULT 0);";
 
     /*[++] schedules campaign table [++]*/
     public final static String SCHEDULE_CAMPAIGNS_TABLE="schedule_campaigns";
@@ -105,7 +109,7 @@ public class CampaignsDBModel
 
     public static Cursor getCampaigns(Context context)
     {
-        String condition = "SELECT * FROM "+CAMPAIGNS_TABLE;
+        String condition = "SELECT * FROM "+CAMPAIGNS_TABLE+" Order By "+CAMPAIGN_TABLE_PLAYER_GROUP_ID+" DESC, "+CAMPAIGN_TABLE_PLAYER_CAMPAIGN_ID+" DESC;";
         return DataBaseHelper.initializeDataBase(context).getRecord(condition);
     }
 

@@ -130,9 +130,11 @@ public class AutoCampDownloadListService extends IntentService
                         String responseString=response.body().string().trim();
 
                         if (response.isSuccessful()) {
+                            Log.d("DownloadCampaigns","Inside AUTOCAMPDOWNLOADLIST list "+responseString);
                             processResponse(responseString);
                         }else
                         {
+                            Log.d("DownloadCampaigns","Inside AUTOCAMPDOWNLOADLIST error "+responseString);
                             sendFailedResponse(false,"Unable to contact the server, please check your connections",0);
                         }
                     }
@@ -182,14 +184,18 @@ public class AutoCampDownloadListService extends IntentService
                         int campaignType = campObject.getInt("camp_type");
                         int scheduleType = ScheduleCampaignModel.CONTINUOUS_PLAY;
                         int isSkip = 0,priority=0;
+                        long playerCampaignId=0;
+                        long groupCampaignId=0;
 
-                        if(Constants.convertToLong(campObject.getString("pc_id"))>0)
+                        if(campObject.has("pc_id") && Constants.convertToLong(campObject.getString("pc_id"))>0)
                         {
+                            playerCampaignId = Constants.convertToLong(campObject.getString("pc_id"));
                             scheduleType = campObject.getInt("schedule_type");
                             isSkip = campObject.getInt("is_skip");
                             priority = campObject.getInt("pc_priority");
-                        }else if(Constants.convertToLong(campObject.getString("dgc_id"))>0)
+                        }else if(campObject.has("dgc_id") && Constants.convertToLong(campObject.getString("dgc_id"))>0)
                         {
+                            groupCampaignId = Constants.convertToLong(campObject.getString("dgc_id"));
                             scheduleType = campObject.getInt("dgc_schedule_type");
                             isSkip = campObject.getInt("dgc_is_skip");
                             priority = campObject.getInt("dgc_priority");
@@ -232,6 +238,8 @@ public class AutoCampDownloadListService extends IntentService
                                 gcModel.setIsSkip(isSkip);
                                 gcModel.setScheduleType(scheduleType);
                                 gcModel.setCampaignPriority(priority);
+                                gcModel.setPlayerCampaignId(playerCampaignId);
+                                gcModel.setGroupCampaignId(groupCampaignId);
 
                                 serverCampaigns.put(serverId, gcModel);
 
@@ -298,6 +306,7 @@ public class AutoCampDownloadListService extends IntentService
 
         }catch (Exception e)
         {
+            Log.d("DownloadCapaign","Inside auto camp downlistservice error "+e.getMessage());
             e.printStackTrace();
             sendFailedResponse(false,"Unable to get the response, Please try again.",0);
         }
@@ -498,7 +507,9 @@ public class AutoCampDownloadListService extends IntentService
                 CampaignsDBModel.CAMPAIGN_TABLE_CAMPAIGN_INFO +"," +
                 CampaignsDBModel.CAMPAIGNS_TABLE_SOURCE+","+
                 CampaignsDBModel.CAMPAIGN_TABLE_SCHEDULE_TYPE+"," +
-                CampaignsDBModel.CAMPAIGN_TABLE_SCHEDULE_PRIORITY+") VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                CampaignsDBModel.CAMPAIGN_TABLE_SCHEDULE_PRIORITY+","+
+                CampaignsDBModel.CAMPAIGN_TABLE_PLAYER_CAMPAIGN_ID+","+
+                CampaignsDBModel.CAMPAIGN_TABLE_PLAYER_GROUP_ID+") VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 
         SQLiteStatement insert = mDb.compileStatement(insetQuary);
@@ -524,6 +535,8 @@ public class AutoCampDownloadListService extends IntentService
             insert.bindLong(12, gcModel.getSource());
             insert.bindLong(13, gcModel.getScheduleType());
             insert.bindLong(14, gcModel.getCampaignPriority());
+            insert.bindLong(15, gcModel.getPlayerCampaignId());
+            insert.bindLong(16, gcModel.getGroupCampaignId());
             insert.execute();
 
         }
@@ -565,7 +578,9 @@ private synchronized void bulkCampaignsUpdate(ArrayList<GCModel> updateData)
                 CampaignsDBModel.CAMPAIGNS_TABLE_SAVE_PATH +" =?,"+
                 CampaignsDBModel.CAMPAIGN_TABLE_CAMPAIGN_INFO  +" =?," +
                 CampaignsDBModel.CAMPAIGN_TABLE_SCHEDULE_TYPE  +" =?, " +
-                CampaignsDBModel.CAMPAIGN_TABLE_SCHEDULE_PRIORITY +"=?"+
+                CampaignsDBModel.CAMPAIGN_TABLE_SCHEDULE_PRIORITY +"=?,"+
+                CampaignsDBModel.CAMPAIGN_TABLE_PLAYER_CAMPAIGN_ID +"=?,"+
+                CampaignsDBModel.CAMPAIGN_TABLE_PLAYER_GROUP_ID +"=?"+
                 "WHERE " + CampaignsDBModel.CAMPAIGNS_TABLE_SERVER_ID + " =?";
 
         SQLiteStatement update = mDb.compileStatement(updateQuary);
@@ -585,7 +600,9 @@ private synchronized void bulkCampaignsUpdate(ArrayList<GCModel> updateData)
             update.bindString(10, gcModel.getInfo());
             update.bindLong(11, gcModel.getScheduleType());
             update.bindLong(12, gcModel.getCampaignPriority());
-            update.bindLong(13, gcModel.getServerId());
+            update.bindLong(13, gcModel.getCampaignPriority());
+            update.bindLong(14, gcModel.getCampaignPriority());
+            update.bindLong(15, gcModel.getServerId());
 
 
             update.execute();

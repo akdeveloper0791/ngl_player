@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 
+import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.ibetter.www.adskitedigi.adskitedigi.display_local_media_folder.DisplayLocalFolderAds;
 import com.ibetter.www.adskitedigi.adskitedigi.display_local_media_folder.receiver.ActionReceiver;
 import com.ibetter.www.adskitedigi.adskitedigi.model.DeviceModel;
@@ -20,7 +21,7 @@ import java.util.TimerTask;
 
 import static com.ibetter.www.adskitedigi.adskitedigi.display_local_media_folder.DisplayLocalFolderAds.SM_UPDATES_INTENT_ACTION;
 
-public class DisplayAdsBase extends AppCompatActivity {
+public class DisplayAdsBase extends YouTubeBaseActivity {
 
    Context context;
    public boolean isRelaunchAppOnStop = true;

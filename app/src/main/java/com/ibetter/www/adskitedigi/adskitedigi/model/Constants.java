@@ -66,7 +66,7 @@ public class Constants
 
     public final static String LAST_MEDIA_PLAYED_SP_KEY = "last_media_played_sp_key";
     public final static String LAST_MEDIA_PLAYED_POSITION_SP_KEY = "LAST_MEDIA_PLAYED_POSITION_SP_KEY";
-
+    public final static String GOOGLE_DEVELOPER_KEY = "AIzaSyDJFxDX9SBYXt8uprJopnel8cXgsEPo8-I";
     //convert to long
     public static Long convertToLong(String value)
     {

@@ -54,7 +54,7 @@ public class UserGuideActivity extends Activity
     private void initializeAdapter()
     {
             guideListView=findViewById(R.id.grid_view);
-           String[] settings= context.getResources().getStringArray(R.array.user_guide_string_array);
+            String[] settings= context.getResources().getStringArray(R.array.user_guide_string_array);
             TypedArray icons=context.getResources().obtainTypedArray(R.array.user_guide_icons_array);
 
             userGuideAdapter=new UserGuideAdapter(context,R.layout.user_guide_supportview,new ArrayList<String>(Arrays.asList(settings)),icons,UserGuideActivity.this);
@@ -71,18 +71,6 @@ public class UserGuideActivity extends Activity
                         break;
 
                     case 1:
-
-                        videoConferencing();
-                        break;
-
-                    case 2:
-
-                        DeviceModel.restartApp(context);
-                        finish();
-                        break;
-
-
-                    case 3:
                         startActivity(new Intent(context, MainSettingsActivity.class));
                         finish();
                         break;
